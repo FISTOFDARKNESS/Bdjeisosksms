@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login/Register</title>
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+<div class="container">
+  <form class="form" id="authForm">
+    <p class="title" id="formTitle">Login</p>
+    <input placeholder="Username" class="input" type="text" id="username" required />
+    <input placeholder="Password" class="input" type="password" id="password" required />
+    <button class="btn" type="submit" id="submitBtn">Login</button>
+    <span class="switch" onclick="toggleForm()">Don't have an account? Register</span>
+    <p class="message" id="message"></p>
+  </form>
+</div>
+<script>
+  let isLogin = true;
+  function toggleForm() {
+    isLogin = !isLogin;
+    document.getElementById("formTitle").textContent = isLogin ? "Login" : "Register";
+    document.getElementById("submitBtn").textContent = isLogin ? "Login" : "Register";
+    document.querySelector(".switch").textContent = isLogin
+      ? "Don't have an account? Register"
+      : "Already have an account? Login";
+    document.getElementById("message").textContent = "";
+  }  document.getElementById("authForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+    const users = JSON.parse(localStorage.getItem("users") || "{}");
+    if (isLogin) {
+      if (users[username] && users[username] === password) {
+        localStorage.setItem("loggedInUser", username);
+        window.location.href = "index.html";
+      } else {
+        document.getElementById("message").textContent = "Invalid username or password.";
+      }
+    } else {
+      if (users[username]) {
+        document.getElementById("message").textContent = "Username already exists.";
+      } else {
+        users[username] = password;
+        localStorage.setItem("users", JSON.stringify(users));
+        document.getElementById("message").textContent = "Registered successfully!";
+        toggleForm();
+      }
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+::selection {
+  background-color: gray;
+}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #121212;
+}
+.container {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.form {
+  width: 400px;
+  background-image: linear-gradient(to bottom, #424242, #212121);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 0.5rem;
+  padding: 2rem;
+}
+.title {
+  color: wheat;
+  margin: 1rem 0;
+  font-size: 2rem;
+}
+.input {
+  margin: 0.5rem 0;
+  padding: 1rem 0.5rem;
+  width: 20rem;
+  background-color: inherit;
+  color: wheat;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid wheat;
+  transition: all 400ms;
+}
+.input:hover {
+  background-color: #424242;
+  border-radius: 0.5rem;
+}
+.btn {
+  height: 3rem;
+  width: 20rem;
+  margin-top: 1.5rem;
+  background-color: wheat;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: 1.2rem;
+  transition: all 400ms;
+  cursor: pointer;
+  box-shadow: 0 0 10px antiquewhite, 0 0 10px antiquewhite;
+}
+.btn:hover {
+  background-color: antiquewhite;
+  box-shadow: none;
+}
+.switch {
+  color: lightgray;
+  margin-top: 1rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.message {
+  margin-top: 1rem;
+  color: lightgreen;
+  font-size: 0.9rem;
+}
+header button {
+  padding: 8px 16px;
+  margin-left: 10px;
+  cursor: pointer;
+  border: none;
+  background-color: #444;
+  color: white;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+header button:hover {
+  background-color: #666;
+}
