@@ -354,6 +354,9 @@ function renderFilms(list) {
     container.appendChild(el);
   });
 
+  // Protege as imagens
+  protegerImagens();
+
   document.querySelectorAll(".play-button").forEach(btn => {
     btn.addEventListener("click", () => {
       const id = btn.dataset.id;
@@ -362,18 +365,15 @@ function renderFilms(list) {
   });
 }
 
+// Protege as imagens de clicarem e arrastá-las
+function protegerImagens() {
+  const imagens = document.querySelectorAll('#film-category img');
+  imagens.forEach(img => {
+    img.setAttribute('oncontextmenu', 'return false');
+    img.setAttribute('draggable', 'false');
+    img.style.pointerEvents = 'none';
+  });
+}
+
 // Initial load
 renderFilms(films);
- document.getElementById("logout").addEventListener("click", function () {
-  localStorage.removeItem("loggedInUser");
-  window.location.href = "auth.html";
-});
-   
-// Search system
-document.getElementById("search-button").addEventListener("click", () => {
-  const query = document.getElementById("search-bar").value.toLowerCase();
-  const results = films.filter(film =>
-    film.title.toLowerCase().includes(query)
-  );
-  renderFilms(results);
-});
