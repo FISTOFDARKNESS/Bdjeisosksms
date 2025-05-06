@@ -354,6 +354,30 @@ function renderFilms(list) {
     container.appendChild(el);
   });
 
+  document.querySelectorAll(".play-button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.id;
+      window.location.href = `${baseDomain}${id}`;
+    });
+  });
+}
+
+// Render films
+function renderFilms(list) {
+  const container = document.getElementById("film-category");
+  container.innerHTML = "";
+  list.forEach(film => {
+    const el = document.createElement("div");
+    el.className = "film";
+    el.innerHTML = `
+     <img src="${film.image}" alt="${film.title}">
+      <h3>${film.title}</h3>
+      <p>${film.category} / ${film.year}</p>
+      <button class="play-button" data-id="${film.id}">Play</button>
+    `;
+    container.appendChild(el);
+  });
+
   // Protege as imagens
   protegerImagens();
 
@@ -374,6 +398,9 @@ function protegerImagens() {
     img.style.pointerEvents = 'none';
   });
 }
-
+document.getElementById("logout").addEventListener("click", function () {
+  localStorage.removeItem("loggedInUser");
+  window.location.href = "auth.html";
+});
 // Initial load
 renderFilms(films);
