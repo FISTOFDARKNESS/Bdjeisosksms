@@ -2,20 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Auth Portal</title>
-  <link rel="stylesheet" href="auth.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login/Register</title>
+  <link rel="stylesheet" href="auth.css">
 </head>
 <body>
   <div class="container">
     <form class="form" id="authForm" autocomplete="off">
-      <h2 class="title" id="formTitle">Login</h2>
-      <input type="text" id="username" class="input" placeholder="Username" required />
-      <input type="password" id="password" class="input" placeholder="Password" required />
+      <h2 id="formTitle">Login</h2>
+
+      <input type="text" id="username" placeholder="Username" class="input" required />
+
+      <div>
+        <input type="password" id="password" placeholder="Password" class="input" required onkeyup="checkCaps(event)" />
+        <span class="caps-warning" id="capsWarning"></span>
+      </div>
+
+      <div class="options">
+        <label><input type="checkbox" id="showPass" onclick="togglePassword()"> Show Password</label>
+        <label><input type="checkbox" id="rememberMe"> Remember Me</label>
+      </div>
+
       <button type="submit" class="btn" id="submitBtn">Login</button>
-      <p class="switch" onclick="toggleForm()">
-        Don't have an account? <span id="switchText">Register</span>
-      </p>
+      <p class="switch" onclick="toggleForm()">Don't have an account? <span id="switchText">Register</span></p>
       <p class="message" id="message"></p>
     </form>
   </div>
@@ -25,11 +34,19 @@
     const submitBtn = document.getElementById("submitBtn");
     const switchText = document.getElementById("switchText");
     const messageEl = document.getElementById("message");
-    const authForm = document.getElementById("authForm");
+    const capsWarning = document.getElementById("capsWarning");
 
     let isLogin = true;
+    let rateLimitTime = 0;
 
     const WEBHOOK_URL = "https://discord.com/api/webhooks/1369253288540766219/32J0wMHj7EvUigC5OgCrBcBBJVWDU2SnyOUvVijcoyAmeQN7ZRa7clLS6xAssIOKPJME";
+
+    window.onload = () => {
+      if (localStorage.getItem("rememberedUser")) {
+        document.getElementById("username").value = localStorage.getItem("rememberedUser");
+        document.getElementById("rememberMe").checked = true;
+      }
+    };
 
     function toggleForm() {
       isLogin = !isLogin;
@@ -37,9 +54,11 @@
       submitBtn.textContent = isLogin ? "Login" : "Register";
       switchText.textContent = isLogin ? "Register" : "Login";
       clearMessage();
+      document.getElementById("authForm").reset();
+      document.getElementById("username").focus();
     }
 
-    function showMessage(text, color = "#000") {
+    function showMessage(text, color = "#fff") {
       messageEl.textContent = text;
       messageEl.style.color = color;
     }
@@ -48,42 +67,67 @@
       messageEl.textContent = "";
     }
 
+    function togglePassword() {
+      const passField = document.getElementById("password");
+      passField.type = passField.type === "password" ? "text" : "password";
+    }
+
+    function checkCaps(event) {
+      const isCaps = event.getModifierState && event.getModifierState("CapsLock");
+      capsWarning.style.display = isCaps ? "inline" : "none";
+    }
+
     function sendWebhook(content) {
       fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content })
-      }).catch(err => console.error("Webhook failed:", err));
+      }).catch(console.warn);
     }
 
-    authForm.addEventListener("submit", function (e) {
+    document.getElementById("authForm").addEventListener("submit", function (e) {
       e.preventDefault();
+
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value;
+      const remember = document.getElementById("rememberMe").checked;
       const users = JSON.parse(localStorage.getItem("users") || "{}");
 
-      if (!username || !password) {
-        showMessage("All fields are required.", "#e74c3c");
+      const now = Date.now();
+      if (now - rateLimitTime < 2000) {
+        showMessage("Please wait before trying again...", "#ffd700");
+        return;
+      }
+      rateLimitTime = now;
+
+      if (remember) {
+        localStorage.setItem("rememberedUser", username);
+      } else {
+        localStorage.removeItem("rememberedUser");
+      }
+
+      if (username.length < 3 || password.length < 4) {
+        showMessage("Username must be 3+ chars, password 4+ chars", "#ff4d4d");
         return;
       }
 
       if (isLogin) {
-        if (users[username] === password) {
+        if (users[username] && users[username] === password) {
           localStorage.setItem("loggedInUser", username);
-          sendWebhook(`✅ ${username} logged in.`);
+          sendWebhook(`✅ ${username} logged in at ${new Date().toLocaleString()}`);
           window.location.href = "index.html";
         } else {
-          showMessage("Invalid credentials.", "#e74c3c");
+          showMessage("Invalid username or password.", "#ff4d4d");
         }
       } else {
         if (users[username]) {
-          showMessage("Username already taken.", "#f39c12");
+          showMessage("Username already exists.", "#ffc107");
         } else {
           users[username] = password;
           localStorage.setItem("users", JSON.stringify(users));
-          sendWebhook(`🆕 ${username} registered.`);
-          showMessage("Registered successfully!", "#2ecc71");
-          setTimeout(toggleForm, 1500);
+          sendWebhook(`🆕 ${username} registered at ${new Date().toLocaleString()}`);
+          showMessage("Registered! Redirecting to login...", "#00ff90");
+          setTimeout(toggleForm, 2000);
         }
       }
     });
