@@ -63,7 +63,7 @@ filter: drop-shadow(0 0 3px var(--button))
   padding: 10px;
   width: 60%;
   max-width: 400px;
-  border-radius: 6px;
+  border-radius: 120px;
   border: 1px solid #ccc;
 }
 
