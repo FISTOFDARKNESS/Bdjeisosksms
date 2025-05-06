@@ -7,33 +7,57 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
- <header>
-  <h1>Easy Film Finder - ITA</h1>
-  <button id="darkToggle">Dark Mode</button>
-  <button id="logout" class="logout__btn">Logout</button>
-</header>
+  <header>
+    <h1>Easy Film Finder - ITA</h1>
+    <button id="darkToggle">Dark Mode</button>
+    <button id="logout" class="logout__btn">Logout</button>
+  </header>
+
   <section id="search-section">
     <input type="text" id="search-bar" placeholder="Search Films by Name..." />
     <button id="search-button">Search</button>
   </section>
+  <p id="total-films">Total films: loading...</p>
+
+
+<style>
+  #total-films {
+    text-align: center;
+    margin: 0 auto;
+    width: fit-content;
+    font-size: 18px;
+  }
+</style>
   <main id="film-category">
   </main>
+
   <footer>
-   <p>Site created by: _.yzero</p>
-<p>Films provided by: the streaming community</p>
-<p>New films are added manually, so updates might take some time. Thanks for your patience!</p>
-<p>&copy; 2025 _.yzero. All rights reserved.</p>
-<p>Have a suggestion or request? <a href="contactyzero.dev@gmail.com">Contact us</a></p>
-<p>Join our community discord to stay updated and help us grow!<a href="https://discord.gg/NVF8ZFXgdJ"> Join</p>
+    <p>Site created by: _.yzero</p>
+    <p>Films provided by: the streaming community</p>
+    <p>New films are added manually, so updates might take some time. Thanks for your patience!</p>
+    <p>&copy; 2025 _.yzero. All rights reserved.</p>
+    <p>Have a suggestion or request? <a href="mailto:contactyzero.dev@gmail.com">Contact us</a></p>
+    <p>Join our community discord to stay updated and help us grow! <a href="https://discord.gg/NVF8ZFXgdJ">Join</a></p>
   </footer>
+
   <script>
+    // Verifica login
     const user = localStorage.getItem("loggedInUser");
     if (!user) {
       window.location.href = "auth.html";
     }
+
+    // Conta quantos filmes (imagens) existem
+    function atualizarTotalFilmes() {
+      const total = document.querySelectorAll('#film-category img').length;
+      document.getElementById('total-films').textContent = `Total filmes: ${total}`;
+    }
+
+    // Chama quando a página terminar de carregar
+    window.addEventListener('load', atualizarTotalFilmes);
   </script>
+
   <script src="scripts.js"></script>
 </body>
 </html>
-/body>
-</html>
+</body
