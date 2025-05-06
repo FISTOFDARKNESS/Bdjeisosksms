@@ -1,15 +1,37 @@
-// Global base domain - change .spa here and all play links are updated
 let baseDomain = "https://streamingcommunity.exposed/watch/";
+
+
 
 // Film list
 const films = [
   // Action
   {
-    id: "2518",
-    title: "Avatar 2",
-    category: "Action",
-    year: "2024",
-    image: "icons/avatar2.png"
+    id: "10002",
+    title: "Thunderbolts",
+    category: "Action, Adventure",
+    year: "2025",
+    image: "icons/td.png"
+  },
+  {
+    id: "12141",
+    title: "Sinners",
+    category: "Action, Adventure",
+    year: "2025",
+    image: "icons/sn.png"
+  },
+  {
+    id: "2151",
+    title: "Flipped",
+    category: "Romance",
+    year: "2010",
+    image: "icons/flipped.png"
+  },
+  {
+    id: "12203",
+    title: "Until Dawn",
+    category: "Mystery, Horror",
+    year: "2025",
+    image: "icons/TDT.png"
   },
   {
     id: "6",
@@ -268,6 +290,13 @@ const films = [
     year: "2012",
     image: "icons/hobbit1.png"
   },
+    {
+    id: "2518",
+    title: "Avatar 2",
+    category: "Action",
+    year: "2024",
+    image: "icons/avatar2.png"
+  },
    {
     id: "8856",
     title: "Nymphomaniac",
@@ -296,370 +325,6 @@ const films = [
     year: "2022",
     image: "icons/365.png"
   },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-   {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-   {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-   {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-   {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-   {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-   {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  }, 
-   {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  },
-    {
-    id: "",
-    title: "",
-    category: "",
-    year: "",
-    image: "icons/.png"
-  }
 ];
 
 // Load dark mode if saved
