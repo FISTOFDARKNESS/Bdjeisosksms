@@ -1,7 +1,6 @@
 let baseDomain = "https://streamingcommunity.exposed/watch/";
 
 
-
 // Film list
 const films = [
   // Action
@@ -401,6 +400,14 @@ function protegerImagens() {
 document.getElementById("logout").addEventListener("click", function () {
   localStorage.removeItem("loggedInUser");
   window.location.href = "auth.html";
+});
+// Search system
+document.getElementById("search-button").addEventListener("click", () => {
+  const query = document.getElementById("search-bar").value.toLowerCase();
+  const results = films.filter(film =>
+    film.title.toLowerCase().includes(query)
+  );
+  renderFilms(results);
 });
 // Initial load
 renderFilms(films);
