@@ -1,4 +1,5 @@
-let baseDomain = "https://streamingcommunity.ovh/watch/"
+let baseDomain = "https://streamingcommunity.ovh/watch/";
+
 
 // Film list
 const films = [
@@ -424,52 +425,68 @@ const films = [
     canSee: true
   },
       {
-    id: "",
+    id: "363",
     title: "Spider-Man",
-    category: "",
-    year: "--",
-    image: "icons/.png",
-    canSee: false
+    category: "Fantasy, Action",
+    year: "2002",
+    image: "icons/s1.png",
+    canSee: true
   },
     {
-    id: "",
-    title: "Comming",
-    category: "N/A",
-    year: "--",
-    image: "icons/.png",
-    canSee: false
+    id: "364",
+    title: "Spider-man 2",
+    category: "Fantasy, Action",
+    year: "2004",
+    image: "icons/s2.png",
+    canSee: true
   },  
-      {
-    id: "",
-    title: "Comming",
-    category: "N/A",
-    year: "--",
-    image: "icons/.png",
-    canSee: false
+  {
+    id: "365",
+    title: "Spider-Man 3",
+    category: "Action",
+    year: "2007",
+    image: "icons/spiderman3.png",
+    canSee: true
   },
-      {
-    id: "",
-    title: "Comming",
-    category: "N/A",
-    year: "--",
-    image: "icons/.png",
-    canSee: false
+  {
+    id: "493",
+    title: "The Amazing Spider-Man",
+    category: "Action",
+    year: "2012",
+    image: "icons/amazingspiderman.png",
+    canSee: true
   },
-      {
-    id: "",
-    title: "Comming",
-    category: "N/A",
-    year: "--",
-    image: "icons/.png",
-    canSee: false
+  {
+    id: "367",
+    title: "The Amazing Spider-Man 2",
+    category: "Action",
+    year: "2014",
+    image: "icons/amazingspiderman2.png",
+    canSee: true
   },
-      {
-    id: "",
-    title: "Comming",
-    category: "N/A",
-    year: "--",
-    image: "icons/.png",
-    canSee: false
+  {
+    id: "336",
+    title: "Spider-Man: Home coming",
+    category: "Action",
+    year: "2017",
+    image: "icons/homecoming.png",
+    canSee: true
+  },
+  {
+    id: "340",
+    title: "Spider-Man: Far From Home",
+    category: "Action",
+    year: "2019",
+    image: "icons/farfromhome.png",
+    canSee: true
+  },
+  {
+    id: "3868",
+    title: "Spider-Man: No Way Home",
+    category: "Action",
+    year: "2021",
+    image: "icons/nowayhome.png",
+    canSee: true
   },
       {
     id: "",
