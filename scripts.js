@@ -1,5 +1,4 @@
-let baseDomain = "https://streamingcommunity.education/watch/";
-
+let baseDomain = "https://streamingcommunity.ovh/watch/"
 
 // Film list
 const films = [
