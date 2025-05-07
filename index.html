@@ -1,30 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
+
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Easy Film Finder - ITA</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
+    }
+    header, footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 1em;
+    }
     #total-films {
       text-align: center;
-      margin: 0 auto;
-      width: fit-content;
       font-size: 18px;
+      margin-top: 10px;      
     }
     #welcomeUser {
       font-size: 16px;
       margin-top: 10px;
       color: #555;
     }
-    body {
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
+    #search-section {
+      text-align: center;
+      margin: 20px 0;
     }
+    #search-bar {
+      width: 250px;
+      padding: 8px;
+    #film-category {
+      text-align: center;
+    }    }
+
     img {
       pointer-events: none;
+      width: 200px;
+      height: auto;
     }
   </style>
 </head>
@@ -37,24 +50,24 @@
   </header>
 
   <section id="search-section">
-    <input type="text" id="search-bar" placeholder="Search Films by Name..." />
+    <input type="text" id="search-bar"placeholder="Search Films by Name..." class="search-bar"/>
     <button id="search-button">Search</button>
   </section>
 
   <p id="total-films">Total films: loading...</p>
 
   <main id="film-category">
-    <!-- Exemplo de imagem protegida -->
-    <img src="film1.jpg" alt="Film 1" oncontextmenu="return false" draggable="false">
+    <img src="error.png" alt="404 back later" oncontextmenu="return false" draggable="false">
   </main>
   <footer>
     <p>Site created by: _.yzero</p>
-    <p>Films provided by: the streaming community</p>
+    <p>Films provided by: streaming community</p>
     <p>New films are added manually, so updates might take some time. Thanks for your patience!</p>
     <p>&copy; 2025 _.yzero. All rights reserved.</p>
     <p>Have a suggestion or request? <a href="mailto:contactyzero.dev@gmail.com">Contact us</a></p>
     <p>Join our community discord to stay updated and help us grow! <a href="https://discord.gg/r7YM2AAKye">Join</a></p>
   </footer>
+
   <script>
     const user = localStorage.getItem("loggedInUser");
     if (!user) {
@@ -68,13 +81,11 @@
       document.getElementById('total-films').textContent = `Total films: ${total}`;
     }
     window.addEventListener('load', atualizarTotalFilmes);
-    
-    // Impede arrastar qualquer coisa (especialmente imagens)
-    document.addEventListener('dragstart', event => event.preventDefault());
 
-    // Bloqueia botão direito (redundância extra para segurança)
+    document.addEventListener('dragstart', event => event.preventDefault());
     document.addEventListener('contextmenu', event => event.preventDefault());
   </script>
+
   <script src="scripts.js"></script>
 </body>
 </html>
