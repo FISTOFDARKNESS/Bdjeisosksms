@@ -22,10 +22,9 @@ body {
   padding: 0;
   font-family: '', sans-serif;
   background-color: var(--bg);
-  color: var(--text);
+  color: var(--text);  
   transition: all 0.3s ease;
 }
-
 header {
   background: var(--card);
   padding: 20px;
@@ -51,7 +50,8 @@ header {
 
 #darkToggle:hover {
 filter: drop-shadow(0 0 3px var(--button))
-          drop-shadow(0 0 8px var(--button));
+          dr6p-shadow(0 0 8px 
+              ar(--button));
 }
 
 #search-section {
