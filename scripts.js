@@ -34,7 +34,10 @@ function renderDownloads(list) {
     const el = document.createElement("div");
     el.className = "download-item";
     el.innerHTML = `
-      <img src="${item.image}" alt="${item.title}" onerror="this.src='icons/error.png'">
+      <div class="image-container">
+        <img src="${item.image}" alt="${item.title}" onerror="this.src='icons/error.png'">
+        <div class="play-icon" onclick="window.open('${item.video}', '_blank')">&#9654;</div> <!-- Ícone de Play -->
+      </div>
       <h3>${item.title}</h3>
       <p>${item.category} / ${item.year}</p>
       <button class="download-button" data-id="${item.id}">Download</button>
@@ -44,7 +47,32 @@ function renderDownloads(list) {
 
   protegerImagens();
 }
-
+const style = document.createElement("style");
+style.innerHTML = `
+  .image-container {
+    position: relative;
+    display: inline-block;
+  }
+  .play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s;
+    cursor: pointer;
+  }
+  .image-container:hover .play-icon {
+    opacity: 1; /* Aparece quando o mouse passa por cima da imagem */
+  }
+  img {
+    width: 100%;
+    height: auto;
+  }
+`;
+document.head.appendChild(style);
 // Protege imagens contra clique e arrasto
 function protegerImagens() {
   const imagens = document.querySelectorAll('#download-category img');
