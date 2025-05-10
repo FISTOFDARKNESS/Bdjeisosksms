@@ -1,196 +1,108 @@
-:root {
-  --bg: #f4f4f4;
-  --text: #222;
-  --card: #fff;
-  --button: #4CAF50;
-  --button-hover: #45a049;
-  --button-shadow: rgba(76, 175, 80, 0.5); 
+// Lista de downloads
+const downloads = [
+  {
+    id: "1",
+    link: "https://example.com/file.zip",
+    title: "Download Exemplo",
+    category: "By me",
+    year: "2025",
+    video: "https://youtu.be/6s8_GnbYDoY?si=u6qpNaFZZBYCpe1q",
+    image: "icons/error.png",
+    canSee: true
+  },
+];
+
+// Carrega dark mode se estiver salvo
+if (localStorage.getItem("dark") === "true") {
+  document.body.classList.add("dark");
 }
 
+// Alterna dark mode
+document.getElementById("darkToggle").addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  localStorage.setItem("dark", document.body.classList.contains("dark"));
+});
 
-body.dark {
-  --bg: #121212;
-  --text: #f4f4f4;
-  --card: #1e1e1e;
-  --button: #bb86fc;
-  --button-hover: #9b63d5;
-  --button-shadow: rgba(187, 134, 252, 0.5); 
+// Renderiza os downloads na tela
+function renderDownloads(list) {
+  const container = document.getElementById("download-category");
+  container.innerHTML = "";
+
+  list.forEach(item => {
+    if (item.canSee === false) return;
+
+    const el = document.createElement("div");
+    el.className = "download-item";
+    el.innerHTML = `
+      <img src="${item.image}" alt="${item.title}" onerror="this.src='icons/error.png'">
+      <h3>${item.title}</h3>
+      <p>${item.category} / ${item.year}</p>
+      <button class="download-button" data-id="${item.id}">Download</button>
+    `;
+    container.appendChild(el);
+  });
+
+  protegerImagens();
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: '', sans-serif;
-  background-color: var(--bg);
-  color: var(--text);  
-  transition: all 0.3s ease;
-}
-header {
-  background: var(--card);
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+// Protege imagens contra clique e arrasto
+function protegerImagens() {
+  const imagens = document.querySelectorAll('#download-category img');
+  imagens.forEach(img => {
+    img.setAttribute('oncontextmenu', 'return false');
+    img.setAttribute('draggable', 'false');
+    img.style.pointerEvents = 'none';
+  });
 }
 
-#darkToggle {
-  padding: 10px 20px;
-  border: none;
-  font-size: 11px;
-  color: #fff;
-  border-radius: 120px;
-  letter-spacing: 4px;
-  font-weight: 700;
-  text-transform: uppercase;
-  background-color: var(--button);
-  transition: 0.3s;
-  cursor: pointer;
-  box-shadow: none;
-  filter: drop-shadow(0 0 2px var(--button));
-}
+// Evento de logout
+document.getElementById("logout").addEventListener("click", () => {
+  localStorage.removeItem("loggedInUser");
+  window.location.href = "auth.html";
+});
 
-#darkToggle:hover {
-filter: drop-shadow(0 0 3px var(--button))
-          dr6p-shadow(0 0 8px 
-              ar(--button));
-}
+// Sistema de busca com botão
+document.getElementById("search-button").addEventListener("click", () => {
+  const query = document.getElementById("search-bar").value.toLowerCase();
+  const results = downloads.filter(item =>
+    item.title.toLowerCase().includes(query)
+  );
+  renderDownloads(results);
+});
 
-#search-section {
-  text-align: center;
-  margin: 20px 0;
-}
-
-#search-bar {
-  padding: 10px;
-  width: 60%;
-  max-width: 400px;
-  border-radius: 120px;
-  border: 1px solid #ccc;
-}
-
-#search-button {
-  padding: 10px 20px;
-  margin-left: 10px;
-  background-color: var(--button);
-  color: white;
-  border: none;
-  border-radius: 120px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-#search-button:hover {
-  box-shadow: 0 0 120px var(--button-shadow), 0 0 20px var(--button-shadow), 0 0 30px var(--button-shadow);
-}
-
-main#download-category {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  padding: 20px;
-}
-
-.download-item {
-  background: var(--card);
-  padding: 20px;
-  width: 250px;
-  text-align: center;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s;
-}
-
-.download-item:hover {
-  transform: scale(1.03);
-}
-
-.download-item img {
-  width: 100%;
-  border-radius: 10px;
-}
-
-.download-item h3 {
-  margin: 10px 0 5px;
-}
-
-.download-item p {
-  font-size: 0.9em;
-  color: gray;
-}
-
-.download-button {
-  padding: 10px 20px;
-  border: none;
-  font-size: 11px;
-  color: #fff;
-  border-radius: 120px;
-  letter-spacing: 4px;
-  font-weight: 700;
-  text-transform: uppercase;
-  background-color: var(--button);
-  transition: 0.3s;
-  cursor: pointer;
-  box-shadow: none; /* fallback */
-  filter: drop-shadow(0 0 8px var(--button));
-}
-
-.download-button:hover {
-  filter: drop-shadow(0 0 10px var(--button))
-          drop-shadow(0 0 25px var(--button))
-          drop-shadow(0 0 50px var(--button))
-          drop-shadow(0 0 100px var(--button));
-}
-
-footer {
-  text-align: center;
-  padding: 20px;
-  font-size: 0.8em;
-  background-color: var(--card);
-}
-
-@media (max-width: 768px) {
-  .download-item {
-    width: 90%;
+// Sistema de busca com Enter
+document.getElementById("search-bar").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    document.getElementById("search-button").click();
   }
-}
-.shadow__btn {
-  padding: 10px 20px;
-  border: none;
-  font-size: 17px;
-  color: #fff;
-  border-radius: 7px;
-  letter-spacing: 4px;
-  font-weight: 700;
-  text-transform: uppercase;
-  transition: 0.3s;
-  background: var(--button);
-  box-shadow: 0 0 25px var(--button-shadow);
-}
+});
 
-.shadow__btn:hover {
-  box-shadow: 0 0 10px var(--button-shadow), 
-              0 0 25px var(--button-shadow), 
-              0 0 50px var(--button-shadow), 
-              0 0 100px var(--button-shadow);
-}
-.logout__btn {
-  padding: 10px 20px;
-  border: none;
-  font-size: 11px;
-  color: #fff;
-  border-radius: 120px;
-  letter-spacing: 4px;
-  font-weight: 700;
-  text-transform: uppercase;
-  background: #e53935;
-  box-shadow: 0 0 25px rgba(229, 57, 53, 0.5);
-  transition: 0.3s;
-  cursor: pointer;
-}
+// Delegação de evento para botões de download
+document.getElementById("download-category").addEventListener("click", (e) => {
+  if (e.target.classList.contains("download-button")) {
+    const id = e.target.dataset.id;
+    const downloadItem = downloads.find(d => d.id === id);
+    if (downloadItem) {
+      window.location.href = downloadItem.link;
+    }
+  }
+});
 
-.logout__btn:hover {
-  box-shadow: 0 0 10px rgba(229, 57, 53, 0.5), 
-              0 0 25px rgba(229, 57, 53, 0.5), 
-              0 0 50px rgba(229, 57, 53, 0.5), 
-              0 0 100px rgba(229, 57, 53, 0.5);
-}
+// Desativa o menu de contexto
+document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+// Impede seleção de texto
+document.addEventListener("selectstart", (e) => e.preventDefault());
+
+// Impede clique longo no mobile
+document.addEventListener("touchstart", (e) => {
+  if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA") {
+    let longPressTimer = setTimeout(() => e.preventDefault(), 500);
+    const cancel = () => clearTimeout(longPressTimer);
+    document.addEventListener("touchend", cancel, { once: true });
+    document.addEventListener("touchmove", cancel, { once: true });
+  }
+});
+
+// Carregamento inicial
+renderDownloads(downloads);
