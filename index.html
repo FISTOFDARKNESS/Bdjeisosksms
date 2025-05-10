@@ -53,7 +53,7 @@
     <button id="search-button">Search</button>
   </section>
 
-  <p id="total-downloads">Total downloads: loading...</p>
+  <p id="total-downloads">Total files: loading...</p>
 
   <main id="download-category">
     <img src="error.png" alt="No downloads yet" oncontextmenu="return false" draggable="false">
@@ -77,7 +77,7 @@
 
     function atualizarTotalDownloads() {
       const total = document.querySelectorAll('#download-category .download-item').length;
-      document.getElementById('total-downloads').textContent = `Total downloads: ${total}`;
+      document.getElementById('total-files').textContent = `Total files: ${total}`;
     }
 
     window.addEventListener('load', atualizarTotalDownloads);
