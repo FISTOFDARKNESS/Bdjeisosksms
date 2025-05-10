@@ -2,12 +2,22 @@
 const downloads = [
   {
     id: "1",
-    link: "https://example.com/file.zip",
-    title: "Download Exemplo",
-    category: "By me",
+    link: "https://link-target.net/1308454/animation-spoofere-v3",
+    title: "Animation Spoofer V3",
+    category: "_.yzero",
     year: "2025",
     video: "https://youtu.be/6s8_GnbYDoY?si=u6qpNaFZZBYCpe1q",
-    image: "icons/error.png",
+    image: "icons/AnimationSpoofer.png",
+    canSee: true
+  },
+    {
+    id: "2",
+    link: "https://link-target.net/1308454/moon-animator-v2",
+    title: "Moon Animator V4",
+    category: "_.yzero",
+    year: "2025",
+    video: "https://youtu.be/eC8ZL0Vemnc?si=-2q7o07tFy0rrCHe",
+    image: "icons/MoonAnimator.png",
     canSee: true
   },
 ];
