@@ -4,7 +4,7 @@
   --card: #fff;
   --button: #4CAF50;
   --button-hover: #45a049;
-  --button-shadow: rgba(76, 175, 80, 0.5); /* Cor da sombra ajustada para o botão */
+  --button-shadow: rgba(76, 175, 80, 0.5); 
 }
 
 
@@ -14,7 +14,7 @@ body.dark {
   --card: #1e1e1e;
   --button: #bb86fc;
   --button-hover: #9b63d5;
-  --button-shadow: rgba(187, 134, 252, 0.5); /* Cor da sombra ajustada para o botão */
+  --button-shadow: rgba(187, 134, 252, 0.5); 
 }
 
 body {
@@ -44,7 +44,7 @@ header {
   background-color: var(--button);
   transition: 0.3s;
   cursor: pointer;
-  box-shadow: none; /* fallback */
+  box-shadow: none;
   filter: drop-shadow(0 0 2px var(--button));
 }
 
@@ -82,7 +82,7 @@ filter: drop-shadow(0 0 3px var(--button))
   box-shadow: 0 0 120px var(--button-shadow), 0 0 20px var(--button-shadow), 0 0 30px var(--button-shadow);
 }
 
-main#film-category {
+main#download-category {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -90,7 +90,7 @@ main#film-category {
   padding: 20px;
 }
 
-.film {
+.download-item {
   background: var(--card);
   padding: 20px;
   width: 250px;
@@ -100,25 +100,25 @@ main#film-category {
   transition: transform 0.2s;
 }
 
-.film:hover {
+.download-item:hover {
   transform: scale(1.03);
 }
 
-.film img {
+.download-item img {
   width: 100%;
   border-radius: 10px;
 }
 
-.film h3 {
+.download-item h3 {
   margin: 10px 0 5px;
 }
 
-.film p {
+.download-item p {
   font-size: 0.9em;
   color: gray;
 }
 
-.play-button {
+.download-button {
   padding: 10px 20px;
   border: none;
   font-size: 11px;
@@ -134,7 +134,7 @@ main#film-category {
   filter: drop-shadow(0 0 8px var(--button));
 }
 
-.play-button:hover {
+.download-button:hover {
   filter: drop-shadow(0 0 10px var(--button))
           drop-shadow(0 0 25px var(--button))
           drop-shadow(0 0 50px var(--button))
@@ -149,12 +149,10 @@ footer {
 }
 
 @media (max-width: 768px) {
-  .film {
+  .download-item {
     width: 90%;
   }
 }
-
-/* Shadow button styles */
 .shadow__btn {
   padding: 10px 20px;
   border: none;
