@@ -20,6 +20,16 @@ const downloads = [
     image: "icons/MoonAnimator.png",
     canSee: true
   },
+   {
+    id: "2",
+    link: "https://link-target.net/1308454/module-lighting-manager",
+    title: "Module Lighting Manager",
+    category: "_.yzero",
+    year: "2025",
+    video: "https://www.youtube.com/@SkyyDev",
+    image: "icons/LightingManager.png",
+    canSee: true
+  },
 ];
 
 // Carrega dark mode se estiver salvo
