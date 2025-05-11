@@ -45,8 +45,8 @@ const downloads = [
     link: "https://direct-link.net/1308454/toji-domain-break",
     title: "Toji Domain Break",
     category: "_.yzero",
-    year: "2025 (no video)",
-    video: "https://www.youtube.com/@SkyyDev",
+    year: "2025 (with video)",
+    video: "https://youtu.be/4ccAgxlc1M8?si=WIBTrjSl8uDVVbV2",
     image: "icons/toji1.png",
     canSee: true
   },
