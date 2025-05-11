@@ -47,7 +47,7 @@ const downloads = [
     category: "_.yzero",
     year: "2025 (no video)",
     video: "https://www.youtube.com/@SkyyDev",
-    image: "icons/.png",
+    image: "icons/toji1.png",
     canSee: true
   },
 ];
