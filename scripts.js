@@ -6,7 +6,7 @@ const downloads = [
     title: "Animation Spoofer V3",
     category: "_.yzero",
     year: "2025 (with video)",
-    video: "https://youtu.be/6s8_GnbYDoY?si=u6qpNaFZZBYCpe1q",
+    video: "https://youtu.be/cjwyrrIeZFw?si=P7l66FEJdqg0AW77",
     image: "icons/AnimationSpoofer.png",
     canSee: true
   },
@@ -15,7 +15,7 @@ const downloads = [
     link: "https://link-target.net/1308454/moon-animator-v2",
     title: "Moon Animator V4",
     category: "_.yzero",
-    year: "2025 (no video)",
+    year: "2025 (with video)",
     video: "https://youtu.be/eC8ZL0Vemnc?si=-2q7o07tFy0rrCHe",
     image: "icons/MoonAnimator.png",
     canSee: true
