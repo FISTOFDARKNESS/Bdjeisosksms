@@ -85,8 +85,8 @@
     document.addEventListener('dragstart', event => event.preventDefault());
     document.addEventListener('contextmenu', event => event.preventDefault());
 
-  const intervalMinutes = 0;
-  const incrementAmount = Math.floor(Math.random() * 99) - 98; // Aumenta de 1 a 4 downloads (ajustável)
+  const intervalMinutes = 30;
+  const incrementAmount = Math.floor(Math.random() * 10) + 1; // Aumenta de 1 a 4 downloads (ajustável)
 
   const countSpan = document.getElementById("download-count");
 
