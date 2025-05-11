@@ -1,56 +1,41 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
-const fs = require('fs');
+const express = require("express");
+const bodyParser = require("body-parser");
+const fetch = require("node-fetch"); // npm install node-fetch
+const path = require("path");
 
 const app = express();
 const PORT = 3000;
 
-app.use(cors());
+// Coloque seu webhook do Discord aqui
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1369288755101438012/9SuVCrsgaQUFWbt-T4b8_aKT2cdGlOJC31I2Qfxn8_d0frluUBhXsm16izL5B9-InJIC";
+
+// Middleware para parsear JSON
 app.use(bodyParser.json());
 
-const USERS_FILE = './users.json';
+// Serve arquivos estáticos diretamente da raiz
+app.use(express.static(__dirname));
 
-function loadUsers() {
-  if (!fs.existsSync(USERS_FILE)) return {};
-  return JSON.parse(fs.readFileSync(USERS_FILE));
-}
+app.post("/webhook", async (req, res) => {
+  const { content } = req.body;
 
-function saveUsers(users) {
-  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
-}
+  if (!content) return res.status(400).json({ message: "Missing content." });
 
-app.post('/register', async (req, res) => {
-  const { username, password } = req.body;
-  const users = loadUsers();
+  try {
+    const response = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content })
+    });
 
-  if (users[username]) {
-    return res.status(400).json({ message: 'Utente già registrato' });
+    if (!response.ok) throw new Error("Failed to send webhook");
+
+    res.status(200).json({ message: "Webhook sent successfully" });
+  } catch (err) {
+    console.error("Webhook error:", err);
+    res.status(500).json({ message: "Error sending webhook" });
   }
-
-  const hashed = await bcrypt.hash(password, 10);
-  users[username] = hashed;
-  saveUsers(users);
-  res.json({ message: 'Registrazione completata' });
-});
-
-app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  const users = loadUsers();
-
-  if (!users[username]) {
-    return res.status(400).json({ message: 'Credenziali non valide' });
-  }
-
-  const isValid = await bcrypt.compare(password, users[username]);
-  if (!isValid) {
-    return res.status(400).json({ message: 'Credenziali non valide' });
-  }
-
-  res.json({ message: 'Login effettuato con successo' });
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Server attivo su http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
