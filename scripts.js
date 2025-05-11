@@ -5,7 +5,7 @@ const downloads = [
     link: "https://link-target.net/1308454/animation-spoofere-v3",
     title: "Animation Spoofer V3",
     category: "_.yzero",
-    year: "2025",
+    year: "2025 (with video)",
     video: "https://youtu.be/6s8_GnbYDoY?si=u6qpNaFZZBYCpe1q",
     image: "icons/AnimationSpoofer.png",
     canSee: true
@@ -15,19 +15,29 @@ const downloads = [
     link: "https://link-target.net/1308454/moon-animator-v2",
     title: "Moon Animator V4",
     category: "_.yzero",
-    year: "2025",
+    year: "2025 (no video)",
     video: "https://youtu.be/eC8ZL0Vemnc?si=-2q7o07tFy0rrCHe",
     image: "icons/MoonAnimator.png",
     canSee: true
   },
    {
-    id: "2",
+    id: "3",
     link: "https://link-target.net/1308454/module-lighting-manager",
     title: "Module Lighting Manager",
     category: "_.yzero",
-    year: "2025",
+    year: "2025 (no video)",
     video: "https://www.youtube.com/@SkyyDev",
     image: "icons/LightingManager.png",
+    canSee: true
+  },
+  {
+    id: "4",
+    link: "https://link-target.net/1308454/module-advanced-tween",
+    title: "Advanced Tween Module",
+    category: "_.yzero",
+    year: "2025 (no video)",
+    video: "https://www.youtube.com/@SkyyDev",
+    image: "icons/tween.png",
     canSee: true
   },
 ];
