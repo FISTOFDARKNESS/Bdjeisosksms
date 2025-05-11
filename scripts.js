@@ -71,7 +71,7 @@ const downloads = [
   },
   {
     id: "8",
-    link: "https://www.youtube.com/@SkyyDev",
+    link: "https://workink.net/1ZCI/Comming",
     title: "Comming Sae Flow",
     category: "_.yzero",
     year: "2025 (13/05 with video)",
@@ -81,7 +81,7 @@ const downloads = [
   },
   {
     id: "9",
-    link: "https://www.youtube.com/@SkyyDev",
+    link: "https://workink.net/1ZCI/Comming",
     title: "Comming Mahito Domain Expansion",
     category: "_.yzero",
     year: "2025 (13/05 with video)",
