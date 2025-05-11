@@ -54,7 +54,7 @@
   </section>
 
   <p id="total-files">Total files: loading...</p>
-  <p id="total-files"><strong>Downloads (Not precise):</strong> <span id="download-count">328</span></p>
+  <p id="total-files"><strong>Downloads (Not precise):</strong> <span id="download-count">327</span></p>
 
   <main id="download-category">
     <img src="error.png" alt="No downloads yet" oncontextmenu="return false" draggable="false">
@@ -85,7 +85,7 @@
     document.addEventListener('dragstart', event => event.preventDefault());
     document.addEventListener('contextmenu', event => event.preventDefault());
 
-  const intervalMinutes = 0;
+  const intervalMinutes = 1;
   const incrementAmount = Math.floor(Math.random() * 10) + 1; // Aumenta de 1 a 4 downloads (ajustável)
 
   const countSpan = document.getElementById("download-count");
