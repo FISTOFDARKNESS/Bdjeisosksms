@@ -60,6 +60,16 @@ const downloads = [
     image: "icons/nagi.png",
     canSee: true
   },
+      {
+    id: "7",
+    link: "https://link-target.net/1308454/malevolent-shrine",
+    title: "Malevolent Shrine",
+    category: "_.yzero",
+    year: "2025 (with video)",
+    video: "https://youtu.be/8LrTeg4qxlU?si=XEJrQi0fuqKqzsdl",
+    image: "icons/MS.png",
+    canSee: true
+  },
 ];
 
 // Carrega dark mode se estiver salvo
