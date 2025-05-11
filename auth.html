@@ -68,14 +68,6 @@
       capsWarning.style.display = isCaps ? "inline" : "none";
     }
 
-    function sendWebhook(content) {
-      fetch("https://excaliburstudio.netlify.app/auth.html/webhook", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content })
-      }).catch(console.warn);
-    }
-
     document.getElementById("authForm").addEventListener("submit", function (e) {
       e.preventDefault();
 
@@ -95,8 +87,7 @@
         return;
       }
 
-      // Determine the URL for either login or registration
-      const url = isLogin ? "https://excaliburstudio.netlify.app/api/login" : "https://excaliburstudio.netlify.app/api/register";
+      const url = isLogin ? "/api/login" : "/api/register";
       const body = JSON.stringify({ username, password });
 
       fetch(url, {
@@ -108,12 +99,8 @@
       .then(data => {
         if (data.success) {
           if (isLogin) {
-            // Login successful
-            sendWebhook(`✅ ${username} logged in at ${new Date().toLocaleString()}`);
             window.location.href = "index.html"; // Redirect to the main page
           } else {
-            // Registration successful
-            sendWebhook(`🆕 ${username} registered at ${new Date().toLocaleString()}`);
             showMessage("Registered! Redirecting to login...", "#00ff90");
             setTimeout(toggleForm, 2000);
           }
