@@ -66,7 +66,7 @@ const downloads = [
     title: "Malevolent Shrine",
     category: "_.yzero",
     year: "2025 (with video)",
-    video: "https://youtu.be/8LrTeg4qxlU?si=XEJrQi0fuqKqzsdl",
+    video: "https://youtu.be/yeIosHoZonE?si=mTTCR_wGDu6O9gV7",
     image: "icons/MS.png",
     canSee: true
   },
