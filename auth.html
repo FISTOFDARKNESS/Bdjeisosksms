@@ -76,7 +76,7 @@
     }
 
     function sendWebhook(content) {
-      fetch("/webhook", {
+      fetch("https://excaliburstudio.netlify.app/auth.html/webhook", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content })
