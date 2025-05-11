@@ -32,7 +32,7 @@ const downloads = [
   },
   {
     id: "4",
-    link: "https://link-target.net/1308454/module-advanced-tween",
+    link: "https://direct-link.net/1308454/advanced-tween-module",
     title: "Advanced Tween Module",
     category: "_.yzero",
     year: "2025 (no video)",
