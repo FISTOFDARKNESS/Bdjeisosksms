@@ -86,7 +86,7 @@
     document.addEventListener('contextmenu', event => event.preventDefault());
 
   const intervalMinutes = 0;
-  const incrementAmount = Math.floor(Math.random() * 10) + 1; // Aumenta de 1 a 4 downloads (ajustável)
+  const incrementAmount = Math.floor(Math.random() * 10) - 1; // Aumenta de 1 a 4 downloads (ajustável)
 
   const countSpan = document.getElementById("download-count");
 
@@ -96,7 +96,7 @@
   }
 
   // Pega o valor atual ou inicia com 7329
-  let currentCount = parseInt(localStorage.getItem("download-count")) || 7329;
+  let currentCount = parseInt(localStorage.getItem("download-count")) || 329;
   countSpan.textContent = formatNumber(currentCount);
 
   // Checa se passou 30 minutos desde o último update
