@@ -109,8 +109,6 @@
     localStorage.setItem("last-update", now);
     countSpan.textContent = formatNumber(currentCount);
   }
-
-  // Atualiza automaticamente após 30 minutos
   setInterval(() => {
     currentCount += incrementAmount;
     localStorage.setItem("download-count", currentCount);
