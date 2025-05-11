@@ -40,6 +40,16 @@ const downloads = [
     image: "icons/tween.png",
     canSee: true
   },
+  {
+    id: "5",
+    link: "https://direct-link.net/1308454/toji-domain-break",
+    title: "Toji Domain Break",
+    category: "_.yzero",
+    year: "2025 (no video)",
+    video: "https://www.youtube.com/@SkyyDev",
+    image: "icons/.png",
+    canSee: true
+  },
 ];
 
 // Carrega dark mode se estiver salvo
