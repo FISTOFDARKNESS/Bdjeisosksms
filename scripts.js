@@ -50,6 +50,16 @@ const downloads = [
     image: "icons/toji1.png",
     canSee: true
   },
+    {
+    id: "6",
+    link: "https://link-hub.net/1308454/nagi-nice-to-meet-you",
+    title: "Nigi Nice To Meet You Japan",
+    category: "_.yzero",
+    year: "2025 (with video)",
+    video: "https://youtu.be/8LrTeg4qxlU?si=XEJrQi0fuqKqzsdl",
+    image: "icons/nagi.png",
+    canSee: true
+  },
 ];
 
 // Carrega dark mode se estiver salvo
