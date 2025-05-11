@@ -2,7 +2,7 @@
 const downloads = [
   {
     id: "1",
-    link: "https://link-target.net/1308454/animation-spoofere-v3",
+    link: "https://workink.net/1ZCI/AnimationSpoofer",
     title: "Animation Spoofer V3",
     category: "_.yzero",
     year: "2025 (with video)",
@@ -12,7 +12,7 @@ const downloads = [
   },
     {
     id: "2",
-    link: "https://link-target.net/1308454/moon-animator-v2",
+    link: "https://workink.net/1ZCI/MoonAnimatorV4",
     title: "Moon Animator V4",
     category: "_.yzero",
     year: "2025 (with video)",
@@ -22,7 +22,7 @@ const downloads = [
   },
    {
     id: "3",
-    link: "https://link-target.net/1308454/module-lighting-manager",
+    link: "https://workink.net/1ZCI/AnimationSpoofer",
     title: "Module Lighting Manager",
     category: "_.yzero",
     year: "2025 (no video)",
@@ -32,7 +32,7 @@ const downloads = [
   },
   {
     id: "4",
-    link: "https://direct-link.net/1308454/advanced-tween-module",
+    link: "https://workink.net/1ZCI/AdvancedTweenModule",
     title: "Advanced Tween Module",
     category: "_.yzero",
     year: "2025 (no video)",
@@ -42,7 +42,7 @@ const downloads = [
   },
   {
     id: "5",
-    link: "https://direct-link.net/1308454/toji-domain-break",
+    link: "https://workink.net/1ZCI/TojiDomainBreak",
     title: "Toji Domain Break",
     category: "_.yzero",
     year: "2025 (with video)",
@@ -52,7 +52,7 @@ const downloads = [
   },
     {
     id: "6",
-    link: "https://link-hub.net/1308454/nagi-nice-to-meet-you",
+    link: "https://workink.net/1ZCI/NigiNiceToMeetYouJapan",
     title: "Nigi Nice To Meet You Japan",
     category: "_.yzero",
     year: "2025 (with video)",
@@ -62,7 +62,7 @@ const downloads = [
   },
       {
     id: "7",
-    link: "https://link-target.net/1308454/malevolent-shrine",
+    link: "https://workink.net/1ZCI/MalevolentShrine",
     title: "Malevolent Shrine",
     category: "_.yzero",
     year: "2025 (with video)",
