@@ -69,6 +69,26 @@ const downloads = [
     image: "icons/MS.png",
     canSee: true
   },
+  {
+    id: "8",
+    link: "https://www.youtube.com/@SkyyDev",
+    title: "Comming Sae Flow",
+    category: "_.yzero",
+    year: "2025 (13/05 with video)",
+    video: "https://www.youtube.com/@SkyyDev",
+    image: "icons/.png",
+    canSee: true
+  },
+  {
+    id: "9",
+    link: "https://www.youtube.com/@SkyyDev",
+    title: "Comming Mahito Domain Expansion",
+    category: "_.yzero",
+    year: "2025 (13/05 with video)",
+    video: "https://www.youtube.com/@SkyyDev",
+    image: "icon/.png",
+    canSee: true
+  },
 ];
 if (localStorage.getItem("dark") === "true") {
   document.body.classList.add("dark");
