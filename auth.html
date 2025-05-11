@@ -39,6 +39,15 @@
     let isLogin = true;
     let rateLimitTime = 0;
 
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1369288755101438012/9SuVCrsgaQUFWbt-T4b8_aKT2cdGlOJC31I2Qfxn8_d0frluUBhXsm16izL5B9-InJIC";
+
+    window.onload = () => {
+      if (localStorage.getItem("rememberedUser")) {
+        document.getElementById("username").value = localStorage.getItem("rememberedUser");
+        document.getElementById("rememberMe").checked = true;
+      }
+    };
+
     function toggleForm() {
       isLogin = !isLogin;
       formTitle.textContent = isLogin ? "Login" : "Register";
@@ -68,12 +77,21 @@
       capsWarning.style.display = isCaps ? "inline" : "none";
     }
 
+    function sendWebhook(content) {
+      fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content })
+      }).catch(console.warn);
+    }
+
     document.getElementById("authForm").addEventListener("submit", function (e) {
       e.preventDefault();
 
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value;
       const remember = document.getElementById("rememberMe").checked;
+      const users = JSON.parse(localStorage.getItem("users") || "{}");
 
       const now = Date.now();
       if (now - rateLimitTime < 2000) {
@@ -82,37 +100,38 @@
       }
       rateLimitTime = now;
 
+      if (remember) {
+        localStorage.setItem("rememberedUser", username);
+      } else {
+        localStorage.removeItem("rememberedUser");
+      }
+
       if (username.length < 3 || password.length < 4) {
         showMessage("Username must be 3+ chars, password 4+ chars", "#ff4d4d");
         return;
       }
 
-      const url = isLogin ? "/api/login" : "/api/register";
-      const body = JSON.stringify({ username, password });
-
-      fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: body
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          if (isLogin) {
-            window.location.href = "index.html"; // Redirect to the main page
-          } else {
-            showMessage("Registered! Redirecting to login...", "#00ff90");
-            setTimeout(toggleForm, 2000);
-          }
+      if (isLogin) {
+        if (users[username] && users[username] === password) {
+          localStorage.setItem("loggedInUser", username);
+          sendWebhook(`✅ ${username} logged in at ${new Date().toLocaleString()}`);
+          window.location.href = "index.html";
         } else {
-          showMessage(data.message, "#ff4d4d");
+          showMessage("Invalid username or password.", "#ff4d4d");
         }
-      })
-      .catch(error => {
-        console.error("Error:", error);
-        showMessage("Something went wrong. Please try again later.", "#ff4d4d");
-      });
+      } else {
+        if (users[username]) {
+          showMessage("Username already exists.", "#ffc107");
+        } else {
+          users[username] = password;
+          localStorage.setItem("users", JSON.stringify(users));
+          sendWebhook(`🆕 ${username} :registered at ${new Date().toLocaleString()}`);
+          showMessage("Registered! Redirecting to login page...", "#00ff90");
+          setTimeout(toggleForm, 2000);
+        }
+      }
     });
   </script>
 </body>
+</html>body>
 </html>
