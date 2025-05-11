@@ -1,4 +1,3 @@
-// Lista de downloads
 const downloads = [
   {
     id: "1",
