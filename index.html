@@ -54,7 +54,7 @@
   </section>
 
   <p id="total-files">Total files: loading...</p>
-  <p id="total-files"><strong>Downloads(Not precise):</strong> 7.329</p>
+  <p id="total-files"><strong>Downloads (Not precise):</strong> <span id="download-count">7.329</span></p>
 
   <main id="download-category">
     <img src="error.png" alt="No downloads yet" oncontextmenu="return false" draggable="false">
@@ -84,6 +84,39 @@
     window.addEventListener('load', atualizarTotalDownloads);
     document.addEventListener('dragstart', event => event.preventDefault());
     document.addEventListener('contextmenu', event => event.preventDefault());
+
+  const intervalMinutes = 1;
+  const incrementAmount = Math.floor(Math.random() * 4) + 1; // Aumenta de 1 a 4 downloads (ajustável)
+
+  const countSpan = document.getElementById("download-count");
+
+  // Função para formatar número como 7.329
+  function formatNumber(num) {
+    return num.toLocaleString('de-DE'); // usa . como separador de milhar
+  }
+
+  // Pega o valor atual ou inicia com 7329
+  let currentCount = parseInt(localStorage.getItem("download-count")) || 7329;
+  countSpan.textContent = formatNumber(currentCount);
+
+  // Checa se passou 30 minutos desde o último update
+  const lastUpdate = parseInt(localStorage.getItem("last-update")) || 0;
+  const now = Date.now();
+
+  if (now - lastUpdate >= intervalMinutes * 60 * 1000) {
+    currentCount += incrementAmount;
+    localStorage.setItem("download-count", currentCount);
+    localStorage.setItem("last-update", now);
+    countSpan.textContent = formatNumber(currentCount);
+  }
+
+  // Atualiza automaticamente após 30 minutos
+  setInterval(() => {
+    currentCount += incrementAmount;
+    localStorage.setItem("download-count", currentCount);
+    localStorage.setItem("last-update", Date.now());
+    countSpan.textContent = formatNumber(currentCount);
+  }, intervalMinutes * 60 * 1000);
   </script>
   <script src="scripts.js"></script>
   <script src="important.js"></script>
