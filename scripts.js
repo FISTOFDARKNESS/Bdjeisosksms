@@ -21,7 +21,7 @@ const downloads = [
   },
    {
     id: "3",
-    link: "https://workink.net/1ZCI/AnimationSpoofer",
+    link: "https://workink.net/1ZCI/ModuleLightingManager",
     title: "Module Lighting Manager",
     category: "_.yzero",
     year: "2025 (no video)",
