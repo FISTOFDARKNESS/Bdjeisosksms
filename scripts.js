@@ -86,7 +86,7 @@ const downloads = [
     category: "_.yzero",
     year: "2025 (with video)",
     video: "https://youtu.be/9u5NHUo1f9c",
-    image: "icon/Cattura1.PNG",
+    image: "icon/mahi.png",
     canSee: true
   },
 ];
