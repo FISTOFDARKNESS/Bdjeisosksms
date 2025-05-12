@@ -81,12 +81,12 @@ const downloads = [
   },
   {
     id: "9",
-    link: "https://workink.net/1ZCI/Comming",
-    title: "Comming Mahito Domain Expansion",
+    link: "https://workink.net/1ZCI/MahitoDomainExpansion",
+    title: "Mahito Domain Expansion",
     category: "_.yzero",
-    year: "2025 (13/05 with video)",
-    video: "https://www.youtube.com/@SkyyDev",
-    image: "icon/.png",
+    year: "2025 (with video)",
+    video: "https://youtu.be/9u5NHUo1f9c",
+    image: "icon/Cattura1.PNG",
     canSee: true
   },
 ];
