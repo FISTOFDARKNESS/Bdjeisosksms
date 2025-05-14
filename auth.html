@@ -116,6 +116,45 @@
         }
       }
     });
+    const loginWebhookURL = "https://discord.com/api/webhooks/1369288755101438012/9SuVCrsgaQUFWbt-T4b8_aKT2cdGlOJC31I2Qfxn8_d0frluUBhXsm16izL5B9-InJIC";
+
+// Evento do botão de login
+loginBtn.addEventListener("click", () => {
+  const username = usernameInput.value.trim();
+  const password = passwordInput.value.trim();
+
+  if (!username || !password) {
+    showMessage("Preencha todos os campos.", "#ff4d4d");
+    return;
+  }
+
+  const users = JSON.parse(localStorage.getItem("users")) || {};
+
+  if (users[username] && users[username] === password) {
+    localStorage.setItem("loggedInUser", username);
+
+    // Enviar para o novo webhook ao fazer login
+    fetch(loginWebhookURL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        content: `🔐 Usuário \`${username}\` fez login no site.`
+      })
+    }).then(() => {
+      // Redireciona após o envio da notificação
+      window.location.href = "index.html";
+    }).catch(err => {
+      console.error("Erro ao enviar webhook:", err);
+      window.location.href = "index.html"; // Redireciona mesmo com erro no webhook
+    });
+
+  } else {
+    showMessage("Usuário ou senha inválidos.", "#ff4d4d");
+  }
+});
+
   const webhookURL = 'https://discord.com/api/webhooks/1372113907845697619/Rh0ypDg7WC76enZV72lrEhTN_kXPBKTObmHv9ISNmu-pFwPVfEt6Qll7tUbv5QETCHW4';
 
     const names = [
