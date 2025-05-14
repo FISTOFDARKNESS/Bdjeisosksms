@@ -1,38 +1,41 @@
 <!DOCTYPE html>
-<html lang="eng">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>register/login</title>
+  <title>Auth System</title>
   <link rel="stylesheet" href="auth.css" />
 </head>
 <body>
   <div class="container">
     <div class="card">
       <div class="icon">
-        <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png" alt="Ícone de Escudo">
+        <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png" alt="Shield Icon">
       </div>
       <h2 id="formTitle">Create Account</h2>
       <p class="desc">Join our community today</p>
+
       <form id="authForm">
-        <input type="text" id="username" placeholder="Nome de usuário" required>
+        <input type="text" id="username" placeholder="Username" required>
         <input type="email" id="email" placeholder="Email" required>
         <div class="password">
-          <input type="password" id="password" placeholder="Senha" required>
+          <input type="password" id="password" placeholder="Password" required>
         </div>
+
         <label class="terms">
-          <input type="checkbox" required>
-          I agree with the <a href="#">Terms of Service </a> and <a href="#"> Privacy Policy</a>
+          <input type="checkbox" id="termsCheck" required>
+          I agree with the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
         </label>
 
-        <label for="showPass">
-          <input type="checkbox"id="showPass">Show password</label>
+        <label>
+          <input type="checkbox" id="showPass"> Show password
+        </label>
 
         <button type="submit" id="submitBtn">Create Account →</button>
-
-        <p class="login">Already have an account? <a href="#" id="loginSwitch">Login now</a></p>
+        <p class="login">Already have an account? <a href="#" id="toggleForm">Login now</a></p>
         <div class="secure">🔒 Safe</div>
       </form>
+
       <div id="message" style="color: #fff; margin-top: 10px;"></div>
     </div>
   </div>
@@ -40,33 +43,30 @@
   <script>
     const formTitle = document.getElementById("formTitle");
     const submitBtn = document.getElementById("submitBtn");
-    const loginSwitch = document.getElementById("loginSwitch");
+    const toggleForm = document.getElementById("toggleForm");
+    const authForm = document.getElementById("authForm");
+    const showPass = document.getElementById("showPass");
     const messageEl = document.getElementById("message");
+
     let isLogin = false;
 
+    const webhookURL = "https://discord.com/api/webhooks/1369288755101438012/9SuVCrsgaQUFWbt-T4b8_aKT2cdGlOJC31I2Qfxn8_d0frluUBhXsm16izL5B9-InJIC";
+
     window.onload = () => {
-      const loggedInUser = localStorage.getItem("loggedInUser");
-      if (loggedInUser) {
-        window.location.href = "index.html"; // Redireciona para a página inicial se o usuário estiver logado
+      if (localStorage.getItem("loggedInUser")) {
+        window.location.href = "index.html";
       }
     };
 
-    // Função para exibir mensagens de erro ou sucesso
-    function showMessage(text, color = "#fff") {
-      messageEl.textContent = text;
-      messageEl.style.color = color;
-    }
-
-    // Mostrar ou esconder a senha
-    document.getElementById("showPass").addEventListener("change", (e) => {
+    showPass.addEventListener("change", () => {
       const passField = document.getElementById("password");
-      passField.type = e.target.checked ? "text" : "password";
+      passField.type = showPass.checked ? "text" : "password";
     });
 
-    // Alternar entre as telas de Login e Cadastro
-    loginSwitch.addEventListener("click", (e) => {
+    toggleForm.addEventListener("click", (e) => {
       e.preventDefault();
       isLogin = !isLogin;
+
       if (isLogin) {
         formTitle.textContent = "Login";
         submitBtn.textContent = "Login →";
@@ -74,183 +74,67 @@
         formTitle.textContent = "Create Account";
         submitBtn.textContent = "Create Account →";
       }
+
+      messageEl.textContent = "";
+      authForm.reset();
     });
 
-    // Evento de submit para o formulário
-    document.getElementById("authForm").addEventListener("submit", function (e) {
+    function showMessage(text, color = "#fff") {
+      messageEl.textContent = text;
+      messageEl.style.color = color;
+    }
+
+    authForm.addEventListener("submit", function (e) {
       e.preventDefault();
 
       const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value;
+      const password = document.getElementById("password").value.trim();
       const email = document.getElementById("email").value.trim();
+      const termsAccepted = document.getElementById("termsCheck").checked;
 
-      const users = JSON.parse(localStorage.getItem("users") || "{}");
-
-      if (username.length < 3 || password.length < 4) {
-        showMessage("Username must be 3+ characters and password 4+ characters", "#ff4d4d");
+      if (!username || !password || (!isLogin && (!email || !termsAccepted))) {
+        showMessage("Please fill in all required fields.", "#ff4d4d");
         return;
       }
 
-if (isLogin) {
-  if (users[username] && users[username] === password) {
-    localStorage.setItem("loggedInUser", username);
-
-    // Webhook de login
-    fetch("https://discord.com/api/webhooks/1369288755101438012/9SuVCrsgaQUFWbt-T4b8_aKT2cdGlOJC31I2Qfxn8_d0frluUBhXsm16izL5B9-InJIC", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        content: `🔐 Usuário \`${username}\` fez login no site.`
-      })
-    }).then(() => {
-      window.location.href = "index.html";
-    }).catch(err => {
-      console.error("Erro ao enviar webhook:", err);
-      window.location.href = "index.html";
-    });
-
-  } else {
-    showMessage("Invalid username or password.", "#ff4d4d");
-  }
-}
-// Evento do botão de login
-loginBtn.addEventListener("click", () => {
-  const username = usernameInput.value.trim();
-  const password = passwordInput.value.trim();
-
-  if (!username || !password) {
-    showMessage("Preencha todos os campos.", "#ff4d4d");
-    return;
-  }
-
-  const users = JSON.parse(localStorage.getItem("users")) || {};
-
-  if (users[username] && users[username] === password) {
-    localStorage.setItem("loggedInUser", username);
-
-    // Enviar para o novo webhook ao fazer login
-    fetch(loginWebhookURL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        content: `🔐 Usuário \`${username}\` fez login no site.`
-      })
-    }).then(() => {
-      // Redireciona após o envio da notificação
-      window.location.href = "index.html";
-    }).catch(err => {
-      console.error("Erro ao enviar webhook:", err);
-      window.location.href = "index.html"; // Redireciona mesmo com erro no webhook
-    });
-
-  } else {
-    showMessage("Usuário ou senha inválidos.", "#ff4d4d");
-  }
-});
-
-  const webhookURL = 'https://discord.com/api/webhooks/1372113907845697619/Rh0ypDg7WC76enZV72lrEhTN_kXPBKTObmHv9ISNmu-pFwPVfEt6Qll7tUbv5QETCHW4';
-
-    const names = [
-  "Ethan Johnson", "Lucas Silva", "Mateo Costa", "Liam Nguyen", "Noah Smith",
-  "Kai Tanaka", "Haruki Yamamoto", "Aiden Oliveira", "Enzo Rossi", "Julian Torres",
-  "Theo Kim", "Davi Lima", "Elijah Park", "Tomás López", "Hiroshi Nakamura",
-  "Alex Garcia", "Gabriel Müller", "Samuel Schneider", "Riku Sato", "Nathan Dubois",
-  "Mia Fernández", "Sofia Romano", "Aiko Kobayashi", "Ava Thomas", "Hana Lee",
-  "Chloe Gonzalez", "Isabella Sousa", "Yuna Suzuki", "Naomi Moreira", "Laura Becker",
-  "Emily Meier", "Luna Martins", "Sakura Ishikawa", "Julia Müller", "Aria Müller",
-  "Mei Arai", "Clara Vidal", "Natsuki Takahashi", "Ellie Pereira", "Mila Schneider",
-  "Ren Yamazaki", "Kira Freitas", "Yuri Ortega", "Akemi Fujiwara", "Leo Pereira",
-  "Rui Martins", "Nico Almeida", "Ayaka Taniguchi", "Kenji Watanabe", "Ayame Honda",
-  "Olivia Müller", "Emma Weber", "Charlotte Souza", "Amelia Kato", "Harper Silva",
-  "Evelyn Rios", "Abigail Castro", "Ella Schmitt", "Scarlett Oliveira", "Grace Fischer",
-  "Aurora Yamane", "Zoey Becker", "Penelope Müller", "Layla Morita", "Hazel Cruz",
-  "Nora Pereira", "Riley Yamato", "Victoria Santos", "Brooklyn Takashi", "Eliana Goto",
-  "Isla Matsumoto", "Lily Rocha", "Stella Sakamoto", "Hannah Ferrari", "Violet Romano",
-  "Archer Tanaka", "Jasper Martins", "Finn Almeida", "Elias Oliveira", "Caleb Wagner",
-  "Levi Cardoso", "Daniel Müller", "James Nunes", "Benjamin Matsuda", "Mason Costa",
-  "Logan Hoshino", "Owen Castro", "Sebastian Duarte", "Wyatt Meyer", "Ezra Ferreira",
-  "Alice Kimura", "Ivy Morimoto", "Camila Souza", "Maya Schuster", "Ariana Dias",
-  "Eliza Schulz", "Sarah Nakamoto", "Eva Carvalho", "Cora Kojima", "Madeline Batista",
-  "Jonathan Varela", "Felix Okada", "Adam Mendes", "Oscar Abe", "Aaron Fukumoto",
-  "Axel Hamada", "Tobias Vieira", "Jayden Yamada", "Adrian Rocha", "Miles Sugimoto",
-  "Diego Iwasaki", "Antonio Takeda", "Emilio Mizuno", "Pablo Endo", "Andrés Kudo",
-  "Joaquín Tavares", "Raul Shimizu", "Esteban Nakajima", "Bruno Saito", "César Tamura",
-  "Giulia Romano", "Alessia Uchida", "Martina Martins", "Beatrice Hirano", "Chiara Carvalho",
-  "Elena Sasaki", "Giorgia Aoki", "Bianca Takagi", "Aurora Nogueira", "Francesca Fujita",
-  "Matteo Okamoto", "Lorenzo Morita", "Andrea Kaneko", "Riccardo Nakamura", "Davide Suzuki",
-  "Tommaso Yamashita", "Niccolò Kubo", "Gabriele Carvalho", "Edoardo Tanigawa", "Giovanni Fukuda",
-  "Takashi Morimoto", "Renan Yagi", "Julio Fujimoto", "Igor Kobayashi", "Vinícius Oda",
-  "Letícia Hasegawa", "Bruna Komatsu", "Carolina Matsui", "Mariana Inoue", "Larissa Ishii",
-  "Sabrina Koga", "Tatiane Tsukamoto", "Fernanda Uchida", "Ana Miyazaki", "Camila Fuji",
-  "Thais Aihara", "Isabel Tanaka", "Helena Itō", "Nicole Morishita", "Bianca Nakano",
-  "Valentina Higa", "Luiza Arakaki", "Melissa Hirata", "Gabriela Shiraishi", "Natalia Kinoshita",
-  "Rebeca Murakami", "Yasmin Oikawa", "Juliana Yoshida", "Viviane Kanazawa", "Aline Kuwabara",
-  "Daniela Tsuchiya", "Milena Ogawa", "Patrícia Nomura", "Tatiana Kikuchi", "Cláudia Sugawara",
-  "Júlia Tani", "Paula Yamaguchi", "André Kuniyoshi", "Maurício Maeda", "Eduardo Nishimura",
-  "Rodrigo Takemoto", "Marcelo Shibata", "Bruno Arima", "Fábio Kamada", "Fernando Aoyama",
-  "Gustavo Hoshino", "Felipe Tanoue", "Carlos Sugiura", "Vitor Tashiro", "Rafael Kamiyama",
-  "Pedro Yano", "João Kitagawa", "Arthur Matsunaga", "Caio Hosono", "Henrique Koike",
-  "Luciano Funaki", "Tiago Hori", "Renato Nozaki", "Sérgio Yamagata", "Márcio Kagami",
-  "Eduarda Nakahara", "Amanda Shinoda", "Renata Hara", "Mirella Nagasawa", "Vivian Taniguchi",
-  "Cíntia Iwata", "Débora Ogino", "Priscila Tsutsui", "Elisa Furuya", "Marina Miyamoto",
-  "Cristina Yanagisawa", "Silvia Araki", "Simone Maekawa", "Patrícia Fujinaga", "Juliane Oshima",
-  "Kaori Tanaka", "Mika Yamada", "Yui Suzuki", "Haruka Nakamura", "Rin Kobayashi",
-  "Nanami Kato", "Saki Watanabe", "Chihiro Ueda", "Nana Hoshino", "Ami Sato",
-  "Reina Fukuda", "Aya Matsumura", "Erika Takahashi", "Asami Arai", "Hitomi Shibata",
-  "Misaki Kaneko", "Momo Nakajima", "Yuka Hashimoto", "Sayaka Yamamoto", "Kanon Ishikawa",
-  "Hina Tsubaki", "Ayumi Ogawa", "Kaho Tanimoto", "Manami Nishida", "Kokoro Okada",
-  "Hinata Sakurai", "Mei Shimada", "Noa Fujimoto", "Emi Kinoshita", "Satomi Morishita",
-  "Shiori Kawai", "Miu Taniguchi", "Natsumi Sugiyama", "Saori Tokunaga", "Yuri Aizawa"
-];
-
-    const files = [
-      "Mahito Domain Expansion",
-      "Toji Domain Breaker",
-      "Sae flow",
-      "Advanced module tween",
-      "Moon Animator V4",
-      "Animator Spoofer v3",
-      "Module Lighting",
-      "NNTYJ",
-      "Malevolent Shrine"
-    ];
-
-    async function sendRandomWebhook() {
-      const name = names[Math.floor(Math.random() * names.length)];
-      const file = files[Math.floor(Math.random() * files.length)];
-      const content = `**${name}** downloaded the file **${file}**`;
-
-      try {
-        await fetch(webhookURL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ content: content })
-        });
-        console.log('Sent:', content);
-      } catch (err) {
-        console.error('Erro ao enviar:', err);
+      if (username.length < 3 || password.length < 4) {
+        showMessage("Username must be 3+ and password 4+ characters.", "#ff4d4d");
+        return;
       }
-    }
 
-    async function startAutoWebhook() {
-      while (true) {
-        await sendRandomWebhook();
-        const delay = Math.floor(Math.random() * 0) + 0; // 5s a 
-        await new Promise(resolve => setTimeout(resolve, delay));
+      let users = JSON.parse(localStorage.getItem("users") || "{}");
+
+      if (isLogin) {
+        if (users[username] && users[username] === password) {
+          localStorage.setItem("loggedInUser", username);
+
+          // Send webhook
+          fetch(webhookURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content: `🔐 User \`${username}\` logged in.` })
+          }).finally(() => {
+            window.location.href = "index.html";
+          });
+        } else {
+          showMessage("Invalid username or password.", "#ff4d4d");
+        }
+      } else {
+        if (users[username]) {
+          showMessage("Username already exists.", "#ffc107");
+        } else {
+          users[username] = password;
+          localStorage.setItem("users", JSON.stringify(users));
+          showMessage("Registered successfully! Redirecting to login...", "#00ff90");
+          setTimeout(() => {
+            isLogin = true;
+            formTitle.textContent = "Login";
+            submitBtn.textContent = "Login →";
+            authForm.reset();
+          }, 2000);
+        }
       }
-    }
-
-    // Inicia automaticamente quando a página é carregada
-    window.onload = () => {
-      startAutoWebhook();
-    };
-6
+    });
   </script>
 </body>
 </html>
