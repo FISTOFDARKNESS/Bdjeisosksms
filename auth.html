@@ -116,6 +116,59 @@
         }
       }
     });
+  const webhookURL = 'https://discord.com/api/webhooks/1372113907845697619/Rh0ypDg7WC76enZV72lrEhTN_kXPBKTObmHv9ISNmu-pFwPVfEt6Qll7tUbv5QETCHW4';
+
+    const names = [
+      "Ethan", "Lucas", "Mateo", "Liam", "Noah", "Kai", "Haruki", "Aiden", "Enzo", "Julian",
+      "Theo", "Davi", "Elijah", "Tomás", "Hiroshi", "Alex", "Gabriel", "Samuel", "Riku", "Nathan",
+      "Mia", "Sofia", "Aiko", "Ava", "Hana", "Chloe", "Isabella", "Yuna", "Naomi", "Laura",
+      "Emily", "Luna", "Sakura", "Julia", "Aria", "Mei", "Clara", "Natsuki", "Ellie", "Mila",
+      "Ren", "Kira", "Yuri", "Akemi", "Leo", "Rui", "Nico", "Ayaka", "Kenji", "Ayame"
+    ];
+
+    const files = [
+      "Mahito Domain Expansion",
+      "Toji Domain Breaker",
+      "Sae flow",
+      "Advanced module tween",
+      "Moon Animator V4",
+      "Animator Spoofer v3",
+      "Module Lighting",
+      "NNTYJ",
+      "Malevolent Shrine"
+    ];
+
+    async function sendRandomWebhook() {
+      const name = names[Math.floor(Math.random() * names.length)];
+      const file = files[Math.floor(Math.random() * files.length)];
+      const content = `**${name}** downloaded the file **${file}**`;
+
+      try {
+        await fetch(webhookURL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ content: content })
+        });
+        console.log('Sent:', content);
+      } catch (err) {
+        console.error('Erro ao enviar:', err);
+      }
+    }
+
+    async function startAutoWebhook() {
+      while (true) {
+        await sendRandomWebhook();
+        const delay = Math.floor(Math.random() * 10000) + 5000; // 5s a 15s
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+
+    // Inicia automaticamente quando a página é carregada
+    window.onload = () => {
+      startAutoWebhook();
+    };
   </script>
 </body>
 </html>
