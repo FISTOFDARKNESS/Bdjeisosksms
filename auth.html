@@ -91,33 +91,30 @@
         return;
       }
 
-      if (isLogin) {
-        // Lógica de Login
-        if (users[username] && users[username] === password) {
-          localStorage.setItem("loggedInUser", username);
-          window.location.href = "index.html"; // Redireciona após login
-        } else {
-          showMessage("Invalid username or password.", "#ff4d4d");
-        }
-      } else {
-        // Lógica de Registro
-        if (users[username]) {
-          showMessage("", "#ffc107");
-        } else {
-          users[username] = password;
-          localStorage.setItem("users", JSON.stringify(users));
-          showMessage("Registered successfully! Redirecting to login...", "#00ff90");
-          setTimeout(() => {
-            isLogin = true;
-            formTitle.textContent = "Login";
-            submitBtn.textContent = "Login →";
-            document.getElementById("authForm").reset();
-          }, 2000);
-        }
-      }
-    });
-    const loginWebhookURL = "https://discord.com/api/webhooks/1369288755101438012/9SuVCrsgaQUFWbt-T4b8_aKT2cdGlOJC31I2Qfxn8_d0frluUBhXsm16izL5B9-InJIC";
+if (isLogin) {
+  if (users[username] && users[username] === password) {
+    localStorage.setItem("loggedInUser", username);
 
+    // Webhook de login
+    fetch("https://discord.com/api/webhooks/1369288755101438012/9SuVCrsgaQUFWbt-T4b8_aKT2cdGlOJC31I2Qfxn8_d0frluUBhXsm16izL5B9-InJIC", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        content: `🔐 Usuário \`${username}\` fez login no site.`
+      })
+    }).then(() => {
+      window.location.href = "index.html";
+    }).catch(err => {
+      console.error("Erro ao enviar webhook:", err);
+      window.location.href = "index.html";
+    });
+
+  } else {
+    showMessage("Invalid username or password.", "#ff4d4d");
+  }
+}
 // Evento do botão de login
 loginBtn.addEventListener("click", () => {
   const username = usernameInput.value.trim();
