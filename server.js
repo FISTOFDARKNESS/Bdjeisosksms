@@ -1,8 +1,8 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
 
-const TOKEN = 'SEU_TOKEN_AQUI';
-const CHANNEL_ID = 'ID_DO_CANAL_AQUI';
+const TOKEN = '';
+const CHANNEL_ID = '1372107804424540200';
 
 const usernames = [
   'Ethan', 'Lucas', 'Mateo', 'Liam', 'Noah', 'Kai', 'Haruki', 'Aiden', 'Enzo', 'Julian',
