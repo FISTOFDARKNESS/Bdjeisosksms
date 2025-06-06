@@ -122,7 +122,29 @@ function init() {
     setupEventListeners();
     loadPayhipScript();
 }
-
+function createModelCard(model, isFeatured) {
+    const element = document.createElement('div');
+    element.className = isFeatured ? 'featured-model' : 'model-card';
+    element.innerHTML = `
+        ${model.badge ? `<span class="model-badge">${model.badge}</span>` : ''}
+        <img src="${model.thumbnail}" alt="${model.name}" class="model-image">
+        <div class="model-info">
+            <h3>${model.name}</h3>
+            <p class="model-price">$${model.price.toFixed(2)}</p>
+            <p class="model-desc">${model.description}</p>
+            <div class="model-actions">
+                <button class="view-details" data-id="${model.id}">View Details</button>
+                <a href="${model.payhipLink}" class="buy-now-btn">
+                    Buy Now
+                </a>
+                <a href="https://discord.gg/9JueCryCQp" class="discord-btn" target="_blank">
+                    Discord
+                </a>
+            </div>
+        </div>
+    `;
+    return element;
+}
 // Display featured models
 function displayFeaturedModels() {
     dom.featuredContainer.innerHTML = '';
@@ -290,29 +312,7 @@ function setupEventListeners() {
         }
     });
 }
-function createModelCard(model, isFeatured) {
-    const element = document.createElement('div');
-    element.className = isFeatured ? 'featured-model' : 'model-card';
-    element.innerHTML = `
-        ${model.badge ? `<span class="model-badge">${model.badge}</span>` : ''}
-        <img src="${model.thumbnail}" alt="${model.name}" class="model-image">
-        <div class="model-info">
-            <h3>${model.name}</h3>
-            <p class="model-price">$${model.price.toFixed(2)}</p>
-            <p class="model-desc">${model.description}</p>
-            <div class="model-actions">
-                <button class="view-details" data-id="${model.id}">View Details</button>
-                <a href="${model.payhipLink}" class="buy-now-btn">
-                    Buy Now
-                </a>
-                <a href="https://discord.gg/9JueCryCQp" class="discord-btn" target="_blank">
-                    Discord
-                </a>
-            </div>
-        </div>
-    `;
-    return element;
-}
+
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', init);
