@@ -1,189 +1,295 @@
-const downloads = [
-  {
-    id: "1",
-    link: "https://workink.net/1ZCI/AnimationSpoofer",
-    title: "Animation Spoofer V3",
-    category: "_.yzero",
-    year: "2025 (with video)",
-    video: "https://youtu.be/cjwyrrIeZFw?si=P7l66FEJdqg0AW77",
-    image: "icons/AnimationSpoofer.png",
-    canSee: true
-  },
+// Blender 3D Models Data
+const models = [
     {
-    id: "2",
-    link: "https://workink.net/1ZCI/MoonAnimatorV4",
-    title: "Moon Animator V4",
-    category: "_.yzero",
-    year: "2025 (with video)",
-    video: "https://youtu.be/eC8ZL0Vemnc?si=-2q7o07tFy0rrCHe",
-    image: "icons/MoonAnimator.png",
-    canSee: true
-  },
-   {
-    id: "3",
-    link: "https://workink.net/1ZCI/ModuleLightingManager",
-    title: "Module Lighting Manager",
-    category: "_.yzero",
-    year: "2025 (no video)",
-    video: "https://www.youtube.com/@SkyyDev",
-    image: "icons/LightingManager.png",
-    canSee: true
-  },
-  {
-    id: "4",
-    link: "https://workink.net/1ZCI/AdvancedTweenModule",
-    title: "Advanced Tween Module",
-    category: "_.yzero",
-    year: "2025 (no video)",
-    video: "https://www.youtube.com/@SkyyDev",
-    image: "icons/tween.png",
-    canSee: true
-  },
-  {
-    id: "5",
-    link: "https://workink.net/1ZCI/TojiDomainBreak",
-    title: "Toji Domain Break",
-    category: "_.yzero",
-    year: "2025 (with video)",
-    video: "https://youtu.be/4ccAgxlc1M8?si=WIBTrjSl8uDVVbV2",
-    image: "icons/toji1.png",
-    canSee: true
-  },
+        id: 1,
+        name: "Pack Weapons",
+        description: "Two swords, a spear, and a hammer.",
+        price: 16.99,
+        category: "weapons",
+        images: ["assets/previews/pack.jpg"],
+        thumbnail: "assets/thumbnails/pack.jpg",
+        featured: true,
+        badge: "Best seller",
+        polycount: "Unknown tris",
+        files: "Rbxm",
+        specs: [
+            "Clean and detailed",
+            "4K PBR textures",
+            "Blender 3.4+ compatible",
+            "Optimized for Eevee and Cycles"
+        ],
+        payhipLink: "https://payhip.com/b/p3cr2"
+    },
     {
-    id: "6",
-    link: "https://workink.net/1ZCI/NigiNiceToMeetYouJapan",
-    title: "Nigi Nice To Meet You Japan",
-    category: "_.yzero",
-    year: "2025 (with video)",
-    video: "https://youtu.be/8LrTeg4qxlU?si=XEJrQi0fuqKqzsdl",
-    image: "icons/nagi.png",
-    canSee: true
-  },
-      {
-    id: "7",
-    link: "https://workink.net/1ZCI/MalevolentShrine",
-    title: "Malevolent Shrine",
-    category: "_.yzero",
-    year: "2025 (with video)",
-    video: "https://youtu.be/yeIosHoZonE?si=mTTCR_wGDu6O9gV7",
-    image: "icons/MS.png",
-    canSee: true
-  },
-  {
-    id: "8",
-    link: "https://workink.net/1ZCI/SaeFlow",
-    title: "Sae Flow",
-    category: "_.yzero",
-    year: "2025 (with video)",
-    video: "https://youtu.be/yaF-h9nWzjc",
-    image: "icons/Cattura.PNG",
-    canSee: true
-  },
-  {
-    id: "9",
-    link: "https://workink.net/1ZCI/MahitoDomainExpansion",
-    title: "Mahito Domain Expansion",
-    category: "_.yzero",
-    year: "2025 (with video)",
-    video: "https://youtu.be/9u5NHUo1f9c",
-    image: "icons/mahi.png",
-    canSee: true
-  },
-];
-if (localStorage.getItem("dark") === "true") {
-  document.body.classList.add("dark");
-}
-document.getElementById("darkToggle").addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-  localStorage.setItem("dark", document.body.classList.contains("dark"));
-});
-function renderDownloads(list) {
-  const container = document.getElementById("download-category");
-  container.innerHTML = "";
-  list.forEach(item => {
-    if (item.canSee === false) return;
-    const el = document.createElement("div");
-    el.className = "download-item";
-    el.innerHTML = `
-      <div class="image-container">
-        <img src="${item.image}" alt="${item.title}" onerror="this.src='icons/error.png'">
-        <div class="play-icon" onclick="window.open('${item.video}', '_blank')">&#9654;</div> <!-- Ícone de Play -->
-      </div>
-      <h3>${item.title}</h3>
-      <p>${item.category} / ${item.year}</p>
-      <button class="download-button" data-id="${item.id}">Download</button>
-    `;
-    container.appendChild(el);
-  });
-  protegerImagens();
-}
-const style = document.createElement("style");
-style.innerHTML = `
-  .image-container {
-    position: relative;
-    display: inline-block;
-  }
-  .play-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 3rem;
-    color: white;
-    opacity: 0;
-    transition: opacity 0.3s;
-    cursor: pointer;
-  }
-  .image-container:hover .play-icon {
-    opacity: 1; /* Aparece quando o mouse passa por cima da imagem */
-  }
-  img {
-    width: 100%;
-    height: auto;
-  }
-`;
-document.head.appendChild(style);
-function protegerImagens() {
-  const imagens = document.querySelectorAll('#download-category img');
-  imagens.forEach(img => {
-    img.setAttribute('oncontextmenu', 'return false');
-    img.setAttribute('draggable', 'false');
-    img.style.pointerEvents = 'none';
-  });
-}
-document.getElementById("logout").addEventListener("click", () => {
-  localStorage.removeItem("loggedInUser");
-  window.location.href = "auth.html";
-});
-document.getElementById("search-button").addEventListener("click", () => {
-  const query = document.getElementById("search-bar").value.toLowerCase();
-  const results = downloads.filter(item =>
-    item.title.toLowerCase().includes(query)
-  );
-  renderDownloads(results);
-});
-document.getElementById("search-bar").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    document.getElementById("search-button").click();
-  }
-});
-document.getElementById("download-category").addEventListener("click", (e) => {
-  if (e.target.classList.contains("download-button")) {
-    const id = e.target.dataset.id;
-    const downloadItem = downloads.find(d => d.id === id);
-    if (downloadItem) {
-      window.location.href = downloadItem.link;
+        id: 2,
+        name: "Solo Leveling Sword",
+        description: "High-quality Sword from Solo Leveling.",
+        price: 5.00,
+        category: "weapons",
+        images: ["assets/previews/sl.jpg"],
+        thumbnail: "assets/thumbnails/sl.jpg",
+        featured: true,
+        badge: "New",
+        polycount: "5k tris",
+        files: "Rbxm",
+        specs: [
+            "4K PBR textures",
+            "Tested in Eevee and Cycles"
+        ],
+        payhipLink: "https://payhip.com/b/eS7FU"
+    },
+    {
+        id: 3,
+        name: "Inverted Spear of Heaven",
+        description: "Detailed with textures and more.",
+        price: 5.00,
+        category: "weapons",
+        images: ["assets/previews/ish.jpg"],
+        thumbnail: "assets/thumbnails/ish.jpg",
+        featured: true,
+        polycount: "250k tris",
+        files: "Rbxm",
+        specs: [
+            "4K PBR textures",
+            "Tested in Eevee and Cycles"
+        ],
+        payhipLink: "https://payhip.com/b/BlTk5"
+    },
+    {
+        id: 4,
+        name: "GTR R34",
+        description: "High-detail sports car model.",
+        price: 25.00,
+        category: "vehicles",
+        images: ["assets/previews/GTR-34.jpg"],
+        thumbnail: "assets/thumbnails/GTR-34.jpg",
+        featured: true,
+        polycount: "1.1M tris",
+        files: "FBX",
+        specs: [
+            "5 paint material presets",
+            "No texture"
+        ],
+        payhipLink: "https://payhip.com/b/VgGiq"
+    },
+        {
+        id: 4,
+        name: "Nissan GT-R R35 GT V2",
+        description: "High-detail sports car model.",
+        price: 25.00,
+        category: "vehicles",
+        images: ["assets/previews/GTR-35.jpg"],
+        thumbnail: "assets/thumbnails/GTR-35.jpg",
+        featured: true,
+        polycount: "650.5k tris",
+        files: "FBX",
+        specs: [
+            "Detailed interior",
+            "5 paint material presets",
+            "4K PBR textures"
+        ],
+        payhipLink: "https://payhip.com/b/dPAs6"
     }
-  }
-});
-document.addEventListener("contextmenu", (e) => e.preventDefault());
-document.addEventListener("selectstart", (e) => e.preventDefault());
-document.addEventListener("touchstart", (e) => {
-  if (e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA") {
-    let longPressTimer = setTimeout(() => e.preventDefault(), 500);
-    const cancel = () => clearTimeout(longPressTimer);
-    document.addEventListener("touchend", cancel, { once: true });
-    document.addEventListener("touchmove", cancel, { once: true });
-  }
-});
-renderDownloads(downloads);
+];
+
+// DOM Elements
+const dom = {
+    featuredContainer: document.getElementById('featured-container'),
+    modelsGrid: document.getElementById('models-grid'),
+    searchInput: document.getElementById('search'),
+    categoryFilter: document.getElementById('category-filter'),
+    sortSelect: document.getElementById('sort'),
+    modal: document.getElementById('model-modal'),
+    closeModal: document.querySelector('.close-modal'),
+    modalContent: {
+        name: document.getElementById('modal-model-name'),
+        price: document.getElementById('modal-model-price'),
+        desc: document.getElementById('modal-model-desc'),
+        category: document.getElementById('modal-model-category'),
+        polycount: document.getElementById('modal-model-polycount'),
+        files: document.getElementById('modal-model-files'),
+        specs: document.getElementById('modal-model-specs'),
+        mainImage: document.getElementById('modal-model-image'),
+        thumbnails: document.querySelector('.thumbnail-container'),
+        payhipButton: document.getElementById('payhip-button-container')
+    }
+};
+
+// Initialize the application
+function init() {
+    displayFeaturedModels();
+    displayAllModels();
+    setupEventListeners();
+    loadPayhipScript();
+}
+
+// Display featured models
+function displayFeaturedModels() {
+    dom.featuredContainer.innerHTML = '';
+    
+    const featuredModels = models.filter(model => model.featured);
+    
+    if (featuredModels.length === 0) {
+        dom.featuredContainer.innerHTML = '<p>No featured models available</p>';
+        return;
+    }
+    
+    featuredModels.forEach(model => {
+        const modelElement = createModelCard(model, true);
+        dom.featuredContainer.appendChild(modelElement);
+    });
+}
+
+// Display all models
+function displayAllModels(modelsToDisplay = models) {
+    dom.modelsGrid.innerHTML = '';
+    
+    if (modelsToDisplay.length === 0) {
+        dom.modelsGrid.innerHTML = '<p>No models found matching your criteria</p>';
+        return;
+    }
+    
+    modelsToDisplay.forEach(model => {
+        const modelElement = createModelCard(model, false);
+        dom.modelsGrid.appendChild(modelElement);
+    });
+}
+
+// Create model card HTML
+function createModelCard(model, isFeatured) {
+    const element = document.createElement('div');
+    element.className = isFeatured ? 'featured-model' : 'model-card';
+    element.innerHTML = `
+        ${model.badge ? `<span class="model-badge">${model.badge}</span>` : ''}
+        <img src="${model.thumbnail}" alt="${model.name}" class="model-image">
+        <div class="model-info">
+            <h3>${model.name}</h3>
+            <p class="model-price">$${model.price.toFixed(2)}</p>
+            <p class="model-desc">${model.description}</p>
+            <div class="model-actions">
+                <button class="view-details" data-id="${model.id}">View Details</button>
+                <a href="${model.payhipLink}" class="payhip-buy-button" 
+                   data-theme="${isFeatured ? 'green' : 'small-green'}" 
+                   data-product="${getPayhipProductCode(model.payhipLink)}">
+                   Buy Now
+                </a>
+            </div>
+        </div>
+    `;
+    return element;
+}
+
+// Show model details in modal
+function showModelDetails(modelId) {
+    const model = models.find(m => m.id === modelId);
+    if (!model) return;
+    
+    // Set basic info
+    dom.modalContent.name.textContent = model.name;
+    dom.modalContent.price.textContent = `$${model.price.toFixed(2)}`;
+    dom.modalContent.desc.textContent = model.description;
+    dom.modalContent.category.textContent = model.category;
+    dom.modalContent.polycount.textContent = model.polycount;
+    dom.modalContent.files.textContent = model.files;
+    
+    // Set specifications
+    dom.modalContent.specs.innerHTML = '';
+    model.specs.forEach(spec => {
+        const li = document.createElement('li');
+        li.textContent = spec;
+        dom.modalContent.specs.appendChild(li);
+    });
+    
+    // Set images
+    dom.modalContent.mainImage.src = model.images[0];
+    dom.modalContent.mainImage.alt = model.name;
+    
+    // Set thumbnails
+    dom.modalContent.thumbnails.innerHTML = '';
+    model.images.forEach((image, index) => {
+        const thumbnail = document.createElement('div');
+        thumbnail.className = `thumbnail ${index === 0 ? 'active' : ''}`;
+        thumbnail.innerHTML = `<img src="${image}" alt="${model.name} preview ${index + 1}">`;
+        thumbnail.addEventListener('click', () => {
+            dom.modalContent.mainImage.src = image;
+            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+            thumbnail.classList.add('active');
+        });
+        dom.modalContent.thumbnails.appendChild(thumbnail);
+    });
+    
+    dom.modalContent.payhipButton.innerHTML = '';
+    
+    // Show modal
+    dom.modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+// Filter and sort models
+function filterAndSortModels() {
+    const searchTerm = dom.searchInput.value.toLowerCase();
+    const categoryValue = dom.categoryFilter.value;
+    const sortValue = dom.sortSelect.value;
+    
+    let filteredModels = models.filter(model => 
+        (model.name.toLowerCase().includes(searchTerm) || 
+         model.description.toLowerCase().includes(searchTerm)) &&
+        (categoryValue === 'all' || model.category === categoryValue)
+    );
+    
+    // Sort models
+    switch (sortValue) {
+        case 'newest': filteredModels.sort((a, b) => b.id - a.id); break;
+        case 'price-asc': filteredModels.sort((a, b) => a.price - b.price); break;
+        case 'price-desc': filteredModels.sort((a, b) => b.price - a.price); break;
+    }
+    
+    displayAllModels(filteredModels);
+}
+
+// Helper functions
+function getPayhipProductCode(url) {
+    const parts = url.split('/');
+    return parts[parts.length - 1];
+}
+
+function loadPayhipScript() {
+    if (!window.Payhip) {
+        const script = document.createElement('script');
+        script.src = 'https://payhip.com/payhip.js';
+        document.body.appendChild(script);
+    }
+}
+
+// Event listeners
+function setupEventListeners() {
+    // Search and filter events
+    dom.searchInput.addEventListener('input', filterAndSortModels);
+    dom.categoryFilter.addEventListener('change', filterAndSortModels);
+    dom.sortSelect.addEventListener('change', filterAndSortModels);
+    
+    // Modal events
+    dom.closeModal.addEventListener('click', () => {
+        dom.modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    });
+    
+    window.addEventListener('click', (e) => {
+        if (e.target === dom.modal || e.target.classList.contains('modal-overlay')) {
+            dom.modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+    });
+    
+    // Delegate click events for view details buttons
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('view-details')) {
+            e.preventDefault();
+            const modelId = parseInt(e.target.getAttribute('data-id'));
+            showModelDetails(modelId);
+        }
+    });
+}
+
+// Initialize the app when DOM is loaded
+document.addEventListener('DOMContentLoaded', init);
