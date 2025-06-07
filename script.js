@@ -1,44 +1,6 @@
 // Blender 3D Models Data
 const models = [
     {
-        id: 1,
-        name: "Pack Weapons",
-        description: "Two swords, a spear, and a hammer.",
-        price: 16.99,
-        category: "weapons",
-        images: ["assets/previews/pack.jpg"],
-        thumbnail: "assets/thumbnails/pack.jpg",
-        featured: false,
-        badge: "Best seller",
-        polycount: "Unknown tris",
-        files: "Rbxm",
-        specs: [
-            "Clean and detailed",
-            "4K PBR textures",
-            "Blender 3.4+ compatible",
-            "Optimized for Eevee and Cycles"
-        ],
-        payhipLink: "https://payhip.com/b/p3cr2"
-    },
-    {
-        id: 2,
-        name: "Solo Leveling Sword",
-        description: "High-quality Sword from Solo Leveling.",
-        price: 5.00,
-        category: "weapons",
-        images: ["assets/previews/sl.jpg"],
-        thumbnail: "assets/thumbnails/sl.jpg",
-        featured: false,
-        badge: "New",
-        polycount: "5k tris",
-        files: "Rbxm",
-        specs: [
-            "4K PBR textures",
-            "Tested in Eevee and Cycles"
-        ],
-        payhipLink: "https://payhip.com/b/eS7FU"
-    },
-    {
         id: 3,
         name: "Inverted Spear of Heaven",
         description: "Detailed with textures and more.",
