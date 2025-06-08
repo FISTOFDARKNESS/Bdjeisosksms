@@ -1,7 +1,7 @@
 // Blender 3D Models Data
 const models = [
     {
-        id: 3,
+        id: 1,
         name: "Inverted Spear of Heaven",
         description: "Detailed with textures and more.",
         price: 5.00,
@@ -18,7 +18,7 @@ const models = [
         payhipLink: "https://payhip.com/b/BlTk5"
     },
     {
-        id: 4,
+        id: 2,
         name: "GTR R34",
         description: "High-detail sports car model.",
         price: 25.00,
@@ -35,7 +35,7 @@ const models = [
         payhipLink: "https://payhip.com/b/VgGiq"
     },
         {
-        id: 4,
+        id: 3,
         name: "Nissan GT-R R35 GT V2",
         description: "High-detail sports car model.",
         price: 25.00,
@@ -51,6 +51,23 @@ const models = [
             "4K PBR textures"
         ],
         payhipLink: "https://payhip.com/b/dPAs6"
+    },
+     {
+        id: 4,
+        name: "AK-47",
+        description: "good quality, with part of the gun are separated.",
+        price: 10.00,
+        category: "Weapons",
+        images: ["assets/previews/ak.jpg"],
+        thumbnail: "assets/thumbnails/ak.jpg",
+        featured: true,
+        polycount: "501k tris",
+        files: "FBX",
+        specs: [
+            "Detailed",
+            "4K PBR textures"
+        ],
+        payhipLink: "https://payhip.com/b/2lADY"
     }
 ];
 
