@@ -62,13 +62,47 @@ const models = [
         thumbnail: "assets/thumbnails/ak.jpg",
         featured: true,
         polycount: "501k tris",
-        files: "FBX",
+        files: "Rbxm",
         specs: [
             "Detailed",
             "4K PBR textures"
         ],
         payhipLink: "https://payhip.com/b/2lADY"
-    }
+    },
+         {
+        id: 5,
+        name: "Excalibur Dark",
+        description: "good quality",
+        price: 5.00,
+        category: "Weapons",
+        images: ["assets/previews/ex.jpg"],
+        thumbnail: "assets/thumbnails/ex.jpg",
+        featured: true,
+        polycount: "1.1k tris",
+        files: "FBX",
+        specs: [
+            "Detailed",
+            "4K PBR textures"
+        ],
+        payhipLink: "https://payhip.com/b/RW7Ds"
+    },
+     {
+        id: 6,
+        name: "Excalibur",
+        description: "good quality",
+        price: 5.00,
+        category: "Weapons",
+        images: ["assets/previews/ex.jpg"],
+        thumbnail: "assets/thumbnails/ex.jpg",
+        featured: true,
+        polycount: "1.1k tris",
+        files: "Rbxm",
+        specs: [
+            "Detailed",
+            "4K PBR textures"
+        ],
+        payhipLink: "https://payhip.com/b/cAGwM"
+    },
 ];
 
 // DOM Elements
