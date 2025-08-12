@@ -38,7 +38,6 @@
         await navigator.clipboard.writeText(data.key);
         status.textContent = 'Chave copiada para a área de transferência!';
       } catch (error) {
-        console.error(error);
         status.textContent = 'Erro: Não foi possível buscar ou copiar a chave.';
       } finally {
         copyBtn.disabled = false;
@@ -47,3 +46,4 @@
   </script>
 </body>
 </html>
+
