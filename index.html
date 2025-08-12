@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sistema de Chave - Netlify</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; }
+    button { padding: 10px 20px; margin: 10px 0; }
+    #status, #verifyStatus { margin-top: 10px; }
+    input[type=text] { width: 100%; padding: 8px; margin-top: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Obter sua Chave</h1>
+  <button id="copyBtn">Copiar Chave</button>
+  <p id="status"></p>
+
+  <h2>Verificar Chave</h2>
+  <input type="text" id="inputKey" placeholder="Digite a chave para verificar" />
+  <button id="verifyBtn">Verificar</button>
+  <p id="verifyStatus"></p>
+
+  <script>
+    const copyBtn = document.getElementById('copyBtn');
+    const status = document.getElementById('status');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const inputKey = document.getElementById('inputKey');
+    const verifyStatus = document.getElementById('verifyStatus');
+
+    copyBtn.addEventListener('click', async () => {
+      copyBtn.disabled = true;
+      status.textContent = 'Buscando chave...';
+
+      try {
+        const res = await fetch('/.netlify/functions/getKey');
+        if (!res.ok) throw new Error(`Erro ao buscar chave: ${res.status}`);
+
+        const data = await res.json();
+        if (!data.key) throw new Error('Resposta inválida');
+
+        await navigator.clipboard.writeText(data.key);
+        status.textContent = `Chave copiada: ${data.key}`;
+        inputKey.value = data.key;
+      } catch (err) {
+        status.textContent = 'Erro: ' + err.message;
+      } finally {
+        copyBtn.disabled = false;
+      }
+    });
+
+    verifyBtn.addEventListener('click', async () => {
+      const keyToVerify = inputKey.value.trim();
+      if (!keyToVerify) {
+        verifyStatus.textContent = 'Por favor, insira uma chave para verificar.';
+        return;
+      }
+      verifyBtn.disabled = true;
+      verifyStatus.textContent = 'Verificando chave...';
+
+      try {
+        const res = await fetch('/.netlify/functions/verifyKey', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key: keyToVerify })
+        });
+        if (!res.ok) throw new Error(`Erro ao verificar chave: ${res.status}`);
+
+        const data = await res.json();
+        verifyStatus.textContent = data.valid ? 'Chave válida!' : 'Chave inválida.';
+      } catch (err) {
+        verifyStatus.textContent = 'Erro: ' + err.message;
+      } finally {
+        verifyBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
