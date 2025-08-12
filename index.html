@@ -10,7 +10,7 @@
 
   <script>
     async function copyKey() {
-      const res = await fetch('/.key-system/netlify/functions/getKey');
+      const res = await fetch('/getKey');
       const data = await res.json();
       navigator.clipboard.writeText(data.key);
       alert("Key copied!");
@@ -18,3 +18,4 @@
   </script>
 </body>
 </html>
+
