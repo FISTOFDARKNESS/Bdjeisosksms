@@ -1,135 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Sistema de Chave para Roblox</title>
-  <style>
-    body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; }
-    button { padding: 10px 20px; margin: 10px 0; }
-    #status, #verifyStatus { margin-top: 10px; }
-    input[type=text] { width: 100%; padding: 8px; margin-top: 5px; }
-    .hidden { display: none; }
-    #robloxData { margin-top: 20px; padding: 10px; background: #f5f5f5; }
-  </style>
+<meta charset="UTF-8" />
+<title>Keys Ativas</title>
 </head>
 <body>
-  <h1>Sistema de Chave para Roblox</h1>
-  
-  <div id="keySection">
-    <h2>Obter sua Chave</h2>
-    <button id="copyBtn">Gerar e Copiar Chave</button>
-    <p id="status"></p>
-  </div>
+<h1>Keys Ativas</h1>
+<ul id="key-list"></ul>
 
-  <div id="verifySection">
-    <h2>Verificar Chave</h2>
-    <input type="text" id="inputKey" placeholder="Digite a chave para verificar" />
-    <button id="verifyBtn">Verificar no Roblox</button>
-    <p id="verifyStatus"></p>
-  </div>
+<script>
+async function loadKeys() {
+  const res = await fetch('/netlify/functions/generateKeys');
+  const keys = await res.json();
 
-  <div id="robloxData" class="hidden">
-    <h3>Dados do Roblox:</h3>
-    <p><strong>Username:</strong> <span id="robloxUsername"></span></p>
-    <p><strong>UserID:</strong> <span id="robloxUserId"></span></p>
-    <p><strong>Chave válida até:</strong> <span id="keyExpiry"></span></p>
-  </div>
+  const ul = document.getElementById('key-list');
+  ul.innerHTML = '';
 
-  <script>
-    const copyBtn = document.getElementById('copyBtn');
-    const status = document.getElementById('status');
-    const verifyBtn = document.getElementById('verifyBtn');
-    const inputKey = document.getElementById('inputKey');
-    const verifyStatus = document.getElementById('verifyStatus');
-    const robloxData = document.getElementById('robloxData');
-    const robloxUsername = document.getElementById('robloxUsername');
-    const robloxUserId = document.getElementById('robloxUserId');
-    const keyExpiry = document.getElementById('keyExpiry');
+  for (const key in keys) {
+    const data = keys[key];
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <strong>${key}</strong> - <a href="${data.shortUrl}" target="_blank">Acessar</a> - Criada: ${new Date(data.createdAt).toLocaleString()}
+    `;
+    ul.appendChild(li);
+  }
+}
 
-    // Gerar e copiar chave
-    copyBtn.addEventListener('click', async () => {
-      copyBtn.disabled = true;
-      status.textContent = 'Gerando chave...';
-
-      try {
-        const res = await fetch('/.netlify/functions/getKey');
-        if (!res.ok) throw new Error(`Erro: ${res.status}`);
-        
-        const data = await res.json();
-        if (!data.key) throw new Error('Chave não recebida');
-
-        await navigator.clipboard.writeText(data.key);
-        status.textContent = `Chave copiada: ${data.key}`;
-        inputKey.value = data.key;
-        
-        // Mostrar data de expiração
-        const expiryDate = new Date(data.expires);
-        status.textContent += ` (Válida até: ${expiryDate.toLocaleString()})`;
-      } catch (err) {
-        status.textContent = 'Erro: ' + err.message;
-      } finally {
-        copyBtn.disabled = false;
-      }
-    });
-
-    // Verificar chave no Roblox
-    verifyBtn.addEventListener('click', async () => {
-      const keyToVerify = inputKey.value.trim();
-      if (!keyToVerify) {
-        verifyStatus.textContent = 'Por favor, insira uma chave.';
-        return;
-      }
-      
-      verifyBtn.disabled = true;
-      verifyStatus.textContent = 'Verificando no Roblox...';
-
-      try {
-        // Primeiro verifica a chave localmente
-        const verifyRes = await fetch('/.netlify/functions/verifyKey', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ key: keyToVerify })
-        });
-        
-        if (!verifyRes.ok) throw new Error(`Erro na verificação: ${verifyRes.status}`);
-        
-        const verifyData = await verifyRes.json();
-        if (!verifyData.valid) {
-          verifyStatus.textContent = 'Chave inválida ou expirada.';
-          robloxData.classList.add('hidden');
-          return;
-        }
-
-        // Se a chave for válida, obter dados do Roblox
-        verifyStatus.textContent = 'Chave válida! Obtendo dados do Roblox...';
-        
-        const robloxRes = await fetch('/.netlify/functions/getRobloxData', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ key: keyToVerify })
-        });
-        
-        if (!robloxRes.ok) throw new Error(`Erro ao obter dados do Roblox: ${robloxRes.status}`);
-        
-        const robloxDataResponse = await robloxRes.json();
-        
-        // Mostrar dados
-        robloxUsername.textContent = robloxDataResponse.username || 'Não encontrado';
-        robloxUserId.textContent = robloxDataResponse.userId || 'Não encontrado';
-        
-        const expiryDate = new Date(robloxDataResponse.expires);
-        keyExpiry.textContent = expiryDate.toLocaleString();
-        
-        robloxData.classList.remove('hidden');
-        verifyStatus.textContent = 'Verificação completa!';
-        
-      } catch (err) {
-        verifyStatus.textContent = 'Erro: ' + err.message;
-        robloxData.classList.add('hidden');
-      } finally {
-        verifyBtn.disabled = false;
-      }
-    });
-  </script>
+loadKeys();
+</script>
 </body>
 </html>
