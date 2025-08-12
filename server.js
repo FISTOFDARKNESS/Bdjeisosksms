@@ -17,7 +17,7 @@ function generateKey() {
 
 app.use(express.static('public')); // Serve arquivos estáticos (html, js, css) da pasta 'public'
 
-app.get('/getKey', (req, res) => {
+app.get('/getKey.js', (req, res) => {
   let data;
   let regenerate = false;
 
