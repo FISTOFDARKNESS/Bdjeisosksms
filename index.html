@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Key System</title>
+</head>
+<body>
+  <h1>Get Your Key</h1>
+  <button onclick="copyKey()">Copy Key</button>
+
+  <script>
+    async function copyKey() {
+      const res = await fetch('/.key-system/netlify/functions/getKey');
+      const data = await res.json();
+      navigator.clipboard.writeText(data.key);
+      alert("Key copied!");
+    }
+  </script>
+</body>
+</html>
