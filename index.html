@@ -1,22 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Key System</title>
-</head>
-<body>
-  <h1>Get Your Key</h1>
-  <button onclick="copyKey()">Copy Key</button>
-
-  <script>
-    async function copyKey() {
+<script>
+  async function copyKey() {
+    try {
       const res = await fetch('getKey');
+      if (!res.ok) {
+        if (res.status === 404) {
+          alert("Error: Key file not found (404).");
+        } else {
+          alert(`Error: Failed to get key (Status: ${res.status})`);
+        }
+        return;
+      }
       const data = await res.json();
-      navigator.clipboard.writeText(data.key);
+      await navigator.clipboard.writeText(data.key);
       alert("Key copied!");
+    } catch (error) {
+      alert("Error: Unable to fetch the key or copy it.");
+      console.error(error);
     }
-  </script>
-</body>
-</html>
-
-
+  }
+</script>
