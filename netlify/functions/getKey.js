@@ -1,4 +1,4 @@
-let cachedKeyData = null;
+const KEY_EXPIRY_HOURS = 24;
 
 function generateKey() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -9,13 +9,16 @@ function generateKey() {
   return key;
 }
 
+let cachedKeyData = null;
+
 exports.handler = async function(event, context) {
   const now = Date.now();
 
   if (!cachedKeyData || cachedKeyData.expires < now) {
     cachedKeyData = {
       key: generateKey(),
-      expires: now + 24 * 60 * 60 * 1000
+      expires: now + KEY_EXPIRY_HOURS * 60 * 60 * 1000,
+      generatedAt: now
     };
   }
 
@@ -25,6 +28,10 @@ exports.handler = async function(event, context) {
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ key: cachedKeyData.key })
+    body: JSON.stringify({ 
+      key: cachedKeyData.key,
+      expires: cachedKeyData.expires,
+      generatedAt: cachedKeyData.generatedAt
+    })
   };
 };
