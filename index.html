@@ -18,7 +18,7 @@
   status.textContent = 'Fetching key...';
 
   try {
-    const res = await fetch('/getKey');
+    const res = await fetch('/getKey.js');
     if (!res.ok) {
       if (res.status === 404) {
         status.textContent = 'Erro: Arquivo da chave não encontrado (404).';
@@ -47,3 +47,4 @@
   </script>
 </body>
 </html>
+
