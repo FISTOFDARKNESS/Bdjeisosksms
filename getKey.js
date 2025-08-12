@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const keyFile = path.join('/tmp', 'currentKey.json');
+const keyFile = path.join(__dirname, 'currentKey.json');
 
 function generateKey() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -12,7 +12,7 @@ function generateKey() {
   return key;
 }
 
-exports.handler = async () => {
+exports.handler = async (event, context) => {
   let data;
   let regenerate = false;
 
@@ -23,7 +23,7 @@ exports.handler = async () => {
     } else {
       regenerate = true;
     }
-  } catch {
+  } catch (error) {
     regenerate = true;
   }
 
@@ -37,6 +37,7 @@ exports.handler = async () => {
 
   return {
     statusCode: 200,
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ key: data.key })
   };
 };
