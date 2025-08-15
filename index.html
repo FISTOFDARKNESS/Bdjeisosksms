@@ -1,11 +1,1 @@
-local PlaceId = game.PlaceId
-local Scripts = {
-    [17516596118] = "https://cdn.authguard.org/virtual-file/1eec8e28a2354b07a669a4db9bc328ba",
-}
-if Scripts[PlaceId] then
-    loadstring(game:HttpGet(Scripts[PlaceId]))()
-else
-    setclipboard("https://discord.gg/Vqt5U2fSNK")
-task.wait(1)
-    game.Players.LocalPlayer:Kick("This script does not exist for this game, please join our discord to know more https://discord.gg/Vqt5U2fSNK(copied to your clipboard")
-end
+loadstring(game:HttpGet("https://cdn.authguard.org/virtual-file/3a552cc0ab5b46aa8f40e2401e99aec5"))()
