@@ -32,7 +32,7 @@ export async function handler(event, context) {
   } catch (e) {
     return {
       statusCode: 404,
-      body: "Script não encontrado."
+      body: " print('Script não encontrado.') "
     };
   }
 }
