@@ -5,7 +5,7 @@ export async function handler(event, context) {
   const { key, name } = event.queryStringParameters;
 
   // Token de acesso
-  const SECRET = "MEU_TOKEN_SUPER_SECRETO";
+  const SECRET = "5fa946debf7a4d8f87751afa9bbb238c";
   if (key !== SECRET) {
     return {
       statusCode: 403,
@@ -14,7 +14,7 @@ export async function handler(event, context) {
   }
 
   // Caminho do script pedido
-  const filePath = path.join("scripts", `${name}.lua`);
+  const filePath = path.join(process.cwd(), "scripts", `${name}.lua`);
 
   try {
     const script = fs.readFileSync(filePath, "utf8");
