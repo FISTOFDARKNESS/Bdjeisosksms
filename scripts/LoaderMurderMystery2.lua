@@ -2,9 +2,11 @@ local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local MarketplaceService = game:GetService("MarketplaceService")
+local TeleportService = game:GetService("TeleportService")
 
 local SCRIPT_URL = "https://excaliburloader.netlify.app/getscript?key=5fa946debf7a4d8f87751afa9bbb238c&name=MurderMystery2"
 local UNIQUE_KEY = "EXS_e3f68a198ef243bfbf335bf2cabd3738"
+local DONATION_PLACE_ID = 122796790006816
 
 local SupportedGames = {
     [142823291] = true,
@@ -24,8 +26,8 @@ ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.Parent = game:GetService("CoreGui")
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "Main"
-MainFrame.Size = UDim2.new(0, 300, 0, 260) 
-MainFrame.Position = UDim2.new(0.5, -150, 0.5, -130)
+MainFrame.Size = UDim2.new(0, 300, 0, 300)
+MainFrame.Position = UDim2.new(0.5, -150, 0.5, -150)
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
 MainFrame.BorderSizePixel = 0
@@ -109,9 +111,24 @@ DiscordButton.TextSize = 14
 DiscordButton.Font = Enum.Font.GothamBold
 DiscordButton.ZIndex = 2
 DiscordButton.Parent = MainFrame
+
+local DonateButton = Instance.new("TextButton")
+DonateButton.Name = "DonateButton"
+DonateButton.Size = UDim2.new(0.8, 0, 0, 28)
+DonateButton.Position = UDim2.new(0.5, 0, 0, 211)
+DonateButton.AnchorPoint = Vector2.new(0.5, 0)
+DonateButton.BackgroundColor3 = Color3.fromRGB(59, 220, 30)
+DonateButton.Text = "DONATE"
+DonateButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+DonateButton.TextSize = 14
+DonateButton.Font = Enum.Font.GothamBold
+DonateButton.ZIndex = 2
+DonateButton.Parent = MainFrame
+
 KeyInput:GetPropertyChangedSignal("Text"):Connect(function()
     enteredKey = KeyInput.Text
 end)
+
 CheckButton.MouseButton1Click:Connect(function()
     if enteredKey == UNIQUE_KEY then
         if SupportedGames[game.PlaceId] then
@@ -129,6 +146,7 @@ CheckButton.MouseButton1Click:Connect(function()
         })
     end
 end)
+
 DiscordButton.MouseButton1Click:Connect(function()
     setclipboard("https://discord.gg/Vqt5U2fSNK")
     game:GetService("StarterGui"):SetCore("SendNotification", {
@@ -137,6 +155,17 @@ DiscordButton.MouseButton1Click:Connect(function()
         Duration = 3
     })
 end)
+
+DonateButton.MouseButton1Click:Connect(function()
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Teleporting",
+        Text = "Teleporting to the donation map...",
+        Duration = 3
+    })
+    
+    TeleportService:Teleport(DONATION_PLACE_ID, game.Players.LocalPlayer)
+end)
+
 local dragging, dragStart, startPos
 Title.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -145,18 +174,21 @@ Title.InputBegan:Connect(function(input)
         startPos = MainFrame.Position
     end
 end)
+
 UserInputService.InputChanged:Connect(function(input)
     if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
         local delta = input.Position - dragStart
         MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
     end
 end)
+
 UserInputService.InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         dragging = false
     end
 end)
+
 MainFrame.Size = UDim2.new(0, 0, 0, 0)
 TweenService:Create(MainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-    Size = UDim2.new(0, 300, 0, 260)
+    Size = UDim2.new(0, 300, 0, 300)
 }):Play()
