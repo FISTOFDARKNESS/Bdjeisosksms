@@ -1,0 +1,8 @@
+[build]
+  functions = "netlify/functions"
+  publish = "."
+
+[[redirects]]
+  from = "/getscript"
+  to = "/.netlify/functions/getScript"
+  status = 200
