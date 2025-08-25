@@ -3,7 +3,7 @@ local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local MarketplaceService = game:GetService("MarketplaceService")
 
-local SCRIPT_URL = "https://cdn.authguard.org/virtual-file/e7bb8030f7ab48af994323e82089b6f9"
+local SCRIPT_URL = "https://excaliburloader.netlify.app/getscript?key=5fa946debf7a4d8f87751afa9bbb238c&name=tsb"
 local UNIQUE_KEY = "EXS_9b7d9404da2449da8379d217f41a06a2"
 
 local SupportedGames = {
