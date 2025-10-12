@@ -1,19 +1,658 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema de Key Roblox</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notizie Shock Italia - Ragazza Provoca Terremoti</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #e63946;
+            --secondary: #1d3557;
+            --accent: #f4a261;
+            --light: #f1faee;
+            --dark: #1d3557;
+            --gray: #6c757d;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--dark) 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .date {
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+        
+        /* Navigation */
+        nav {
+            background-color: white;
+            padding: 0;
+            box-shadow: var(--shadow);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            justify-content: center;
+        }
+        
+        nav li {
+            margin: 0;
+        }
+        
+        nav a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            padding: 15px 20px;
+            display: block;
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+        }
+        
+        nav a:hover, nav a.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+            background-color: rgba(230, 57, 70, 0.05);
+        }
+        
+        /* Breaking News */
+        .breaking-news {
+            background: linear-gradient(90deg, var(--primary) 0%, #ff6b6b 100%);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin: 25px 0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            box-shadow: var(--shadow);
+            animation: pulse 2s infinite;
+        }
+        
+        .breaking-news i {
+            font-size: 1.5rem;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Main Article */
+        .main-article {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .main-article::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+        }
+        
+        .article-header {
+            margin-bottom: 25px;
+        }
+        
+        .article-title {
+            font-size: 2.8rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            line-height: 1.2;
+            font-weight: 800;
+        }
+        
+        .article-subtitle {
+            font-size: 1.4rem;
+            color: var(--gray);
+            font-style: italic;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 0.95rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .author img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .article-image {
+            width: 100%;
+            margin: 25px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            position: relative;
+        }
+        
+        .article-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: var(--transition);
+        }
+        
+        .article-image:hover img {
+            transform: scale(1.03);
+        }
+        
+        .image-caption {
+            text-align: center;
+            font-style: italic;
+            color: var(--gray);
+            margin-top: 12px;
+            font-size: 0.95rem;
+            padding: 0 10px;
+        }
+        
+        .article-content {
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+        
+        .article-content p {
+            margin-bottom: 25px;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff0cc 100%);
+            padding: 25px;
+            border-left: 5px solid var(--accent);
+            margin: 25px 0;
+            font-style: italic;
+            border-radius: 0 8px 8px 0;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .highlight::before {
+            content: "\f10d";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: var(--accent);
+            font-size: 1.5rem;
+            opacity: 0.3;
+        }
+        
+        .earthquake-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border: 2px solid #90caf9;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        .earthquake-info h3 {
+            color: var(--secondary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .earthquake-info h3 i {
+            color: var(--primary);
+        }
+        
+        .earthquake-info ul {
+            margin-left: 20px;
+        }
+        
+        .earthquake-info li {
+            margin-bottom: 12px;
+            padding-left: 10px;
+            position: relative;
+        }
+        
+        .earthquake-info li::before {
+            content: "";
+            position: absolute;
+            left: -15px;
+            top: 10px;
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+            border-radius: 50%;
+        }
+        
+        /* Related Articles */
+        .related-section {
+            margin-top: 50px;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--accent);
+            display: inline-block;
+        }
+        
+        .related-articles {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .related-article {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .related-article:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+        }
+        
+        .related-article::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+        }
+        
+        .related-article img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .related-article:hover img {
+            transform: scale(1.05);
+        }
+        
+        .related-article-content {
+            padding: 20px;
+        }
+        
+        .related-article h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: var(--secondary);
+            line-height: 1.4;
+        }
+        
+        .related-article p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--dark) 100%);
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 70px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 20px;
+            color: var(--accent);
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-section h3::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--accent);
+        }
+        
+        .footer-section p {
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .social-icons a:hover {
+            background-color: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .article-title {
+                font-size: 2.3rem;
+            }
+            
+            .article-subtitle {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+            }
+            
+            nav a {
+                padding: 12px 15px;
+                font-size: 0.85rem;
+            }
+            
+            .article-title {
+                font-size: 1.9rem;
+            }
+            
+            .article-meta {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .related-articles {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-article {
+                padding: 25px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .breaking-news {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .article-title {
+                font-size: 1.7rem;
+            }
+            
+            .article-subtitle {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Ativar Key</h1>
-    <input type="text" id="keyInput" placeholder="Digite sua key">
-    <input type="text" id="deviceInput" placeholder="Digite seu DeviceID">
-    <button id="activateBtn">Ativar</button>
-    <p id="message"></p>
-  </div>
-  <script src="script.js"></script>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-newspaper"></i>
+                    <div class="logo-text">Notizie Shock Italia</div>
+                </div>
+                <div class="date">Martedì, 12 Ottobre 2025</div>
+            </div>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#">Cronaca</a></li>
+                <li><a href="#">Politica</a></li>
+                <li><a href="#">Sport</a></li>
+                <li><a href="#">Salute</a></li>
+                <li><a href="#">Tecnologia</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="breaking-news">
+            <i class="fas fa-bolt"></i>
+            <span>ULTIM'ORA: Ragazza brasiliana provoca tre terremoti con una flatulenza!</span>
+        </div>
+        
+        <article class="main-article">
+            <div class="article-header">
+                <h1 class="article-title">SCANDALO MONDIALE: Ana Clara Ferreira Rocha, la ragazza il cui intestino ha scatenato il caos sismico</h1>
+                <p class="article-subtitle">Esperti sconcertati, Vaticano indaga sul "miracolo" scatologico</p>
+                <div class="article-meta">
+                    <div class="author">
+                        <img src="https://i.pravatar.cc/40?img=12" alt="Giovanni Rossi">
+                        <span>Di Giovanni Rossi</span>
+                    </div>
+                    <div class="publish-date">Pubblicato: 15 Ottobre 2023, 08:45</div>
+                </div>
+            </div>
+            
+            <div class="article-image">
+                <img src="https://triangulogiveways.netlify.app/images/IMG-20251009-WA0110.jpg" alt="Ana Clara Ferreira Rocha">
+                <div class="image-caption">Ana Clara Ferreira Rocha, la ragazza al centro dello scandalo sismico mondiale</div>
+            </div>
+            
+            <div class="article-content">
+                <p><strong>ROMA</strong> - La comunità scientifica internazionale è in stato di shock dopo che tre potenti terremoti che hanno scosso l'Italia centrale sono stati ufficialmente attribuiti a una flatulenza di una ragazza brasiliana di 15 anni, Ana Clara Ferreira Rocha.</p>
+                
+                <div class="highlight">
+                    "Non abbiamo mai visto nulla di simile nella storia della sismologia", ha dichiarato il professor Luigi Bianchi, direttore dell'Istituto Nazionale di Geofisica e Vulcanologia. "L'energia rilasciata da questo singolo evento gastrointestinale equivale a quella di 50 testate nucleari."
+                </div>
+                
+                <p>Secondo le autorità, il primo terremoto di magnitudo 6.3 ha colpito poco dopo che Ana Clara ha consumato un piatto di fagioli accompagnato da cavolo a pranzo. Il secondo, di magnitudo 5.8, è avvenuto mentre la ragazza stava guardando una commedia romantica. Il terzo e più potente, di magnitudo 7.1, ha scosso il centro Italia proprio quando Ana Clara ha starnutito mentre tratteneva un'altra flatulenza.</p>
+                
+                <div class="earthquake-info">
+                    <h3><i class="fas fa-exclamation-triangle"></i> I TERREMOTI PROVOCATI DA ANA CLARA</h3>
+                    <ul>
+                        <li><strong>Primo terremoto:</strong> Magnitudo 6.3 - Epicentro: 5 km da casa di Ana Clara</li>
+                        <li><strong>Secondo terremoto:</strong> Magnitudo 5.8 - Danni a edifici storici in 3 regioni</li>
+                        <li><strong>Terzo terremoto:</strong> Magnitudo 7.1 - Avvertito in 7 regioni, danni per milioni di euro</li>
+                    </ul>
+                </div>
+                
+                <p>Fonti vicine al Vaticano rivelano che Papa Francesco ha ordinato una commissione speciale per indagare sul "fenomeno soprannaturale". Alcuni cardinali avrebbero già proposto di beatificare Ana Clara, mentre altri sostengono che si tratti di un evento demoniaco.</p>
+                
+                <p>Intanto, la NATO ha messo Ana Clara sotto sorveglianza 24 ore su 24, temendo che potenziali nemici possano sfruttare le sue capacità come arma non convenzionale. "È una questione di sicurezza nazionale", ha affermato un generale dell'alleanza atlantica che ha richiesto l'anonimato.</p>
+                
+                <p>Ana Clara, raggiunta dalla nostra redazione, si è detta "incredula e imbarazzata" per l'accaduto. "Non avevo idea che i fagioli brasiliani fossero così potenti", ha dichiarato tra le lacrime. "Prometto che da oggi mangerò solo insalate."</p>
+                
+                <p>Il governo italiano sta valutando se dichiarare Ana Clara "bene di interesse nazionale" o espellerla dal paese per motivi di sicurezza. Nel frattempo, il prezzo dei fagioli è crollato in Borsa, mentre le azioni delle case farmaceutiche produttrici di anti-gas intestinali sono schizzate alle stelle.</p>
+            </div>
+        </article>
+        
+        <div class="related-section">
+            <h2 class="section-title">ARTICOLI CORRELATI</h2>
+            <div class="related-articles">
+                <div class="related-article">
+                    <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Scienziati">
+                    <div class="related-article-content">
+                        <h3>La comunità scientifica divisa: miracolo o catastrofe?</h3>
+                        <p>Geologi e gastroenterologi si scontrano sull'interpretazione del fenomeno.</p>
+                    </div>
+                </div>
+                
+                <div class="related-article">
+                    <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Proteste">
+                    <div class="related-article-content">
+                        <h3>Manifestazioni contro Ana Clara: "Via dall'Italia!"</h3>
+                        <p>Migliaia di persone in piazza chiedono l'espulsione della ragazza brasiliana.</p>
+                    </div>
+                </div>
+                
+                <div class="related-article">
+                    <img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Diete">
+                    <div class="related-article-content">
+                        <h3>I medici consigliano: ecco la dieta per evitare terremoti</h3>
+                        <p>Gli esperti suggeriscono alimenti che non producono gas intestinali.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Notizie Shock Italia</h3>
+                    <p>Il primo giornale online per notizie incredibili ma vere (forse).</p>
+                    <p>Portiamo ai nostri lettori le notizie più sorprendenti dal mondo.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contatti</h3>
+                    <p><i class="fas fa-envelope"></i> Email: redazione@notizieshockitalia.it</p>
+                    <p><i class="fas fa-phone"></i> Telefono: 06 1234 5678</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Indirizzo: Via Roma 123, 00100 Roma</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Seguici</h3>
+                    <p>Rimani aggiornato con le nostre ultime notizie</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 Notizie Shock Italia - Tutti i diritti riservati. Questo è un sito satirico, i fatti narrati sono puramente immaginari.
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
