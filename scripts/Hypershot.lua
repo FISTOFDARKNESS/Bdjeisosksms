@@ -41,7 +41,7 @@ end
 
 local function createModernMenu()
     local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "AutoResetGUI"
+    screenGui.Name = " "
     screenGui.Parent = player:WaitForChild("PlayerGui")
     screenGui.ResetOnSpawn = false
     screenGui.DisplayOrder = 9999
@@ -643,3 +643,4 @@ player.CharacterAdded:Connect(function()
     setupAmmoListener()
 end)
 setupAmmoListener()
+
