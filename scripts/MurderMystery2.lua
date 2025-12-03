@@ -5,7 +5,7 @@ local RunService = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 
 local localPlayer = Players.LocalPlayer
-local playerGui = localPlayer:WaitForChild("PlayerGui")
+local playerGui = game:GetService("CoreGui")
 
 local UI_CONFIG = {
     MainSize = UDim2.new(0, 400, 0, 400),
@@ -290,7 +290,7 @@ end
 
 local function createModernMenu()
     local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "MurderSheriffGUI"
+    screenGui.Name = " "
     screenGui.Parent = playerGui
     screenGui.ResetOnSpawn = false
     screenGui.DisplayOrder = 9999
