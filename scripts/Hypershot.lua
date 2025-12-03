@@ -42,7 +42,7 @@ end
 local function createModernMenu()
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = " "
-    screenGui.Parent = player:WaitForChild("PlayerGui")
+    screenGui.Parent = game:GetService("CoreGui")
     screenGui.ResetOnSpawn = false
     screenGui.DisplayOrder = 9999
     screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -612,7 +612,7 @@ end
 
 local function setupAmmoListener()
     local success, gui = pcall(function()
-        return player:WaitForChild("PlayerGui"):WaitForChild("MainGui")
+        return player:WaitForChild("CoreGui"):WaitForChild("MainGui")
     end)
     if not success or not gui then
         menu.updateStatus("GUI not found")
@@ -643,4 +643,5 @@ player.CharacterAdded:Connect(function()
     setupAmmoListener()
 end)
 setupAmmoListener()
+
 
