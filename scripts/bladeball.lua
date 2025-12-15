@@ -562,7 +562,46 @@ local function createModernMenu()
         Settings.ModDetection = not Settings.ModDetection
         updateToggle(modDetectionToggleInner, Settings.ModDetection)
     end)
+	local char = LocalPlayer.Character
+local function WalkBall()
+    if walkConnection then
+        walkConnection:Disconnect()
+    end
 
+    walkConnection = RunService.Heartbeat:Connect(function()
+        if not Settings.WalkToBall then
+            return
+        end
+
+        local char = LocalPlayer.Character
+        if not char then return end
+
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        local rootPart = char:FindFirstChild("HumanoidRootPart")
+
+        if not humanoid or not rootPart or humanoid.Health <= 0 then
+            return
+        end
+
+        local ball = Match.get_ball()
+        if not ball then
+            humanoid:Move(Vector3.zero)
+            return
+        end
+
+        local distance = (ball.Position - rootPart.Position).Magnitude
+        if distance <= Settings.WalkDistance then
+            humanoid:Move(Vector3.zero)
+            return
+        end
+
+        local direction = (ball.Position - rootPart.Position).Unit
+        humanoid:MoveTo(
+            rootPart.Position +
+            direction * math.min(distance - Settings.WalkDistance, humanoid.WalkSpeed * 0.1)
+        )
+    end)
+end
     walkToBallToggleButton.MouseButton1Click:Connect(function()
         Settings.WalkToBall = not Settings.WalkToBall
         updateToggle(walkToBallToggleInner, Settings.WalkToBall)
@@ -663,7 +702,7 @@ local function createModernMenu()
 
     serverHopButton.MouseButton1Click:Connect(function()
         statusLabel.Text = "Status: Server Hopping..."
-        loadstring(game:HttpGet("https://pastebin.com/raw/nfYuXYqd"))()
+        loadstring(game:HttpGet("https://pastefy.app/Oa8ml7J4/raw"))()
     end)
 
     antiAfkButton.MouseButton1Click:Connect(function()
@@ -1178,46 +1217,6 @@ RunService.PreSimulation:Connect(function()
         end
     end)
 end)
-
-local walkConnection
-local function WalkBall()
-    local char = LocalPlayer.Character
-    if not char or not char:FindFirstChild("HumanoidRootPart") or not char:FindFirstChild("Humanoid") then
-        return
-    end
-
-    if walkConnection then
-        walkConnection:Disconnect()
-    end
-
-    local humanoid = char.Humanoid
-    local rootPart = char.HumanoidRootPart
-
-    walkConnection = RunService.Heartbeat:Connect(function()
-        if not Settings.WalkToBall then
-            humanoid:Move(Vector3.zero)
-            if walkConnection then
-                walkConnection:Disconnect()
-            end
-            return
-        end
-
-        local ball = Match.get_ball()
-        if not ball then
-            humanoid:Move(Vector3.zero)
-            return
-        end
-
-        local distance = (ball.Position - rootPart.Position).Magnitude
-        if distance <= Settings.WalkDistance then
-            humanoid:Move(Vector3.zero)
-            return
-        end
-
-        local direction = (ball.Position - rootPart.Position).Unit
-        humanoid:MoveTo(rootPart.Position + direction * math.min(distance - Settings.WalkDistance, humanoid.WalkSpeed * 0.1))
-    end)
-end
 
 ReplicatedStorage.Remotes.ParrySuccessAll.OnClientEvent:Connect(function(ball, hitEntity)
     if hitEntity.Parent and hitEntity.Parent ~= LocalPlayer.Character then
