@@ -691,7 +691,7 @@ localPlayer.CharacterAdded:Connect(function(character)
     updateCharacterJump()
 end)
 
-runsee+.Heartbeat:Connect(function()
+runservice.Heartbeat:Connect(function()
     if autoCoin and localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
         local coin = getNearestCoin()
         if coin then
