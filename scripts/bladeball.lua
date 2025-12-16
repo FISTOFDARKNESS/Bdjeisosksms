@@ -24,11 +24,11 @@ local VUser = Services.VirtualUser
 
 local Settings = {
     ParryMode = "Machine",
-    AutoParry = false,
-    AutoSpam = false,
+    AutoParry = true,
+    AutoSpam = true,
     MaxHits = 10,
     ModDetection = false,
-    WalkToBall = false,
+    WalkToBall = true,
     WalkDistance = 60,
 }
 
