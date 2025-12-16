@@ -148,14 +148,14 @@ local function setHighlight(player, role)
     end
 end
 
-local function removeHighlight(player)
+local function rehigh(player)
     if playerHighlights[player] then
         playerHighlights[player]:Destroy()
         playerHighlights[player] = nil
     end
 end
 
-local function checkRole(player)
+local function role(player)
     if player == localPlayer then return "Innocent" end
     
     local char = player.Character
@@ -170,10 +170,10 @@ local function checkRole(player)
     return "Innocent"
 end
 
-local function refreshUI()
+local function reui()
     for _, plr in ipairs(Players:GetPlayers()) do
         if plr ~= localPlayer then
-            local role = checkRole(plr)
+            local role = role(plr)
             if playerRoles[plr] ~= role then
                 playerRoles[plr] = role
                 setHighlight(plr, role)
@@ -192,7 +192,7 @@ local function refreshUI()
         murderUI.NameLabel.Text = murder.Name
     else
         murderUI.Image.Image = ""
-        murderUI.NameLabel.Text = "Waiting For a Player"
+        murderUI.NameLabel.Text = "Wating"
     end
     
     if sheriff then
@@ -200,11 +200,11 @@ local function refreshUI()
         sheriffUI.NameLabel.Text = sheriff.Name
     else
         sheriffUI.Image.Image = ""
-        sheriffUI.NameLabel.Text = "Waiting For a Player"
+        sheriffUI.NameLabel.Text = "Wating"
     end
 end
 
-local function setupPlayer(plr)
+local function stplayer(plr)
     if plr == localPlayer then return end
     
     local function connectChar(char)
@@ -213,18 +213,18 @@ local function setupPlayer(plr)
         
         char.ChildAdded:Connect(function(child)
             wait(0.1)
-            refreshUI()
+            reui()
         end)
         char.ChildRemoved:Connect(function(child)
             wait(0.1)
-            refreshUI()
+            reui()
         end)
         
         local humanoid = char:WaitForChild("Humanoid")
         humanoid.Died:Connect(function()
             wait(3)
             if plr and plr.Character then
-                setHighlight(plr, checkRole(plr))
+                setHighlight(plr, role(plr))
             end
         end)
     end
@@ -240,22 +240,20 @@ local function setupPlayer(plr)
     local backpack = plr:FindFirstChild("Backpack")
     if backpack then
         backpack.ChildAdded:Connect(function(child)
-            wait(0.1)
-            refreshUI()
+            reui()
         end)
         backpack.ChildRemoved:Connect(function(child)
-            wait(0.1)
-            refreshUI()
+            reui()
         end)
     end
     
-    refreshUI()
+    reui()
 end
 
 local function cleanupPlayer(plr)
-    removeHighlight(plr)
+    rehigh(plr)
     playerRoles[plr] = nil
-    refreshUI()
+    reui()
 end
 
 local function getNearestCoin()
@@ -276,19 +274,19 @@ local function getNearestCoin()
     return closest
 end
 
-local function updateCharacterSpeed()
+local function changespeed()
     if localPlayer.Character and localPlayer.Character:FindFirstChild("Humanoid") then
         localPlayer.Character.Humanoid.WalkSpeed = walkSpeed
     end
 end
 
-local function updateCharacterJump()
+local function changejupm()
     if localPlayer.Character and localPlayer.Character:FindFirstChild("Humanoid") then
         localPlayer.Character.Humanoid.JumpPower = jumpPower
     end
 end
 
-local function createModernMenu()
+local function createmenu()
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = " "
     screenGui.Parent = playerGui
@@ -390,7 +388,7 @@ local function createModernMenu()
         nameLabel.Position = UDim2.new(0, 5, 1, -25)
         nameLabel.BackgroundTransparency = 1
         nameLabel.TextColor3 = Color3.fromRGB(255,255,255)
-        nameLabel.Text = "Nenhum"
+        nameLabel.Text = "N/A"
         nameLabel.Font = Enum.Font.Gotham
         nameLabel.TextSize = 12
         nameLabel.Parent = frame
@@ -574,7 +572,7 @@ local function createModernMenu()
         local newSpeed = tonumber(spdtxtbox.Text)
         if newSpeed and newSpeed >= 0 then
             walkSpeed = newSpeed
-            updateCharacterSpeed()
+            changespeed()
             statlabel.Text = "Status: Speed ​​changed to " .. walkSpeed
         else
             spdtxtbox.Text = tostring(walkSpeed)
@@ -586,7 +584,7 @@ local function createModernMenu()
         local newJump = tonumber(jumpTextBox.Text)
         if newJump and newJump >= 0 then
             jumpPower = newJump
-            updateCharacterJump()
+            changejupm()
             statlabel.Text = "Status: JumpPower to " .. jumpPower
         else
             jumpTextBox.Text = tostring(jumpPower)
@@ -683,12 +681,12 @@ local function createModernMenu()
     }
 end
 
-local menu = createModernMenu()
+local menu = createmenu()
 
 localPlayer.CharacterAdded:Connect(function(character)
     wait(0.5)
-    updateCharacterSpeed()
-    updateCharacterJump()
+    changespeed()
+    changejupm()
 end)
 
 runservice.Heartbeat:Connect(function()
@@ -707,13 +705,13 @@ end)
 
 for _, plr in ipairs(Players:GetPlayers()) do
     if plr ~= localPlayer then
-        setupPlayer(plr)
+        stplayer(plr)
     end
 end
 
 Players.PlayerAdded:Connect(function(plr)
     if plr ~= localPlayer then
-        setupPlayer(plr)
+        stplayer(plr)
     end
 end)
 
@@ -721,5 +719,5 @@ Players.PlayerRemoving:Connect(cleanupPlayer)
 
 while true do
     wait(2)
-    refreshUI()
+    reui()
 end
