@@ -1,13 +1,13 @@
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
-local RunService = game:GetService("RunService")
+local runservice = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 
 local localPlayer = Players.LocalPlayer
 local playerGui = game:GetService("CoreGui")
 
-local UI_CONFIG = {
+local uiconfig = {
     MainSize = UDim2.new(0, 400, 0, 400),
     Colors = {
         Background = Color3.fromRGB(30, 30, 40),
@@ -24,8 +24,8 @@ local UI_CONFIG = {
         TextBox = Color3.fromRGB(50, 50, 60)
     },
     Icons = {
-        Murder = "rbxassetid://7072710002",
-        Sheriff = "rbxassetid://7072710777"
+        Murder = "rbxassetid://0",
+        Sheriff = "rbxassetid://0"
     }
 }
 
@@ -298,10 +298,10 @@ local function createModernMenu()
 
     local mainFrame = Instance.new("Frame")
     mainFrame.Name = "MainFrame"
-    mainFrame.Size = UI_CONFIG.MainSize
-    mainFrame.Position = UDim2.new(0.5, -UI_CONFIG.MainSize.X.Offset/2, 0.05, 0)
+    mainFrame.Size = uiconfig.MainSize
+    mainFrame.Position = UDim2.new(0.5, -uiconfig.MainSize.X.Offset/2, 0.05, 0)
     mainFrame.AnchorPoint = Vector2.new(0.5, 0)
-    mainFrame.BackgroundColor3 = UI_CONFIG.Colors.Background
+    mainFrame.BackgroundColor3 = uiconfig.Colors.Background
     mainFrame.BorderSizePixel = 0
     mainFrame.ClipsDescendants = true
     mainFrame.Parent = screenGui
@@ -319,7 +319,7 @@ local function createModernMenu()
     local titleBar = Instance.new("Frame")
     titleBar.Name = "TitleBar"
     titleBar.Size = UDim2.new(1, 0, 0, 30)
-    titleBar.BackgroundColor3 = UI_CONFIG.Colors.Header
+    titleBar.BackgroundColor3 = uiconfig.Colors.Header
     titleBar.BorderSizePixel = 0
     titleBar.Parent = mainFrame
 
@@ -353,7 +353,7 @@ local function createModernMenu()
         local frame = Instance.new("Frame")
         frame.Size = UDim2.new(0.5, -10, 0, 120)
         frame.Position = position
-        frame.BackgroundColor3 = UI_CONFIG.Colors.RoleFrame
+        frame.BackgroundColor3 = uiconfig.Colors.RoleFrame
         frame.BorderSizePixel = 0
         frame.Parent = parent
         
@@ -405,8 +405,8 @@ local function createModernMenu()
         return {Frame=frame, Image=image, NameLabel=nameLabel, Title=titleLabel}
     end
 
-    murderUI = createRoleFrame(mainFrame, "Murder", UI_CONFIG.Colors.Murder, UI_CONFIG.Icons.Murder, UDim2.new(0, 5, 0, 40))
-    sheriffUI = createRoleFrame(mainFrame, "Sheriff", UI_CONFIG.Colors.Sheriff, UI_CONFIG.Icons.Sheriff, UDim2.new(0.5, 5, 0, 40))
+    murderUI = createRoleFrame(mainFrame, "Murder", uiconfig.Colors.Murder, uiconfig.Icons.Murder, UDim2.new(0, 5, 0, 40))
+    sheriffUI = createRoleFrame(mainFrame, "Sheriff", uiconfig.Colors.Sheriff, uiconfig.Icons.Sheriff, UDim2.new(0.5, 5, 0, 40))
 
     local speedFrame = Instance.new("Frame")
     speedFrame.Name = "SpeedFrame"
@@ -426,20 +426,20 @@ local function createModernMenu()
     speedLabel.TextXAlignment = Enum.TextXAlignment.Left
     speedLabel.Parent = speedFrame
 
-    local speedTextBox = Instance.new("TextBox")
-    speedTextBox.Name = "SpeedTextBox"
-    speedTextBox.Size = UDim2.new(0.5, 0, 1, 0)
-    speedTextBox.Position = UDim2.new(0.5, 0, 0, 0)
-    speedTextBox.BackgroundColor3 = UI_CONFIG.Colors.TextBox
-    speedTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-    speedTextBox.Text = tostring(walkSpeed)
-    speedTextBox.TextSize = 14
-    speedTextBox.Font = Enum.Font.Gotham
-    speedTextBox.Parent = speedFrame
+    local spdtxtbox = Instance.new("TextBox")
+    spdtxtbox.Name = "spdtxtbox"
+    spdtxtbox.Size = UDim2.new(0.5, 0, 1, 0)
+    spdtxtbox.Position = UDim2.new(0.5, 0, 0, 0)
+    spdtxtbox.BackgroundColor3 = uiconfig.Colors.TextBox
+    spdtxtbox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    spdtxtbox.Text = tostring(walkSpeed)
+    spdtxtbox.TextSize = 14
+    spdtxtbox.Font = Enum.Font.Gotham
+    spdtxtbox.Parent = speedFrame
 
     local speedCorner = Instance.new("UICorner")
     speedCorner.CornerRadius = UDim.new(0, 6)
-    speedCorner.Parent = speedTextBox
+    speedCorner.Parent = spdtxtbox
 
     local jumpFrame = Instance.new("Frame")
     jumpFrame.Name = "JumpFrame"
@@ -463,7 +463,7 @@ local function createModernMenu()
     jumpTextBox.Name = "JumpTextBox"
     jumpTextBox.Size = UDim2.new(0.5, 0, 1, 0)
     jumpTextBox.Position = UDim2.new(0.5, 0, 0, 0)
-    jumpTextBox.BackgroundColor3 = UI_CONFIG.Colors.TextBox
+    jumpTextBox.BackgroundColor3 = uiconfig.Colors.TextBox
     jumpTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
     jumpTextBox.Text = tostring(jumpPower)
     jumpTextBox.TextSize = 14
@@ -478,7 +478,7 @@ local function createModernMenu()
     gunDropButton.Name = "GunDropButton"
     gunDropButton.Size = UDim2.new(1, -20, 0, 30)
     gunDropButton.Position = UDim2.new(0, 10, 0, 210)
-    gunDropButton.BackgroundColor3 = UI_CONFIG.Colors.Button
+    gunDropButton.BackgroundColor3 = uiconfig.Colors.Button
     gunDropButton.TextColor3 = Color3.fromRGB(255,255,255)
     gunDropButton.Text = "Teleport to Gun"
     gunDropButton.Font = Enum.Font.GothamBold
@@ -493,7 +493,7 @@ local function createModernMenu()
     teleportAttackButton.Name = "TeleportAttackButton"
     teleportAttackButton.Size = UDim2.new(1, -20, 0, 30)
     teleportAttackButton.Position = UDim2.new(0, 10, 0, 250)
-    teleportAttackButton.BackgroundColor3 = UI_CONFIG.Colors.Button
+    teleportAttackButton.BackgroundColor3 = uiconfig.Colors.Button
     teleportAttackButton.TextColor3 = Color3.fromRGB(255,255,255)
     teleportAttackButton.Text = "Kill Someone (Only Murder)"
     teleportAttackButton.Font = Enum.Font.GothamBold
@@ -526,7 +526,7 @@ local function createModernMenu()
     autoCoinToggleButton.Name = "AutoCoinToggleButton"
     autoCoinToggleButton.Size = UDim2.new(0, 50, 0, 25)
     autoCoinToggleButton.Position = UDim2.new(1, -50, 0.5, -12)
-    autoCoinToggleButton.BackgroundColor3 = UI_CONFIG.Colors.ButtonOff
+    autoCoinToggleButton.BackgroundColor3 = uiconfig.Colors.ButtonOff
     autoCoinToggleButton.Text = ""
     autoCoinToggleButton.Parent = autoCoinToggleFrame
 
@@ -538,47 +538,47 @@ local function createModernMenu()
     autoCoinToggleInner.Name = "AutoCoinToggleInner"
     autoCoinToggleInner.Size = UDim2.new(0, 21, 0, 21)
     autoCoinToggleInner.Position = UDim2.new(0, 2, 0.5, -10)
-    autoCoinToggleInner.BackgroundColor3 = UI_CONFIG.Colors.ToggleOff
+    autoCoinToggleInner.BackgroundColor3 = uiconfig.Colors.ToggleOff
     autoCoinToggleInner.Parent = autoCoinToggleButton
 
     local autoCoinToggleInnerCorner = Instance.new("UICorner")
     autoCoinToggleInnerCorner.CornerRadius = UDim.new(0, 10)
     autoCoinToggleInnerCorner.Parent = autoCoinToggleInner
 
-    local statusLabel = Instance.new("TextLabel")
-    statusLabel.Name = "StatusLabel"
-    statusLabel.Size = UDim2.new(1, -20, 0, 20)
-    statusLabel.Position = UDim2.new(0, 10, 0, 330)
-    statusLabel.BackgroundTransparency = 1
-    statusLabel.Text = "Status: Inactive"
-    statusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-    statusLabel.TextSize = 12
-    statusLabel.Font = Enum.Font.Gotham
-    statusLabel.TextXAlignment = Enum.TextXAlignment.Left
-    statusLabel.Parent = mainFrame
+    local statlabel = Instance.new("TextLabel")
+    statlabel.Name = "statlabel"
+    statlabel.Size = UDim2.new(1, -20, 0, 20)
+    statlabel.Position = UDim2.new(0, 10, 0, 330)
+    statlabel.BackgroundTransparency = 1
+    statlabel.Text = "Status: Inactive"
+    statlabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    statlabel.TextSize = 12
+    statlabel.Font = Enum.Font.Gotham
+    statlabel.TextXAlignment = Enum.TextXAlignment.Left
+    statlabel.Parent = mainFrame
 
     local function updateAutoCoinToggle()
         local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
         if autoCoin then
-            local tween = TweenService:Create(autoCoinToggleInner, tweenInfo, {Position = UDim2.new(1, -23, 0.5, -10), BackgroundColor3 = UI_CONFIG.Colors.ToggleOn})
+            local tween = TweenService:Create(autoCoinToggleInner, tweenInfo, {Position = UDim2.new(1, -23, 0.5, -10), BackgroundColor3 = uiconfig.Colors.ToggleOn})
             tween:Play()
-            autoCoinToggleButton.BackgroundColor3 = UI_CONFIG.Colors.ButtonOn
+            autoCoinToggleButton.BackgroundColor3 = uiconfig.Colors.ButtonOn
         else
-            local tween = TweenService:Create(autoCoinToggleInner, tweenInfo, {Position = UDim2.new(0, 2, 0.5, -10), BackgroundColor3 = UI_CONFIG.Colors.ToggleOff})
+            local tween = TweenService:Create(autoCoinToggleInner, tweenInfo, {Position = UDim2.new(0, 2, 0.5, -10), BackgroundColor3 = uiconfig.Colors.ToggleOff})
             tween:Play()
-            autoCoinToggleButton.BackgroundColor3 = UI_CONFIG.Colors.ButtonOff
+            autoCoinToggleButton.BackgroundColor3 = uiconfig.Colors.ButtonOff
         end
     end
 
-    speedTextBox.FocusLost:Connect(function(enterPressed)
-        local newSpeed = tonumber(speedTextBox.Text)
+    spdtxtbox.FocusLost:Connect(function(enterPressed)
+        local newSpeed = tonumber(spdtxtbox.Text)
         if newSpeed and newSpeed >= 0 then
             walkSpeed = newSpeed
             updateCharacterSpeed()
-            statusLabel.Text = "Status: Speed ​​changed to " .. walkSpeed
+            statlabel.Text = "Status: Speed ​​changed to " .. walkSpeed
         else
-            speedTextBox.Text = tostring(walkSpeed)
-            statusLabel.Text = "Status: Invalid speed value"
+            spdtxtbox.Text = tostring(walkSpeed)
+            statlabel.Text = "Status: Invalid speed value"
         end
     end)
 
@@ -587,10 +587,10 @@ local function createModernMenu()
         if newJump and newJump >= 0 then
             jumpPower = newJump
             updateCharacterJump()
-            statusLabel.Text = "Status: JumpPower to " .. jumpPower
+            statlabel.Text = "Status: JumpPower to " .. jumpPower
         else
             jumpTextBox.Text = tostring(jumpPower)
-            statusLabel.Text = "Status: Invalid JumpPower value"
+            statlabel.Text = "Status: Invalid JumpPower value"
         end
     end)
 
@@ -598,26 +598,26 @@ local function createModernMenu()
         local gunDrop = findGunDrop()
         if gunDrop and localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
             localPlayer.Character.HumanoidRootPart.CFrame = gunDrop.CFrame + Vector3.new(0,0,0)
-            statusLabel.Text = "Status: Teleported to Gun"
+            statlabel.Text = "Status: Teleported to Gun"
         else
-            statusLabel.Text = "Status: Gun not found"
+            statlabel.Text = "Status: Gun not found"
         end
     end)
 
     teleportAttackButton.MouseButton1Click:Connect(function()
         teleportAndAttack()
-        statusLabel.Text = "Status: Auto Kill Someone Executed"
+        statlabel.Text = "Status: Auto Kill Someone Executed"
     end)
 
     autoCoinToggleButton.MouseButton1Click:Connect(function()
         autoCoin = not autoCoin
         updateAutoCoinToggle()
-        statusLabel.Text = "Status: Auto Coin " .. (autoCoin and "Enabled" or "Disabled")
+        statlabel.Text = "Status: Auto Coin " .. (autoCoin and "Enabled" or "Disabled")
         
         if autoCoin then
-            statusLabel.Text = "Status: Auto Farm Coins Enabled"
+            statlabel.Text = "Status: Auto Farm Coins Enabled"
         else
-            statusLabel.Text = "Status: Auto Farm Coins Disabled"
+            statlabel.Text = "Status: Auto Farm Coins Disabled"
             if currentTween then currentTween:Cancel() end
         end
     end)
@@ -658,24 +658,24 @@ local function createModernMenu()
     end)
 
     gunDropButton.MouseEnter:Connect(function()
-        TweenService:Create(gunDropButton, TweenInfo.new(0.2), {BackgroundColor3 = UI_CONFIG.Colors.ButtonHover}):Play()
+        TweenService:Create(gunDropButton, TweenInfo.new(0.2), {BackgroundColor3 = uiconfig.Colors.ButtonHover}):Play()
     end)
     gunDropButton.MouseLeave:Connect(function()
-        TweenService:Create(gunDropButton, TweenInfo.new(0.2), {BackgroundColor3 = UI_CONFIG.Colors.Button}):Play()
+        TweenService:Create(gunDropButton, TweenInfo.new(0.2), {BackgroundColor3 = uiconfig.Colors.Button}):Play()
     end)
 
     teleportAttackButton.MouseEnter:Connect(function()
-        TweenService:Create(teleportAttackButton, TweenInfo.new(0.2), {BackgroundColor3 = UI_CONFIG.Colors.ButtonHover}):Play()
+        TweenService:Create(teleportAttackButton, TweenInfo.new(0.2), {BackgroundColor3 = uiconfig.Colors.ButtonHover}):Play()
     end)
     teleportAttackButton.MouseLeave:Connect(function()
-        TweenService:Create(teleportAttackButton, TweenInfo.new(0.2), {BackgroundColor3 = UI_CONFIG.Colors.Button}):Play()
+        TweenService:Create(teleportAttackButton, TweenInfo.new(0.2), {BackgroundColor3 = uiconfig.Colors.Button}):Play()
     end)
 
     updateAutoCoinToggle()
 
     return {
         updateStatus = function(text)
-            statusLabel.Text = "Status: " .. text
+            statlabel.Text = "Status: " .. text
         end,
         getAutoCoinEnabled = function()
             return autoCoin
@@ -691,7 +691,7 @@ localPlayer.CharacterAdded:Connect(function(character)
     updateCharacterJump()
 end)
 
-RunService.Heartbeat:Connect(function()
+runsee+.Heartbeat:Connect(function()
     if autoCoin and localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
         local coin = getNearestCoin()
         if coin then
