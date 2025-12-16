@@ -29,7 +29,7 @@ local uiconfig = {
     }
 }
 
-local SEARCH_MODELS = {"ResearchFacility","BioLab","House2","Mansion","MilBase","Yacht","Workplace","PoliceStation","Office3","Hotel","BeachResort","Mansion2","Factory","Bank2"}
+local Maps = {"ResearchFacility","BioLab","House2","Mansion","MilBase","Yacht","Workplace","PoliceStation","Office3","Hotel","BeachResort","Mansion2","Factory","Bank2"}
 
 local playerHighlights = {}
 local playerRoles = {}
@@ -43,7 +43,7 @@ local jumpPower = 50
 
 local function getSearchModels()
     local models = {}
-    for _, name in ipairs(SEARCH_MODELS) do
+    for _, name in ipairs(Maps) do
         local model = workspace:FindFirstChild(name)
         if model then
             table.insert(models, model)
