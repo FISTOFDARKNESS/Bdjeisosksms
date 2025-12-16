@@ -767,6 +767,10 @@ local function createModernMenu()
 end
 LoadSettings()
 local menu, uiElements = createModernMenu()
+updateToggle(uiElements.autoParryToggleInner, Settings.AutoParry)
+updateToggle(uiElements.autoSpamToggleInner, Settings.AutoSpam)
+updateToggle(uiElements.modDetectionToggleInner, Settings.ModDetection)
+updateToggle(uiElements.walkToBallToggleInner, Settings.WalkToBall)
 
 local function LerpRadians(from, to, alpha)
     return from + ((to - from) * alpha)
@@ -1391,3 +1395,4 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         fireproximityprompt(createPrompt)
     end
 end)
+
