@@ -1931,9 +1931,9 @@ local function WalkBall()
     end
 
     walkConnection = RunService.Heartbeat:Connect(function()
-        if not Settings.WalkToBall then
-            return
-        end
+      --  if not Settings.WalkToBall then
+        --    return
+      --  end
 
         local char = LocalPlayer.Character
         if not char then return end
