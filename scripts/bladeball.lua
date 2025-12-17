@@ -28,32 +28,47 @@ local Settings = {
     AutoSpam = false,
     MaxHits = 10,
     ModDetection = false,
-    WalkToBall = false,
+    WalkToBall = true,
     WalkDistance = 60,
 }
-local DataStoreService = game:GetService("DataStoreService")
 local HttpService = game:GetService("HttpService")
-local SETTINGS_FILE_NAME = "BladeBall_Zeta_Settings.json"
+
+local CONFIG_FOLDER = "BladeBall"
+local CONFIG_FILE = CONFIG_FOLDER .. "/settings.json"
+
+if makefolder and not isfolder(CONFIG_FOLDER) then
+    makefolder(CONFIG_FOLDER)
+end
 
 local function SaveSettings()
-    if writefile then
+    if not writefile then return end
+
+    local success, err = pcall(function()
         local data = HttpService:JSONEncode(Settings)
-        pcall(writefile, SETTINGS_FILE_NAME, data)
+        writefile(CONFIG_FILE, data)
+    end)
+
+    if not success then
+        warn("Erro ao salvar settings:", err)
     end
 end
 
 local function LoadSettings()
-    if readfile and isfile and isfile(SETTINGS_FILE_NAME) then
-        local success, loadedData = pcall(readfile, SETTINGS_FILE_NAME)
-        if success and loadedData then
-            local decoded = HttpService:JSONDecode(loadedData)
-            if type(decoded) == "table" then
-                for key, value in pairs(decoded) do
-                    if Settings[key] ~= nil then
-                        Settings[key] = value
-                    end
-                end
-            end
+    if not (readfile and isfile) then return end
+    if not isfile(CONFIG_FILE) then return end
+
+    local success, data = pcall(function()
+        return readfile(CONFIG_FILE)
+    end)
+
+    if not success then return end
+
+    local decoded = HttpService:JSONDecode(data)
+    if type(decoded) ~= "table" then return end
+
+    for k, v in pairs(decoded) do
+        if Settings[k] ~= nil then
+            Settings[k] = v
         end
     end
 end
@@ -411,6 +426,21 @@ local function createModernMenu()
     walkToBallToggleCorner.CornerRadius = UDim.new(0, 12)
     walkToBallToggleCorner.Parent = walkToBallToggleButton
 
+	local maxHitsBox = Instance.new("TextBox")
+    maxHitsBox.Name = "MaxHitsBox"
+    maxHitsBox.Size = UDim2.new(0.25, 0, 0.7, 0)
+    maxHitsBox.Position = UDim2.new(0.75, -5, 0.15, 0)
+    maxHitsBox.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
+    maxHitsBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    maxHitsBox.Text = "10"
+    maxHitsBox.TextSize = 14
+    maxHitsBox.Font = Enum.Font.Gotham
+    maxHitsBox.Parent = maxHitsFrame
+
+    local maxHitsCorner = Instance.new("UICorner")
+    maxHitsCorner.CornerRadius = UDim.new(0, 4)
+    maxHitsCorner.Parent = maxHitsBox
+
     local walkToBallToggleInner = Instance.new("Frame")
     walkToBallToggleInner.Name = "WalkToBallToggleInner"
     walkToBallToggleInner.Size = UDim2.new(0, 21, 0, 21)
@@ -563,56 +593,6 @@ local function createModernMenu()
         SaveSettings()
     end)
 
-    local walkConnection
-    local function WalkBall()
-        if walkConnection then
-            walkConnection:Disconnect()
-        end
-
-        walkConnection = RunService.Heartbeat:Connect(function()
-            if not Settings.WalkToBall then
-                return
-            end
-
-            local char = LocalPlayer.Character
-            if not char then return end
-
-            local humanoid = char:FindFirstChildOfClass("Humanoid")
-            local rootPart = char:FindFirstChild("HumanoidRootPart")
-
-            if not humanoid or not rootPart or humanoid.Health <= 0 then
-                return
-            end
-
-            local ball = Match.get_ball()
-            if not ball then
-                humanoid:Move(Vector3.zero)
-                return
-            end
-
-            local distance = (ball.Position - rootPart.Position).Magnitude
-            if distance <= Settings.WalkDistance then
-                humanoid:Move(Vector3.zero)
-                return
-            end
-
-            local direction = (ball.Position - rootPart.Position).Unit
-            humanoid:MoveTo(
-                rootPart.Position +
-                direction * math.min(distance - Settings.WalkDistance, humanoid.WalkSpeed * 0.1)
-            )
-        end)
-    end
-    
-    walkToBallToggleButton.MouseButton1Click:Connect(function()
-        Settings.WalkToBall = not Settings.WalkToBall
-        updateToggle(walkToBallToggleInner, Settings.WalkToBall)
-        SaveSettings()
-        if Settings.WalkToBall then
-            WalkBall()
-        end
-    end)
-
     walkDistanceBox.FocusLost:Connect(function(enterPressed)
         local num = tonumber(walkDistanceBox.Text)
         if num and num >= 0 then
@@ -623,6 +603,55 @@ local function createModernMenu()
             walkDistanceBox.Text = tostring(Settings.WalkDistance)
         end
     end)
+
+	maxHitsBox.FocusLost:Connect(function(enterPressed)
+        local num = tonumber(maxHitsBox.Text)
+        if num and num > 0 then
+            Settings.MaxHits = num
+            maxHitsBox.Text = tostring(num)
+        else
+            maxHitsBox.Text = tostring(Settings.MaxHits)
+        end
+    end)
+
+	local walkConnection
+	local function WalkBall()
+    if walkConnection then
+        walkConnection:Disconnect()
+        walkConnection = nil
+    end
+
+    if not Settings.WalkToBall then return end
+
+    walkConnection = RunService.Heartbeat:Connect(function()
+        local ball = Match.get_ball()
+        if not ball then return end -- só continua quando a bola existir
+
+        local char = LocalPlayer.Character
+        if not char then return end
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        local rootPart = char:FindFirstChild("HumanoidRootPart")
+        if not humanoid or not rootPart or humanoid.Health <= 0 then return end
+
+        local distance = (ball.Position - rootPart.Position).Magnitude
+        if distance <= Settings.WalkDistance then
+            humanoid:Move(Vector3.zero)
+            return
+        end
+
+        local direction = (ball.Position - rootPart.Position).Unit
+        humanoid:MoveTo(rootPart.Position + direction * math.min(distance - Settings.WalkDistance, humanoid.WalkSpeed * 0.1))
+    end)
+end
+
+walkToBallToggleButton.MouseButton1Click:Connect(function()
+        Settings.WalkToBall = not Settings.WalkToBall
+        updateToggle(walkToBallToggleInner, Settings.WalkToBall)
+        if Settings.WalkToBall then
+            WalkBall()
+        end
+    end)
+
 
     fpsBoostButton.MouseButton1Click:Connect(function()
         statusLabel.Text = "Status: Applying FPS Boost..."
@@ -767,10 +796,6 @@ local function createModernMenu()
 end
 LoadSettings()
 local menu, uiElements = createModernMenu()
-updateToggle(uiElements.autoParryToggleInner, Settings.AutoParry)
-updateToggle(uiElements.autoSpamToggleInner, Settings.AutoSpam)
-updateToggle(uiElements.modDetectionToggleInner, Settings.ModDetection)
-updateToggle(uiElements.walkToBallToggleInner, Settings.WalkToBall)
 
 local function LerpRadians(from, to, alpha)
     return from + ((to - from) * alpha)
@@ -1395,4 +1420,3 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         fireproximityprompt(createPrompt)
     end
 end)
-
