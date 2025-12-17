@@ -2,7 +2,8 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
-
+local Lighting = game:GetService("Lighting")
+local Terrain = workspace:FindFirstChildWhichIsA("Terrain")
 local clonefunction = clonefunction or function(f) return f end
 local cloneref = clonefunction(cloneref) or function(i) return i end
 
@@ -614,114 +615,132 @@ local function createModernMenu()
         end
     end)
 
-	local walkConnection
-	local function WalkBall()
+
+local walkConnection
+
+walkToBallToggleButton.MouseButton1Click:Connect(function()
+    Settings.WalkToBall = not Settings.WalkToBall
+    updateToggle(walkToBallToggleInner, Settings.WalkToBall)
+    SaveSettings()
+    
     if walkConnection then
         walkConnection:Disconnect()
         walkConnection = nil
     end
+    
+    if Settings.WalkToBall then
+        walkConnection = RunService.Heartbeat:Connect(function()
+            if not Settings.WalkToBall then
+                return
+            end
 
-    if not Settings.WalkToBall then return end
+            local char = LocalPlayer.Character
+            if not char then return end
 
-    walkConnection = RunService.Heartbeat:Connect(function()
-        local ball = Match.get_ball()
-        if not ball then return end -- só continua quando a bola existir
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+            local rootPart = char:FindFirstChild("HumanoidRootPart")
 
-        local char = LocalPlayer.Character
-        if not char then return end
-        local humanoid = char:FindFirstChildOfClass("Humanoid")
-        local rootPart = char:FindFirstChild("HumanoidRootPart")
-        if not humanoid or not rootPart or humanoid.Health <= 0 then return end
+            if not humanoid or not rootPart or humanoid.Health <= 0 then
+                return
+            end
 
-        local distance = (ball.Position - rootPart.Position).Magnitude
-        if distance <= Settings.WalkDistance then
-            humanoid:Move(Vector3.zero)
-            return
-        end
+            local ball = Match.get_ball()
+            if not ball then
+                humanoid:Move(Vector3.zero)
+                return
+            end
 
-        local direction = (ball.Position - rootPart.Position).Unit
-        humanoid:MoveTo(rootPart.Position + direction * math.min(distance - Settings.WalkDistance, humanoid.WalkSpeed * 0.1))
-    end)
+            local distance = (ball.Position - rootPart.Position).Magnitude
+            if distance <= Settings.WalkDistance then
+                humanoid:Move(Vector3.zero)
+                return
+            end
+
+            local direction = (ball.Position - rootPart.Position).Unit
+            humanoid:MoveTo(
+                rootPart.Position +
+                direction * math.min(distance - Settings.WalkDistance, humanoid.WalkSpeed * 0.1)
+            )
+        end)
+    end
+end)
+
+if Settings.WalkToBall then
+    updateToggle(walkToBallToggleInner, true)
+    WalkBall()
 end
 
-walkToBallToggleButton.MouseButton1Click:Connect(function()
-        Settings.WalkToBall = not Settings.WalkToBall
-        updateToggle(walkToBallToggleInner, Settings.WalkToBall)
-        if Settings.WalkToBall then
-            WalkBall()
+
+
+fpsBoostButton.MouseButton1Click:Connect(function()
+    statusLabel.Text = "Status: Applying FPS Boost..."
+    
+  
+
+    if Terrain then
+        Terrain.WaterWaveSize = 0
+        Terrain.WaterWaveSpeed = 0
+        Terrain.WaterReflectance = 0
+        Terrain.WaterTransparency = 1
+    end
+
+    Lighting.GlobalShadows = false
+    Lighting.FogEnd = 1e10
+    Lighting.FogStart = 0
+    Lighting.EnvironmentDiffuseScale = 0
+    Lighting.EnvironmentSpecularScale = 0
+    settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+
+    local objects = workspace:GetDescendants()
+    local index = 1
+    local accumulator = 0
+    local PARTS_PER_SECOND = 5
+
+    local function processObject(o)
+        if o:IsA("BasePart") then
+            o.CastShadow = false
+            o.Material = Enum.Material.Plastic
+            o.Reflectance = 0
+        elseif o:IsA("Beam") 
+            or o:IsA("Trail") 
+            or o:IsA("ParticleEmitter") 
+            or o:IsA("Fire") 
+            or o:IsA("Smoke") 
+            or o:IsA("Sparkles") 
+            or o:IsA("Decal") 
+            or o:IsA("Texture") 
+            or o:IsA("PointLight") 
+            or o:IsA("SurfaceAppearance") then
+            o:Destroy()
+        elseif o:IsA("MeshPart") then
+            o.TextureId = ""
+            o.MeshId = ""
+        end
+    end
+
+    RunService.PreRender:Connect(function(deltaTime)
+        accumulator = accumulator + deltaTime
+        if accumulator >= 1 then
+            accumulator = 0
+            for i = 1, PARTS_PER_SECOND do
+                local obj = objects[index]
+                if not obj then break end
+                processObject(obj)
+             --   print("name: "..obj.Name)
+                index = index + 1
+            end
         end
     end)
 
-
-    fpsBoostButton.MouseButton1Click:Connect(function()
-        statusLabel.Text = "Status: Applying FPS Boost..."
-        
-        local RunService = game:GetService("RunService")
-        local Lighting = game:GetService("Lighting")
-        local Terrain = workspace:FindFirstChildWhichIsA("Terrain")
-
-        if Terrain then
-            Terrain.WaterWaveSize = 0
-            Terrain.WaterWaveSpeed = 0
-            Terrain.WaterReflectance = 0
-            Terrain.WaterTransparency = 1
-        end
-
-        Lighting.GlobalShadows = false
-        Lighting.FogEnd = 1e10
-        Lighting.FogStart = 0
-        Lighting.EnvironmentDiffuseScale = 0
-        Lighting.EnvironmentSpecularScale = 0
-        settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
-
-        local objects = game:GetDescendants()
-        local index = 1
-        local accumulator = 0
-        local PARTS_PER_SECOND = 300
-
-        local function processObject(o)
-            if o:IsA("BasePart") then
-                o.CastShadow = false
-                o.Material = Enum.Material.Plastic
-                o.Reflectance = 0
-            elseif o:IsA("Beam")
-                or o:IsA("Trail")
-                or o:IsA("ParticleEmitter")
-                or o:IsA("Fire")
-                or o:IsA("Smoke")
-                or o:IsA("Sparkles")
-                or o:IsA("Decal")
-                or o:IsA("Texture")
-                or o:IsA("PointLight")
-                or o:IsA("SurfaceAppearance") then
-                o:Destroy()
-            elseif o:IsA("MeshPart") then
-                o.TextureId = ""
-                o.MeshId = ""
-            end
-        end
-
-        RunService.PreRender:Connect(function(deltaTime)
-            accumulator += deltaTime
-            if accumulator >= 1 then
-                accumulator = 0
-                for i = 1, PARTS_PER_SECOND do
-                    local obj = objects[index]
-                    if not obj then return end
-                    processObject(obj)
-                    index += 1
-                end
-            end
+    workspace.DescendantAdded:Connect(function(o)
+        task.defer(function()
+            processObject(o)
         end)
-
-        workspace.DescendantAdded:Connect(function(o)
-            task.defer(function()
-                processObject(o)
-            end)
-        end)
-
-        statusLabel.Text = "Status: FPS Boost Applied"
     end)
+
+    statusLabel.Text = "Status: FPS Boost Applied"
+end)
+
 
     serverHopButton.MouseButton1Click:Connect(function()
         statusLabel.Text = "Status: Server Hopping..."
