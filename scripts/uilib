@@ -58,7 +58,7 @@ function ZoUI.new(title)
     closeButton.Text = "X"
     closeButton.Font = Enum.Font.GothamBold
     closeButton.TextSize = 16
-    closeButton.TextColor3 = Color3.white
+    closeButton.TextColor3 = Color3.fromRGB(180, 180, 200)
     closeButton.Parent = topBar
     
     closeButton.MouseButton1Click:Connect(function()
