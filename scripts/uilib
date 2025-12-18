@@ -6,302 +6,292 @@ ZoUI.__index = ZoUI
 
 -- Main Constructor
 function ZoUI.new(title)
-    local self = setmetatable({}, ZoUI)
-    
-    self.title = title or "ZoUI - Zeta Realm"
-    self.tabs = { }
-    self.currentTab = nil
-    self.open = false
-    
-    -- Main Window
-    self.mainWindow = Instance.new("ScreenGui")
-    self.mainWindow.Name = "ZoUIMain"
-    self.mainWindow.ResetOnSpawn = false
-    self.mainWindow.Parent = game:GetService("CoreGui")
-    
-    -- Main Frame
-    self.mainFrame = Instance.new("Frame")
-    self.mainFrame.Name = "MainFrame"
-    self.mainFrame.Size = UDim2.new(0, 450, 0, 500)
-    self.mainFrame.Position = UDim2.new(0.5, -225, 0.5, -250)
-    self.mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
-    self.mainFrame.BorderSizePixel = 0
-    self.mainFrame.Visible = false
-    self.mainFrame.Parent = self.mainWindow
-    
-    -- Top Bar
-    local topBar = Instance.new("Frame")
-    topBar.Name = "TopBar"
-    topBar.Size = UDim2.new(1, 0, 0, 40)
-    topBar.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
-    topBar.BorderSizePixel = 0
-    topBar.Parent = self.mainFrame
-    
-    local titleLabel = Instance.new("TextLabel")
-    titleLabel.Name = "Title"
-    titleLabel.Size = UDim2.new(1, -40, 1, 0)
-    titleLabel.Position = UDim2.new(0, 10, 0, 0)
-    titleLabel.BackgroundTransparency = 1
-    titleLabel.Text = self.title
-    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    titleLabel.Font = Enum.Font.GothamBold
-    titleLabel.TextSize = 18
-    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-    titleLabel.Parent = topBar
-    
-    local closeButton = Instance.new("TextButton")
-    closeButton.Name = "CloseButton"
-    closeButton.Size = UDim2.new(0, 30, 0, 30)
-    closeButton.Position = UDim2.new(1, -35, 0.5, -15)
-    closeButton.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
-    closeButton.BorderSizePixel = 0
-    closeButton.Text = "X"
-    closeButton.Font = Enum.Font.GothamBold
-    closeButton.TextSize = 16
-    closeButton.TextColor3 = Color3.fromRGB(180, 180, 200)
-    closeButton.Parent = topBar
-    
-    closeButton.MouseButton1Click:Connect(function()
-        self:Toggle()
-    end)
-    
-    -- Tab Container
-    self.tabContainer = Instance.new("Frame")
-    self.tabContainer.Name = "TabContainer"
-    self.tabContainer.Size = UDim2.new(1, 0, 0, 50)
-    self.tabContainer.Position = UDim2.new(0, 0, 0, 40)
-    self.tabContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
-    self.tabContainer.BorderSizePixel = 0
-    self.tabContainer.Parent = self.mainFrame
-    
-    -- Content Container
-    self.contentContainer = Instance.new("Frame")
-    self.contentContainer.Name = "ContentContainer"
-    self.contentContainer.Size = UDim2.new(1, 0, 1, -90)
-    self.contentContainer.Position = UDim2.new(0, 0, 0, 90)
-    self.contentContainer.BackgroundTransparency = 1
-    self.contentContainer.ClipsDescendants = true
-    self.contentContainer.Parent = self.mainFrame
-    
-    -- Credits Bar (like in your image)
-    local creditsBar = Instance.new("Frame")
-    creditsBar.Name = "CreditsBar"
-    creditsBar.Size = UDim2.new(1, 0, 0, 30)
-    creditsBar.Position = UDim2.new(0, 0, 1, -30)
-    creditsBar.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
-    creditsBar.BorderSizePixel = 0
-    creditsBar.Parent = self.mainFrame
-    
-    local creditsLabel = Instance.new("TextLabel")
-    creditsLabel.Size = UDim2.new(1, -20, 1, 0)
-    creditsLabel.Position = UDim2.new(0, 10, 0, 0)
-    creditsLabel.BackgroundTransparency = 1
-    creditsLabel.Text = "Blade Ball by excellent team"
-    creditsLabel.TextColor3 = Color3.fromRGB(180, 180, 200)
-    creditsLabel.Font = Enum.Font.Gotham
-    creditsLabel.TextSize = 14
-    creditsLabel.TextXAlignment = Enum.TextXAlignment.Left
-    creditsLabel.Parent = creditsBar
-    
-    -- Toggle Keybind (default: J)
-    game:GetService("UserInputService").InputBegan:Connect(function(input, processed)
-        if not processed and input.KeyCode == Enum.KeyCode.J then
-            self:Toggle()
-        end
-    end)
-    
-    return self
+	local self = setmetatable({}, ZoUI)
+
+	self.title = title or "ZoUI - Zeta Realm"
+	self.tabs = { }
+	self.currentTab = nil
+	self.open = false
+
+	-- Main Window
+	self.mainWindow = Instance.new("ScreenGui")
+	self.mainWindow.Name = "ZoUIMain"
+	self.mainWindow.ResetOnSpawn = false
+	self.mainWindow.Parent = game:GetService("CoreGui")
+
+	-- Main Frame
+	self.mainFrame = Instance.new("Frame")
+	self.mainFrame.Name = "MainFrame"
+	self.mainFrame.Size = UDim2.new(0, 450, 0, 500)
+	self.mainFrame.Position = UDim2.new(0.5, -225, 0.5, -250)
+	self.mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+	self.mainFrame.BorderSizePixel = 0
+	self.mainFrame.Visible = false
+	self.mainFrame.Parent = self.mainWindow
+
+	-- Top Bar
+	local topBar = Instance.new("Frame")
+	topBar.Name = "TopBar"
+	topBar.Size = UDim2.new(1, 0, 0, 40)
+	topBar.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+	topBar.BorderSizePixel = 0
+	topBar.Parent = self.mainFrame
+
+	local titleLabel = Instance.new("TextLabel")
+	titleLabel.Name = "Title"
+	titleLabel.Size = UDim2.new(1, -40, 1, 0)
+	titleLabel.Position = UDim2.new(0, 10, 0, 0)
+	titleLabel.BackgroundTransparency = 1
+	titleLabel.Text = self.title
+	titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	titleLabel.Font = Enum.Font.GothamBold
+	titleLabel.TextSize = 18
+	titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+	titleLabel.Parent = topBar
+
+	local closeButton = Instance.new("TextButton")
+	closeButton.Name = "CloseButton"
+	closeButton.Size = UDim2.new(0, 30, 0, 30)
+	closeButton.Position = UDim2.new(1, -35, 0.5, -15)
+	closeButton.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
+	closeButton.BorderSizePixel = 0
+	closeButton.Text = "X"
+	closeButton.Font = Enum.Font.GothamBold
+	closeButton.TextSize = 16
+	closeButton.TextColor3 = Color3.fromRGB(180, 180, 200)
+	closeButton.Parent = topBar
+
+	closeButton.MouseButton1Click:Connect(function()
+		self:Toggle()
+	end)
+
+	-- Tab Container
+	self.tabContainer = Instance.new("Frame")
+	self.tabContainer.Name = "TabContainer"
+	self.tabContainer.Size = UDim2.new(1, 0, 0, 50)
+	self.tabContainer.Position = UDim2.new(0, 0, 0, 40)
+	self.tabContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+	self.tabContainer.BorderSizePixel = 0
+	self.tabContainer.Parent = self.mainFrame
+
+	-- Content Container
+	self.contentContainer = Instance.new("Frame")
+	self.contentContainer.Name = "ContentContainer"
+	self.contentContainer.Size = UDim2.new(1, 0, 1, -90)
+	self.contentContainer.Position = UDim2.new(0, 0, 0, 90)
+	self.contentContainer.BackgroundTransparency = 1
+	self.contentContainer.ClipsDescendants = true
+	self.contentContainer.Parent = self.mainFrame
+
+	-- Credits Bar (like in your image)
+	local creditsBar = Instance.new("Frame")
+	creditsBar.Name = "CreditsBar"
+	creditsBar.Size = UDim2.new(1, 0, 0, 30)
+	creditsBar.Position = UDim2.new(0, 0, 1, -30)
+	creditsBar.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+	creditsBar.BorderSizePixel = 0
+	creditsBar.Parent = self.mainFrame
+
+	local creditsLabel = Instance.new("TextLabel")
+	creditsLabel.Size = UDim2.new(1, -20, 1, 0)
+	creditsLabel.Position = UDim2.new(0, 10, 0, 0)
+	creditsLabel.BackgroundTransparency = 1
+	creditsLabel.Text = "Blade Ball by excellent team"
+	creditsLabel.TextColor3 = Color3.fromRGB(180, 180, 200)
+	creditsLabel.Font = Enum.Font.Gotham
+	creditsLabel.TextSize = 14
+	creditsLabel.TextXAlignment = Enum.TextXAlignment.Left
+	creditsLabel.Parent = creditsBar
+
+	game:GetService("UserInputService").InputBegan:Connect(function(input, processed)
+		if not processed and input.KeyCode == Enum.KeyCode.J then
+			self:Toggle()
+		end
+	end)
+
+	return self
 end
 
--- Toggle UI visibility
 function ZoUI:Toggle()
-    self.open = not self.open
-    self.mainFrame.Visible = self.open
+	self.open = not self.open
+	self.mainFrame.Visible = self.open
 end
 
--- Add a new tab (like "Combat", "FPS Boost", etc.)
 function ZoUI:AddTab(tabName)
-    local tab = { }
-    tab.name = tabName
-    tab.buttons = { }
-    
-    -- Tab Button
-    local tabButton = Instance.new("TextButton")
-    tabButton.Name = tabName .. "Tab"
-    tabButton.Size = UDim2.new(0, 100, 1, 0)
-    tabButton.Position = UDim2.new(0, (#self.tabs * 100), 0, 0)
-    tabButton.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
-    tabButton.BorderSizePixel = 0
-    tabButton.Text = tabName
-    tabButton.Font = Enum.Font.Gotham
-    tabButton.TextSize = 14
-    tabButton.TextColor3 = Color3.fromRGB(200, 200, 220)
-    tabButton.Parent = self.tabContainer
-    
-    -- Tab Content Frame
-    local tabFrame = Instance.new("ScrollingFrame")
-    tabFrame.Name = tabName .. "Content"
-    tabFrame.Size = UDim2.new(1, 0, 1, 0)
-    tabFrame.Position = UDim2.new(0, 0, 0, 0)
-    tabFrame.BackgroundTransparency = 1
-    tabFrame.ScrollingEnabled = true
-    tabFrame.ScrollBarThickness = 4
-    tabFrame.Visible = false
-    tabFrame.Parent = self.contentContainer
-    
-    local uiListLayout = Instance.new("UIListLayout")
-    uiListLayout.Padding = UDim.new(0, 10)
-    uiListLayout.Parent = tabFrame
-    
-    tab.button = tabButton
-    tab.frame = tabFrame
-    tab.content = { }
-    
-    -- Tab selection logic
-    tabButton.MouseButton1Click:Connect(function()
-        self:SelectTab(tabName)
-    end)
-    
-    table.insert(self.tabs, tab)
-    
-    -- Select first tab by default
-    if #self.tabs == 1 then
-        self:SelectTab(tabName)
-    end
-    
-    return tab
+	local tab = { }
+	tab.name = tabName
+	tab.buttons = { }
+
+	local tabButton = Instance.new("TextButton")
+	tabButton.Name = tabName .. "Tab"
+	tabButton.Size = UDim2.new(0, 100, 1, 0)
+	tabButton.Position = UDim2.new(0, (#self.tabs * 100), 0, 0)
+	tabButton.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+	tabButton.BorderSizePixel = 0
+	tabButton.Text = tabName
+	tabButton.Font = Enum.Font.Gotham
+	tabButton.TextSize = 14
+	tabButton.TextColor3 = Color3.fromRGB(200, 200, 220)
+	tabButton.Parent = self.tabContainer
+
+	local tabFrame = Instance.new("ScrollingFrame")
+	tabFrame.Name = tabName .. "Content"
+	tabFrame.Size = UDim2.new(1, 0, 1, 0)
+	tabFrame.Position = UDim2.new(0, 0, 0, 0)
+	tabFrame.BackgroundTransparency = 1
+	tabFrame.ScrollingEnabled = true
+	tabFrame.ScrollBarThickness = 4
+	tabFrame.Visible = false
+	tabFrame.Parent = self.contentContainer
+
+	local uiListLayout = Instance.new("UIListLayout")
+	uiListLayout.Padding = UDim.new(0, 10)
+	uiListLayout.Parent = tabFrame
+
+	tab.button = tabButton
+	tab.frame = tabFrame
+	tab.content = { }
+
+	tabButton.MouseButton1Click:Connect(function()
+		self:SelectTab(tabName)
+	end)
+
+	table.insert(self.tabs, tab)
+
+	if #self.tabs == 1 then
+		self:SelectTab(tabName)
+	end
+
+	return tab
 end
 
--- Select a tab
 function ZoUI:SelectTab(tabName)
-    for _, tab in pairs(self.tabs) do
-        local isSelected = tab.name == tabName
-        tab.frame.Visible = isSelected
-        tab.button.BackgroundColor3 = isSelected and Color3.fromRGB(50, 120, 220) or Color3.fromRGB(30, 30, 40)
-    end
-    self.currentTab = tabName
+	for _, tab in pairs(self.tabs) do
+		local isSelected = tab.name == tabName
+		tab.frame.Visible = isSelected
+		tab.button.BackgroundColor3 = isSelected and Color3.fromRGB(50, 120, 220) or Color3.fromRGB(30, 30, 40)
+	end
+	self.currentTab = tabName
 end
 
--- Add a toggle button (for Auto Parry, Auto Spam, etc.)
 function ZoUI:AddToggle(tabName, toggleName, defaultValue, callback)
-    local tab = nil
-    for _, t in pairs(self.tabs) do
-        if t.name == tabName then
-            tab = t
-            break
-        end
-    end
-    
-    if not tab then
-        tab = self:AddTab(tabName)
-    end
-    
-    local toggle = { }
-    toggle.name = toggleName
-    toggle.value = defaultValue or false
-    
-    -- Toggle Container
-    local toggleFrame = Instance.new("Frame")
-    toggleFrame.Name = toggleName .. "Toggle"
-    toggleFrame.Size = UDim2.new(1, -20, 0, 40)
-    toggleFrame.Position = UDim2.new(0, 10, 0, #tab.content * 50)
-    toggleFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
-    toggleFrame.BorderSizePixel = 0
-    toggleFrame.Parent = tab.frame
-    
-    local toggleLabel = Instance.new("TextLabel")
-    toggleLabel.Size = UDim2.new(1, -60, 1, 0)
-    toggleLabel.Position = UDim2.new(0, 10, 0, 0)
-    toggleLabel.BackgroundTransparency = 1
-    toggleLabel.Text = toggleName
-    toggleLabel.TextColor3 = Color3.fromRGB(240, 240, 250)
-    toggleLabel.Font = Enum.Font.Gotham
-    toggleLabel.TextSize = 16
-    toggleLabel.TextXAlignment = Enum.TextXAlignment.Left
-    toggleLabel.Parent = toggleFrame
-    
-    local toggleButton = Instance.new("TextButton")
-    toggleButton.Size = UDim2.new(0, 50, 0, 24)
-    toggleButton.Position = UDim2.new(1, -60, 0.5, -12)
-    toggleButton.BackgroundColor3 = toggle.value and Color3.fromRGB(80, 180, 80) or Color3.fromRGB(70, 70, 80)
-    toggleButton.BorderSizePixel = 0
-    toggleButton.Text = ""
-    toggleButton.Font = Enum.Font.GothamBold
-    toggleButton.TextSize = 12
-    toggleButton.Parent = toggleFrame
-    
-    local toggleStatus = Instance.new("TextLabel")
-    toggleStatus.Size = UDim2.new(1, 0, 1, 0)
-    toggleStatus.BackgroundTransparency = 1
-    toggleStatus.Text = toggle.value and "ON" or "OFF"
-    toggleStatus.TextColor3 = Color3.fromRGB(255, 255, 255)
-    toggleStatus.Font = Enum.Font.GothamBold
-    toggleStatus.TextSize = 12
-    toggleStatus.Parent = toggleButton
-    
-    toggleButton.MouseButton1Click:Connect(function()
-        toggle.value = not toggle.value
-        toggleButton.BackgroundColor3 = toggle.value and Color3.fromRGB(80, 180, 80) or Color3.fromRGB(70, 70, 80)
-        toggleStatus.Text = toggle.value and "ON" or "OFF"
-        if callback then
-            callback(toggle.value)
-        end
-    end)
-    
-    toggle.frame = toggleFrame
-    table.insert(tab.content, toggle)
-    
-    return toggle
+	local tab = nil
+	for _, t in pairs(self.tabs) do
+		if t.name == tabName then
+			tab = t
+			break
+		end
+	end
+
+	if not tab then
+		tab = self:AddTab(tabName)
+	end
+
+	local toggle = { }
+	toggle.name = toggleName
+	toggle.value = defaultValue or false
+
+	-- Toggle Container
+	local toggleFrame = Instance.new("Frame")
+	toggleFrame.Name = toggleName .. "Toggle"
+	toggleFrame.Size = UDim2.new(1, -20, 0, 40)
+	toggleFrame.Position = UDim2.new(0, 10, 0, #tab.content * 50)
+	toggleFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+	toggleFrame.BorderSizePixel = 0
+	toggleFrame.Parent = tab.frame
+
+	local toggleLabel = Instance.new("TextLabel")
+	toggleLabel.Size = UDim2.new(1, -60, 1, 0)
+	toggleLabel.Position = UDim2.new(0, 10, 0, 0)
+	toggleLabel.BackgroundTransparency = 1
+	toggleLabel.Text = toggleName
+	toggleLabel.TextColor3 = Color3.fromRGB(240, 240, 250)
+	toggleLabel.Font = Enum.Font.Gotham
+	toggleLabel.TextSize = 16
+	toggleLabel.TextXAlignment = Enum.TextXAlignment.Left
+	toggleLabel.Parent = toggleFrame
+
+	local toggleButton = Instance.new("TextButton")
+	toggleButton.Size = UDim2.new(0, 50, 0, 24)
+	toggleButton.Position = UDim2.new(1, -60, 0.5, -12)
+	toggleButton.BackgroundColor3 = toggle.value and Color3.fromRGB(80, 180, 80) or Color3.fromRGB(70, 70, 80)
+	toggleButton.BorderSizePixel = 0
+	toggleButton.Text = ""
+	toggleButton.Font = Enum.Font.GothamBold
+	toggleButton.TextSize = 12
+	toggleButton.Parent = toggleFrame
+
+	local toggleStatus = Instance.new("TextLabel")
+	toggleStatus.Size = UDim2.new(1, 0, 1, 0)
+	toggleStatus.BackgroundTransparency = 1
+	toggleStatus.Text = toggle.value and "ON" or "OFF"
+	toggleStatus.TextColor3 = Color3.fromRGB(255, 255, 255)
+	toggleStatus.Font = Enum.Font.GothamBold
+	toggleStatus.TextSize = 12
+	toggleStatus.Parent = toggleButton
+
+	toggleButton.MouseButton1Click:Connect(function()
+		toggle.value = not toggle.value
+		toggleButton.BackgroundColor3 = toggle.value and Color3.fromRGB(80, 180, 80) or Color3.fromRGB(70, 70, 80)
+		toggleStatus.Text = toggle.value and "ON" or "OFF"
+		if callback then
+			callback(toggle.value)
+		end
+	end)
+
+	toggle.frame = toggleFrame
+	table.insert(tab.content, toggle)
+
+	return toggle
 end
 
--- Add a status indicator (like "Status: FPS Boost Applied")
 function ZoUI:AddStatus(tabName, statusName, defaultText)
-    local tab = nil
-    for _, t in pairs(self.tabs) do
-        if t.name == tabName then
-            tab = t
-            break
-        end
-    end
-    
-    if not tab then
-        tab = self:AddTab(tabName)
-    end
-    
-    local statusFrame = Instance.new("Frame")
-    statusFrame.Name = statusName .. "Status"
-    statusFrame.Size = UDim2.new(1, -20, 0, 30)
-    statusFrame.Position = UDim2.new(0, 10, 0, #tab.content * 50)
-    statusFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 55)
-    statusFrame.BorderSizePixel = 0
-    statusFrame.Parent = tab.frame
-    
-    local statusLabel = Instance.new("TextLabel")
-    statusLabel.Size = UDim2.new(0.4, 0, 1, 0)
-    statusLabel.Position = UDim2.new(0, 10, 0, 0)
-    statusLabel.BackgroundTransparency = 1
-    statusLabel.Text = statusName .. ":"
-    statusLabel.TextColor3 = Color3.fromRGB(200, 200, 220)
-    statusLabel.Font = Enum.Font.Gotham
-    statusLabel.TextSize = 14
-    statusLabel.TextXAlignment = Enum.TextXAlignment.Left
-    statusLabel.Parent = statusFrame
-    
-    local statusValue = Instance.new("TextLabel")
-    statusValue.Name = "Value"
-    statusValue.Size = UDim2.new(0.6, -10, 1, 0)
-    statusValue.Position = UDim2.new(0.4, 0, 0, 0)
-    statusValue.BackgroundTransparency = 1
-    statusValue.Text = defaultText or "N/A"
-    statusValue.TextColor3 = Color3.fromRGB(100, 200, 255)
-    statusValue.Font = Enum.Font.GothamBold
-    statusValue.TextSize = 14
-    statusValue.TextXAlignment = Enum.TextXAlignment.Left
-    statusValue.Parent = statusFrame
-    
-    table.insert(tab.content, statusFrame)
-    
-    return statusValue
+	local tab = nil
+	for _, t in pairs(self.tabs) do
+		if t.name == tabName then
+			tab = t
+			break
+		end
+	end
+
+	if not tab then
+		tab = self:AddTab(tabName)
+	end
+
+	local statusFrame = Instance.new("Frame")
+	statusFrame.Name = statusName .. "Status"
+	statusFrame.Size = UDim2.new(1, -20, 0, 30)
+	statusFrame.Position = UDim2.new(0, 10, 0, #tab.content * 50)
+	statusFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 55)
+	statusFrame.BorderSizePixel = 0
+	statusFrame.Parent = tab.frame
+
+	local statusLabel = Instance.new("TextLabel")
+	statusLabel.Size = UDim2.new(0.4, 0, 1, 0)
+	statusLabel.Position = UDim2.new(0, 10, 0, 0)
+	statusLabel.BackgroundTransparency = 1
+	statusLabel.Text = statusName .. ":"
+	statusLabel.TextColor3 = Color3.fromRGB(200, 200, 220)
+	statusLabel.Font = Enum.Font.Gotham
+	statusLabel.TextSize = 14
+	statusLabel.TextXAlignment = Enum.TextXAlignment.Left
+	statusLabel.Parent = statusFrame
+
+	local statusValue = Instance.new("TextLabel")
+	statusValue.Name = "Value"
+	statusValue.Size = UDim2.new(0.6, -10, 1, 0)
+	statusValue.Position = UDim2.new(0.4, 0, 0, 0)
+	statusValue.BackgroundTransparency = 1
+	statusValue.Text = defaultText or "N/A"
+	statusValue.TextColor3 = Color3.fromRGB(100, 200, 255)
+	statusValue.Font = Enum.Font.GothamBold
+	statusValue.TextSize = 14
+	statusValue.TextXAlignment = Enum.TextXAlignment.Left
+	statusValue.Parent = statusFrame
+
+	table.insert(tab.content, statusFrame)
+
+	return statusValue
 end
 
 return ZoUI
