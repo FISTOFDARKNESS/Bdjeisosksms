@@ -103,9 +103,9 @@ function ZoUI.new(title)
     creditsLabel.TextXAlignment = Enum.TextXAlignment.Left
     creditsLabel.Parent = creditsBar
     
-    -- Toggle Keybind (default: RightShift)
+    -- Toggle Keybind (default: J)
     game:GetService("UserInputService").InputBegan:Connect(function(input, processed)
-        if not processed and input.KeyCode == Enum.KeyCode.RightShift then
+        if not processed and input.KeyCode == Enum.KeyCode.J then
             self:Toggle()
         end
     end)
