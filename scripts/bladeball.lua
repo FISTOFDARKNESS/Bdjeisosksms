@@ -28,7 +28,7 @@ function ZoUI:CreateWindow(options)
     local size = options.Size or UDim2.new(0, 300, 0, 400)
     local position = options.Position or UDim2.new(0.5, -150, 0.5, -200)
     
-    local screenGui = self:Create("ScreenGui", {
+    local screenGui = ZoUI:Create("ScreenGui", {
         Name = "ZoUI_" .. title:gsub("%s+", ""),
         Parent = game:GetService("CoreGui"),
         ResetOnSpawn = false,
@@ -36,61 +36,61 @@ function ZoUI:CreateWindow(options)
         ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     })
     
-    local mainFrame = self:Create("Frame", {
+    local mainFrame = ZoUI:Create("Frame", {
         Name = "MainFrame",
         Size = size,
         Position = position,
         AnchorPoint = Vector2.new(0.5, 0.5),
-        BackgroundColor3 = self.Theme.Primary,
+        BackgroundColor3 = ZoUI.Theme.Primary,
         BorderSizePixel = 0,
         ClipsDescendants = true,
         Parent = screenGui
     })
-    self:Create("UICorner", {CornerRadius = UDim.new(0, 8), Parent = mainFrame})
-    self:Create("UIStroke", {
+    ZoUI:Create("UICorner", {CornerRadius = UDim.new(0, 8), Parent = mainFrame})
+    ZoUI:Create("UIStroke", {
         ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-        Color = self.Theme.Stroke,
+        Color = ZoUI.Theme.Stroke,
         Thickness = 2,
         Parent = mainFrame
     })
     
-    local titleBar = self:Create("Frame", {
+    local titleBar = ZoUI:Create("Frame", {
         Name = "TitleBar",
         Size = UDim2.new(1, 0, 0, 40),
-        BackgroundColor3 = self.Theme.Secondary,
+        BackgroundColor3 = ZoUI.Theme.Secondary,
         BorderSizePixel = 0,
         Parent = mainFrame
     })
-    self:Create("UICorner", {CornerRadius = UDim.new(0, 8), Parent = titleBar})
+    ZoUI:Create("UICorner", {CornerRadius = UDim.new(0, 8), Parent = titleBar})
     
-    local titleLabel = self:Create("TextLabel", {
+    local titleLabel = ZoUI:Create("TextLabel", {
         Name = "Title",
         Size = UDim2.new(0.8, 0, 1, 0),
         Position = UDim2.new(0.1, 0, 0, 0),
         BackgroundTransparency = 1,
         Text = title,
-        TextColor3 = self.Theme.Text,
+        TextColor3 = ZoUI.Theme.Text,
         TextSize = 18,
-        Font = self.FontBold,
+        Font = ZoUI.FontBold,
         Parent = titleBar
     })
     
-    local closeButton = self:Create("TextButton", {
+    local closeButton = ZoUI:Create("TextButton", {
         Name = "CloseButton",
         Size = UDim2.new(0, 40, 0, 40),
         Position = UDim2.new(1, -40, 0, 0),
         BackgroundTransparency = 1,
         Text = "X",
-        TextColor3 = self.Theme.Text,
+        TextColor3 = ZoUI.Theme.Text,
         TextSize = 18,
-        Font = self.FontBold,
+        Font = ZoUI.FontBold,
         Parent = titleBar
     })
     closeButton.MouseButton1Click:Connect(function()
         screenGui:Destroy()
     end)
     
-    local tabContainer = self:Create("Frame", {
+    local tabContainer = ZoUI:Create("Frame", {
         Name = "TabContainer",
         Size = UDim2.new(1, -20, 0, 30),
         Position = UDim2.new(0, 10, 0, 50),
@@ -98,7 +98,7 @@ function ZoUI:CreateWindow(options)
         Parent = mainFrame
     })
     
-    local contentFrame = self:Create("Frame", {
+    local contentFrame = ZoUI:Create("Frame", {
         Name = "ContentFrame",
         Size = UDim2.new(1, -20, 0, size.Y.Offset - 110),
         Position = UDim2.new(0, 10, 0, 90),
@@ -106,15 +106,15 @@ function ZoUI:CreateWindow(options)
         Parent = mainFrame
     })
     
-    local statusLabel = self:Create("TextLabel", {
+    local statusLabel = ZoUI:Create("TextLabel", {
         Name = "StatusLabel",
         Size = UDim2.new(1, -20, 0, 20),
         Position = UDim2.new(0, 10, 1, -30),
         BackgroundTransparency = 1,
         Text = "Status: Ready",
-        TextColor3 = self.Theme.SubText,
+        TextColor3 = ZoUI.Theme.SubText,
         TextSize = 8,
-        Font = self.Font,
+        Font = ZoUI.Font,
         TextXAlignment = Enum.TextXAlignment.Left,
         Parent = mainFrame
     })
@@ -132,7 +132,7 @@ function ZoUI:CreateWindow(options)
     end
     
     function window:CreateTab(tabName)
-        local tabButton = self:Create("TextButton", {
+        local tabButton = ZoUI:Create("TextButton", {
             Name = tabName .. "TabButton",
             Size = UDim2.new(0, 80, 1, 0),
             BackgroundColor3 = #window.Tabs == 0 and ZoUI.Theme.Accent or ZoUI.Theme.Button,
@@ -142,9 +142,9 @@ function ZoUI:CreateWindow(options)
             Font = #window.Tabs == 0 and ZoUI.FontBold or ZoUI.Font,
             Parent = tabContainer
         })
-        self:Create("UICorner", {CornerRadius = UDim.new(0, 4), Parent = tabButton})
+        ZoUI:Create("UICorner", {CornerRadius = UDim.new(0, 4), Parent = tabButton})
         
-        local tabContent = self:Create("ScrollingFrame", {
+        local tabContent = ZoUI:Create("ScrollingFrame", {
             Name = tabName .. "Content",
             Size = UDim2.new(1, 0, 1, 0),
             BackgroundTransparency = 1,
@@ -155,7 +155,7 @@ function ZoUI:CreateWindow(options)
             Visible = #window.Tabs == 0,
             Parent = contentFrame
         })
-        local listLayout = self:Create("UIListLayout", {
+        local listLayout = ZoUI:Create("UIListLayout", {
             Padding = UDim.new(0, 10),
             Parent = tabContent
         })
@@ -197,7 +197,7 @@ function ZoUI:CreateWindow(options)
             Name = "LabelFrame",
             Size = UDim2.new(1, 0, 0, 20),
             BackgroundTransparency = 1,
-            Parent = self.Content
+            Parent = ZoUI.Content
         })
         local label = ZoUI:Create("TextLabel", {
             Name = "Label",
@@ -210,7 +210,7 @@ function ZoUI:CreateWindow(options)
             TextXAlignment = options.Alignment or Enum.TextXAlignment.Left,
             Parent = labelFrame
         })
-        table.insert(self.Elements, labelFrame)
+        table.insert(ZoUI.Elements, labelFrame)
         return labelFrame
     end
     
@@ -224,11 +224,11 @@ function ZoUI:CreateWindow(options)
             TextColor3 = ZoUI.Theme.Text,
             TextSize = 14,
             Font = ZoUI.FontBold,
-            Parent = self.Content
+            Parent = ZoUI.Content
         })
         ZoUI:Create("UICorner", {CornerRadius = UDim.new(0, 4), Parent = button})
         button.MouseButton1Click:Connect(callback)
-        table.insert(self.Elements, button)
+        table.insert(ZoUI.Elements, button)
         return button
     end
     
@@ -238,7 +238,7 @@ function ZoUI:CreateWindow(options)
             Name = text .. "ToggleFrame",
             Size = UDim2.new(1, 0, 0, 30),
             BackgroundTransparency = 1,
-            Parent = self.Content
+            Parent = ZoUI.Content
         })
         local toggleLabel = ZoUI:Create("TextLabel", {
             Name = text .. "ToggleLabel",
@@ -282,7 +282,7 @@ function ZoUI:CreateWindow(options)
             toggleInner.Position = UDim2.new(1, -23, 0.5, -10)
         end
         
-        table.insert(self.Elements, toggleFrame)
+        table.insert(ZoUI.Elements, toggleFrame)
         return toggleFrame
     end
     
@@ -292,7 +292,7 @@ function ZoUI:CreateWindow(options)
             Name = placeholder .. "TextBoxFrame",
             Size = UDim2.new(1, 0, 0, 30),
             BackgroundTransparency = 1,
-            Parent = self.Content
+            Parent = ZoUI.Content
         })
         local textBoxLabel = ZoUI:Create("TextLabel", {
             Name = placeholder .. "TextBoxLabel",
@@ -323,7 +323,7 @@ function ZoUI:CreateWindow(options)
                 callback(textBox.Text)
             end
         end)
-        table.insert(self.Elements, textBoxFrame)
+        table.insert(ZoUI.Elements, textBoxFrame)
         return textBoxFrame
     end
     
