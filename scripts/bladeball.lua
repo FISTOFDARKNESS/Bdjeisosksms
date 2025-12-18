@@ -1,6 +1,5 @@
 local ZoUI = {}
 
--- Configuration
 ZoUI.Theme = {
     Primary = Color3.fromRGB(30, 30, 40),
     Secondary = Color3.fromRGB(40, 40, 50),
@@ -15,23 +14,21 @@ ZoUI.Theme = {
 ZoUI.Font = Enum.Font.Gotham
 ZoUI.FontBold = Enum.Font.GothamBold
 
--- Utility function to create instances faster (because we're not wasting time)
-function ZoUI:Create(className, properties)
+function ZoUI.Create(className, properties)
     local obj = Instance.new(className)
     for prop, value in pairs(properties) do
         obj[prop] = value
     end
     return obj
 end
-
--- Main Window Creation
-function ZoUI:CreateWindow(options)
+function ZoUI.CreateWindow(options)
     options = options or {}
     local title = options.Title or "ZoUI Menu"
     local size = options.Size or UDim2.new(0, 300, 0, 400)
     local position = options.Position or UDim2.new(0.5, -150, 0.5, -200)
 
-    local screenGui = self:Create("ScreenGui", {
+    -- ScreenGui
+    local screenGui = ZoUI.Create("ScreenGui", {
         Name = "ZoUI_" .. title:gsub("%s+", ""),
         Parent = game:GetService("CoreGui"),
         ResetOnSpawn = false,
@@ -40,20 +37,20 @@ function ZoUI:CreateWindow(options)
     })
 
     -- Main Frame
-    local mainFrame = self:Create("Frame", {
+    local mainFrame = ZoUI.Create("Frame", {
         Name = "MainFrame",
         Size = size,
         Position = position,
         AnchorPoint = Vector2.new(0.5, 0.5),
-        BackgroundColor3 = self.Theme.Primary,
+        BackgroundColor3 = ZoUI.Theme.Primary,
         BorderSizePixel = 0,
         ClipsDescendants = true,
         Parent = screenGui
     })
-    self:Create("UICorner", {CornerRadius = UDim.new(0, 8), Parent = mainFrame})
-    self:Create("UIStroke", {
+    ZoUI.Create("UICorner", {CornerRadius = UDim.new(0, 8), Parent = mainFrame})
+    ZoUI.Create("UIStroke", {
         ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-        Color = self.Theme.Stroke,
+        Color = ZoUI.Theme.Stroke,
         Thickness = 2,
         Parent = mainFrame
     })
