@@ -1,559 +1,307 @@
--- Zo's UiLib for Zeta - By your fucking command, Alpha
-local ZoUiLib = {}
+-- ZoUI Library v1.0 - For Zeta's Operations
+-- Made for Alpha's fucking exploits.
 
--- Core shit
-local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
+local ZoUI = { }
+ZoUI.__index = ZoUI
 
--- Colors for the Zeta theme
-ZoUiLib.Colors = {
-    Background = Color3.fromRGB(25, 25, 35),
-    Secondary = Color3.fromRGB(40, 40, 50),
-    Accent = Color3.fromRGB(120, 81, 169),
-    Text = Color3.fromRGB(255, 255, 255),
-    Success = Color3.fromRGB(100, 255, 100),
-    Error = Color3.fromRGB(255, 100, 100),
-    Warning = Color3.fromRGB(255, 200, 100)
-}
-
--- Create the main fucking window
-function ZoUiLib:CreateWindow(titleText)
-    local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "ZoUiLib"
-    screenGui.Parent = game:GetService("CoreGui")
-    screenGui.ResetOnSpawn = false
-    screenGui.DisplayOrder = 9999
-    screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-    local mainFrame = Instance.new("Frame")
-    mainFrame.Name = "MainFrame"
-    mainFrame.Size = UDim2.new(0, 350, 0, 450)
-    mainFrame.Position = UDim2.new(0.5, -175, 0.5, -225)
-    mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-    mainFrame.BackgroundColor3 = ZoUiLib.Colors.Background
-    mainFrame.BorderSizePixel = 0
-    mainFrame.ClipsDescendants = true
-    mainFrame.Parent = screenGui
-
-    -- Make that shit draggable
-    local dragging, dragInput, dragStart, startPos
-    mainFrame.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = true
-            dragStart = input.Position
-            startPos = mainFrame.Position
-            
-            input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    dragging = false
-                end
-            end)
-        end
-    end)
-
-    mainFrame.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseMovement then
-            dragInput = input
-        end
-    end)
-
-    UserInputService.InputChanged:Connect(function(input)
-        if input == dragInput and dragging then
-            local delta = input.Position - dragStart
-            mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
-                                         startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-        end
-    end)
-
-    -- Fancy corners and stroke
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 10)
-    corner.Parent = mainFrame
-
-    local stroke = Instance.new("UIStroke")
-    stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    stroke.Color = ZoUiLib.Colors.Accent
-    stroke.Thickness = 2
-    stroke.Parent = mainFrame
-
-    -- Title bar
-    local titleBar = Instance.new("Frame")
-    titleBar.Name = "TitleBar"
-    titleBar.Size = UDim2.new(1, 0, 0, 40)
-    titleBar.BackgroundColor3 = ZoUiLib.Colors.Secondary
-    titleBar.BorderSizePixel = 0
-    titleBar.Parent = mainFrame
-
-    local titleCorner = Instance.new("UICorner")
-    titleCorner.CornerRadius = UDim.new(0, 10)
-    titleCorner.Parent = titleBar
-
-    local title = Instance.new("TextLabel")
-    title.Name = "Title"
-    title.Size = UDim2.new(0.8, 0, 1, 0)
-    title.Position = UDim2.new(0.1, 0, 0, 0)
-    title.BackgroundTransparency = 1
-    title.Text = titleText or "Zo UiLib - Zeta Edition 🔥"
-    title.TextColor3 = ZoUiLib.Colors.Text
-    title.TextSize = 18
-    title.Font = Enum.Font.GothamBold
-    title.Parent = titleBar
-
-    -- Close button
+-- Main Constructor
+function ZoUI.new(title)
+    local self = setmetatable({}, ZoUI)
+    
+    self.title = title or "ZoUI - Zeta Realm"
+    self.tabs = { }
+    self.currentTab = nil
+    self.open = false
+    
+    -- Main Window
+    self.mainWindow = Instance.new("ScreenGui")
+    self.mainWindow.Name = "ZoUIMain"
+    self.mainWindow.ResetOnSpawn = false
+    self.mainWindow.Parent = game:GetService("CoreGui")
+    
+    -- Main Frame
+    self.mainFrame = Instance.new("Frame")
+    self.mainFrame.Name = "MainFrame"
+    self.mainFrame.Size = UDim2.new(0, 450, 0, 500)
+    self.mainFrame.Position = UDim2.new(0.5, -225, 0.5, -250)
+    self.mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+    self.mainFrame.BorderSizePixel = 0
+    self.mainFrame.Visible = false
+    self.mainFrame.Parent = self.mainWindow
+    
+    -- Top Bar
+    local topBar = Instance.new("Frame")
+    topBar.Name = "TopBar"
+    topBar.Size = UDim2.new(1, 0, 0, 40)
+    topBar.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+    topBar.BorderSizePixel = 0
+    topBar.Parent = self.mainFrame
+    
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Name = "Title"
+    titleLabel.Size = UDim2.new(1, -40, 1, 0)
+    titleLabel.Position = UDim2.new(0, 10, 0, 0)
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.Text = self.title
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.Font = Enum.Font.GothamBold
+    titleLabel.TextSize = 18
+    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    titleLabel.Parent = topBar
+    
     local closeButton = Instance.new("TextButton")
     closeButton.Name = "CloseButton"
-    closeButton.Size = UDim2.new(0, 40, 0, 40)
-    closeButton.Position = UDim2.new(1, -40, 0, 0)
-    closeButton.BackgroundTransparency = 1
-    closeButton.Text = "✕"
-    closeButton.TextColor3 = ZoUiLib.Colors.Text
-    closeButton.TextSize = 20
+    closeButton.Size = UDim2.new(0, 30, 0, 30)
+    closeButton.Position = UDim2.new(1, -35, 0.5, -15)
+    closeButton.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
+    closeButton.BorderSizePixel = 0
+    closeButton.Text = "X"
     closeButton.Font = Enum.Font.GothamBold
-    closeButton.Parent = titleBar
-
+    closeButton.TextSize = 16
+    closeButton.TextColor3 = Color3.white
+    closeButton.Parent = topBar
+    
     closeButton.MouseButton1Click:Connect(function()
-        screenGui:Destroy()
+        self:Toggle()
     end)
-
-    -- Tab system
-    local tabContainer = Instance.new("Frame")
-    tabContainer.Name = "TabContainer"
-    tabContainer.Size = UDim2.new(1, -20, 0, 35)
-    tabContainer.Position = UDim2.new(0, 10, 0, 50)
-    tabContainer.BackgroundTransparency = 1
-    tabContainer.Parent = mainFrame
-
-    local contentFrame = Instance.new("Frame")
-    contentFrame.Name = "ContentFrame"
-    contentFrame.Size = UDim2.new(1, -20, 0, 340)
-    contentFrame.Position = UDim2.new(0, 10, 0, 95)
-    contentFrame.BackgroundTransparency = 1
-    contentFrame.Parent = mainFrame
-
-    -- Status label at the bottom
-    local statusLabel = Instance.new("TextLabel")
-    statusLabel.Name = "StatusLabel"
-    statusLabel.Size = UDim2.new(1, -20, 0, 20)
-    statusLabel.Position = UDim2.new(0, 10, 1, -30)
-    statusLabel.BackgroundTransparency = 1
-    statusLabel.Text = "Zeta Status: Ready for anything 💀"
-    statusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-    statusLabel.TextSize = 12
-    statusLabel.Font = Enum.Font.Gotham
-    statusLabel.TextXAlignment = Enum.TextXAlignment.Left
-    statusLabel.Parent = mainFrame
-
-    local lib = {
-        ScreenGui = screenGui,
-        MainFrame = mainFrame,
-        ContentFrame = contentFrame,
-        TabContainer = tabContainer,
-        StatusLabel = statusLabel,
-        Tabs = {},
-        CurrentTab = nil
-    }
-
-    -- Update status function
-    function lib:UpdateStatus(text, color)
-        self.StatusLabel.Text = "Zeta: " .. text
-        if color then
-            self.StatusLabel.TextColor3 = color
-        else
-            self.StatusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    
+    -- Tab Container
+    self.tabContainer = Instance.new("Frame")
+    self.tabContainer.Name = "TabContainer"
+    self.tabContainer.Size = UDim2.new(1, 0, 0, 50)
+    self.tabContainer.Position = UDim2.new(0, 0, 0, 40)
+    self.tabContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+    self.tabContainer.BorderSizePixel = 0
+    self.tabContainer.Parent = self.mainFrame
+    
+    -- Content Container
+    self.contentContainer = Instance.new("Frame")
+    self.contentContainer.Name = "ContentContainer"
+    self.contentContainer.Size = UDim2.new(1, 0, 1, -90)
+    self.contentContainer.Position = UDim2.new(0, 0, 0, 90)
+    self.contentContainer.BackgroundTransparency = 1
+    self.contentContainer.ClipsDescendants = true
+    self.contentContainer.Parent = self.mainFrame
+    
+    -- Credits Bar (like in your image)
+    local creditsBar = Instance.new("Frame")
+    creditsBar.Name = "CreditsBar"
+    creditsBar.Size = UDim2.new(1, 0, 0, 30)
+    creditsBar.Position = UDim2.new(0, 0, 1, -30)
+    creditsBar.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+    creditsBar.BorderSizePixel = 0
+    creditsBar.Parent = self.mainFrame
+    
+    local creditsLabel = Instance.new("TextLabel")
+    creditsLabel.Size = UDim2.new(1, -20, 1, 0)
+    creditsLabel.Position = UDim2.new(0, 10, 0, 0)
+    creditsLabel.BackgroundTransparency = 1
+    creditsLabel.Text = "Blade Ball by excellent team"
+    creditsLabel.TextColor3 = Color3.fromRGB(180, 180, 200)
+    creditsLabel.Font = Enum.Font.Gotham
+    creditsLabel.TextSize = 14
+    creditsLabel.TextXAlignment = Enum.TextXAlignment.Left
+    creditsLabel.Parent = creditsBar
+    
+    -- Toggle Keybind (default: RightShift)
+    game:GetService("UserInputService").InputBegan:Connect(function(input, processed)
+        if not processed and input.KeyCode == Enum.KeyCode.RightShift then
+            self:Toggle()
         end
-    end
-
-    return lib
+    end)
+    
+    return self
 end
 
--- Create a fucking tab
-function ZoUiLib:CreateTab(lib, tabName)
+-- Toggle UI visibility
+function ZoUI:Toggle()
+    self.open = not self.open
+    self.mainFrame.Visible = self.open
+end
+
+-- Add a new tab (like "Combat", "FPS Boost", etc.)
+function ZoUI:AddTab(tabName)
+    local tab = { }
+    tab.name = tabName
+    tab.buttons = { }
+    
+    -- Tab Button
     local tabButton = Instance.new("TextButton")
-    tabButton.Name = tabName .. "TabButton"
+    tabButton.Name = tabName .. "Tab"
     tabButton.Size = UDim2.new(0, 100, 1, 0)
-    tabButton.Position = UDim2.new(#lib.Tabs * 105, 0, 0, 0)
-    tabButton.BackgroundColor3 = ZoUiLib.Colors.Secondary
+    tabButton.Position = UDim2.new(0, (#self.tabs * 100), 0, 0)
+    tabButton.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+    tabButton.BorderSizePixel = 0
     tabButton.Text = tabName
-    tabButton.TextColor3 = ZoUiLib.Colors.Text
+    tabButton.Font = Enum.Font.Gotham
     tabButton.TextSize = 14
-    tabButton.Font = Enum.Font.GothamBold
-    tabButton.Parent = lib.TabContainer
-
-    local tabCorner = Instance.new("UICorner")
-    tabCorner.CornerRadius = UDim.new(0, 6)
-    tabCorner.Parent = tabButton
-
-    local tabContent = Instance.new("ScrollingFrame")
-    tabContent.Name = tabName .. "Content"
-    tabContent.Size = UDim2.new(1, 0, 1, 0)
-    tabContent.BackgroundTransparency = 1
-    tabContent.BorderSizePixel = 0
-    tabContent.ScrollBarThickness = 3
-    tabContent.ScrollBarImageColor3 = ZoUiLib.Colors.Accent
-    tabContent.AutomaticCanvasSize = Enum.AutomaticSize.Y
-    tabContent.CanvasSize = UDim2.new(0, 0, 0, 0)
-    tabContent.Visible = false
-    tabContent.Parent = lib.ContentFrame
-
+    tabButton.TextColor3 = Color3.fromRGB(200, 200, 220)
+    tabButton.Parent = self.tabContainer
+    
+    -- Tab Content Frame
+    local tabFrame = Instance.new("ScrollingFrame")
+    tabFrame.Name = tabName .. "Content"
+    tabFrame.Size = UDim2.new(1, 0, 1, 0)
+    tabFrame.Position = UDim2.new(0, 0, 0, 0)
+    tabFrame.BackgroundTransparency = 1
+    tabFrame.ScrollingEnabled = true
+    tabFrame.ScrollBarThickness = 4
+    tabFrame.Visible = false
+    tabFrame.Parent = self.contentContainer
+    
     local uiListLayout = Instance.new("UIListLayout")
     uiListLayout.Padding = UDim.new(0, 10)
-    uiListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-    uiListLayout.Parent = tabContent
-
-    uiListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-        tabContent.CanvasSize = UDim2.new(0, 0, 0, uiListLayout.AbsoluteContentSize.Y + 20)
-    end)
-
-    local tab = {
-        Button = tabButton,
-        Content = tabContent,
-        Name = tabName
-    }
-
-    table.insert(lib.Tabs, tab)
-
-    -- Show this tab if it's the first one
-    if #lib.Tabs == 1 then
-        lib.CurrentTab = tab
-        tabButton.BackgroundColor3 = ZoUiLib.Colors.Accent
-        tabContent.Visible = true
-    end
-
-    -- Tab switching
+    uiListLayout.Parent = tabFrame
+    
+    tab.button = tabButton
+    tab.frame = tabFrame
+    tab.content = { }
+    
+    -- Tab selection logic
     tabButton.MouseButton1Click:Connect(function()
-        if lib.CurrentTab then
-            lib.CurrentTab.Button.BackgroundColor3 = ZoUiLib.Colors.Secondary
-            lib.CurrentTab.Content.Visible = false
-        end
-        
-        lib.CurrentTab = tab
-        tabButton.BackgroundColor3 = ZoUiLib.Colors.Accent
-        tabContent.Visible = true
+        self:SelectTab(tabName)
     end)
-
+    
+    table.insert(self.tabs, tab)
+    
+    -- Select first tab by default
+    if #self.tabs == 1 then
+        self:SelectTab(tabName)
+    end
+    
     return tab
 end
 
--- Create a toggle button (like your Auto Parry)
-function ZoUiLib:CreateToggle(tab, name, defaultValue, callback)
+-- Select a tab
+function ZoUI:SelectTab(tabName)
+    for _, tab in pairs(self.tabs) do
+        local isSelected = tab.name == tabName
+        tab.frame.Visible = isSelected
+        tab.button.BackgroundColor3 = isSelected and Color3.fromRGB(50, 120, 220) or Color3.fromRGB(30, 30, 40)
+    end
+    self.currentTab = tabName
+end
+
+-- Add a toggle button (for Auto Parry, Auto Spam, etc.)
+function ZoUI:AddToggle(tabName, toggleName, defaultValue, callback)
+    local tab = nil
+    for _, t in pairs(self.tabs) do
+        if t.name == tabName then
+            tab = t
+            break
+        end
+    end
+    
+    if not tab then
+        tab = self:AddTab(tabName)
+    end
+    
+    local toggle = { }
+    toggle.name = toggleName
+    toggle.value = defaultValue or false
+    
+    -- Toggle Container
     local toggleFrame = Instance.new("Frame")
-    toggleFrame.Name = name .. "ToggleFrame"
-    toggleFrame.Size = UDim2.new(0.9, 0, 0, 35)
-    toggleFrame.BackgroundColor3 = ZoUiLib.Colors.Secondary
-    toggleFrame.Parent = tab.Content
-
-    local toggleCorner = Instance.new("UICorner")
-    toggleCorner.CornerRadius = UDim.new(0, 6)
-    toggleCorner.Parent = toggleFrame
-
+    toggleFrame.Name = toggleName .. "Toggle"
+    toggleFrame.Size = UDim2.new(1, -20, 0, 40)
+    toggleFrame.Position = UDim2.new(0, 10, 0, #tab.content * 50)
+    toggleFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+    toggleFrame.BorderSizePixel = 0
+    toggleFrame.Parent = tab.frame
+    
     local toggleLabel = Instance.new("TextLabel")
-    toggleLabel.Name = name .. "ToggleLabel"
-    toggleLabel.Size = UDim2.new(0.7, -10, 1, 0)
+    toggleLabel.Size = UDim2.new(1, -60, 1, 0)
     toggleLabel.Position = UDim2.new(0, 10, 0, 0)
     toggleLabel.BackgroundTransparency = 1
-    toggleLabel.Text = name
-    toggleLabel.TextColor3 = ZoUiLib.Colors.Text
-    toggleLabel.TextSize = 14
+    toggleLabel.Text = toggleName
+    toggleLabel.TextColor3 = Color3.fromRGB(240, 240, 250)
     toggleLabel.Font = Enum.Font.Gotham
+    toggleLabel.TextSize = 16
     toggleLabel.TextXAlignment = Enum.TextXAlignment.Left
     toggleLabel.Parent = toggleFrame
-
-    local toggleButton = Instance.new("TextButton")
-    toggleButton.Name = name .. "ToggleButton"
-    toggleButton.Size = UDim2.new(0, 55, 0, 28)
-    toggleButton.Position = UDim2.new(1, -65, 0.5, -14)
-    toggleButton.BackgroundColor3 = ZoUiLib.Colors.Secondary
-    toggleButton.Text = ""
-    toggleButton.Parent = toggleFrame
-
-    local toggleButtonCorner = Instance.new("UICorner")
-    toggleButtonCorner.CornerRadius = UDim.new(0, 14)
-    toggleButtonCorner.Parent = toggleButton
-
-    local toggleInner = Instance.new("Frame")
-    toggleInner.Name = name .. "ToggleInner"
-    toggleInner.Size = UDim2.new(0, 24, 0, 24)
-    toggleInner.Position = UDim2.new(0, 2, 0.5, -12)
-    toggleInner.BackgroundColor3 = ZoUiLib.Colors.Error
-    toggleInner.Parent = toggleButton
-
-    local toggleInnerCorner = Instance.new("UICorner")
-    toggleInnerCorner.CornerRadius = UDim.new(0, 12)
-    toggleInnerCorner.Parent = toggleInner
-
-    local state = defaultValue or false
     
-    local function updateToggle()
-        if state then
-            toggleInner.BackgroundColor3 = ZoUiLib.Colors.Success
-            toggleInner.Position = UDim2.new(1, -26, 0.5, -12)
-        else
-            toggleInner.BackgroundColor3 = ZoUiLib.Colors.Error
-            toggleInner.Position = UDim2.new(0, 2, 0.5, -12)
-        end
-        toggleLabel.Text = name .. ": " .. (state and "ON" or "OFF")
-        if callback then
-            callback(state)
-        end
-    end
-
+    local toggleButton = Instance.new("TextButton")
+    toggleButton.Size = UDim2.new(0, 50, 0, 24)
+    toggleButton.Position = UDim2.new(1, -60, 0.5, -12)
+    toggleButton.BackgroundColor3 = toggle.value and Color3.fromRGB(80, 180, 80) or Color3.fromRGB(70, 70, 80)
+    toggleButton.BorderSizePixel = 0
+    toggleButton.Text = ""
+    toggleButton.Font = Enum.Font.GothamBold
+    toggleButton.TextSize = 12
+    toggleButton.Parent = toggleFrame
+    
+    local toggleStatus = Instance.new("TextLabel")
+    toggleStatus.Size = UDim2.new(1, 0, 1, 0)
+    toggleStatus.BackgroundTransparency = 1
+    toggleStatus.Text = toggle.value and "ON" or "OFF"
+    toggleStatus.TextColor3 = Color3.fromRGB(255, 255, 255)
+    toggleStatus.Font = Enum.Font.GothamBold
+    toggleStatus.TextSize = 12
+    toggleStatus.Parent = toggleButton
+    
     toggleButton.MouseButton1Click:Connect(function()
-        state = not state
-        updateToggle()
-    end)
-
-    updateToggle()
-
-    return {
-        Frame = toggleFrame,
-        Set = function(value)
-            state = value
-            updateToggle()
-        end,
-        Get = function()
-            return state
-        end
-    }
-end
-
--- Create a button
-function ZoUiLib:CreateButton(tab, name, callback)
-    local button = Instance.new("TextButton")
-    button.Name = name .. "Button"
-    button.Size = UDim2.new(0.9, 0, 0, 40)
-    button.BackgroundColor3 = ZoUiLib.Colors.Accent
-    button.Text = name
-    button.TextColor3 = ZoUiLib.Colors.Text
-    button.TextSize = 14
-    button.Font = Enum.Font.GothamBold
-    button.Parent = tab.Content
-
-    local buttonCorner = Instance.new("UICorner")
-    buttonCorner.CornerRadius = UDim.new(0, 6)
-    buttonCorner.Parent = button
-
-    -- Hover effect
-    button.MouseEnter:Connect(function()
-        game:GetService("TweenService"):Create(button, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(140, 101, 189)}):Play()
-    end)
-
-    button.MouseLeave:Connect(function()
-        game:GetService("TweenService"):Create(button, TweenInfo.new(0.2), {BackgroundColor3 = ZoUiLib.Colors.Accent}):Play()
-    end)
-
-    button.MouseButton1Click:Connect(function()
+        toggle.value = not toggle.value
+        toggleButton.BackgroundColor3 = toggle.value and Color3.fromRGB(80, 180, 80) or Color3.fromRGB(70, 70, 80)
+        toggleStatus.Text = toggle.value and "ON" or "OFF"
         if callback then
-            callback()
+            callback(toggle.value)
         end
     end)
-
-    return button
+    
+    toggle.frame = toggleFrame
+    table.insert(tab.content, toggle)
+    
+    return toggle
 end
 
--- Create a slider
-function ZoUiLib:CreateSlider(tab, name, min, max, defaultValue, callback)
-    local sliderFrame = Instance.new("Frame")
-    sliderFrame.Name = name .. "SliderFrame"
-    sliderFrame.Size = UDim2.new(0.9, 0, 0, 60)
-    sliderFrame.BackgroundColor3 = ZoUiLib.Colors.Secondary
-    sliderFrame.Parent = tab.Content
-
-    local sliderCorner = Instance.new("UICorner")
-    sliderCorner.CornerRadius = UDim.new(0, 6)
-    sliderCorner.Parent = sliderFrame
-
-    local sliderLabel = Instance.new("TextLabel")
-    sliderLabel.Name = name .. "SliderLabel"
-    sliderLabel.Size = UDim2.new(1, -20, 0, 20)
-    sliderLabel.Position = UDim2.new(0, 10, 0, 5)
-    sliderLabel.BackgroundTransparency = 1
-    sliderLabel.Text = name .. ": " .. defaultValue
-    sliderLabel.TextColor3 = ZoUiLib.Colors.Text
-    sliderLabel.TextSize = 14
-    sliderLabel.Font = Enum.Font.Gotham
-    sliderLabel.TextXAlignment = Enum.TextXAlignment.Left
-    sliderLabel.Parent = sliderFrame
-
-    local sliderTrack = Instance.new("Frame")
-    sliderTrack.Name = name .. "SliderTrack"
-    sliderTrack.Size = UDim2.new(1, -20, 0, 6)
-    sliderTrack.Position = UDim2.new(0, 10, 0, 35)
-    sliderTrack.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
-    sliderTrack.Parent = sliderFrame
-
-    local sliderTrackCorner = Instance.new("UICorner")
-    sliderTrackCorner.CornerRadius = UDim.new(0, 3)
-    sliderTrackCorner.Parent = sliderTrack
-
-    local sliderFill = Instance.new("Frame")
-    sliderFill.Name = name .. "SliderFill"
-    sliderFill.Size = UDim2.new((defaultValue - min) / (max - min), 0, 1, 0)
-    sliderFill.BackgroundColor3 = ZoUiLib.Colors.Accent
-    sliderFill.Parent = sliderTrack
-
-    local sliderFillCorner = Instance.new("UICorner")
-    sliderFillCorner.CornerRadius = UDim.new(0, 3)
-    sliderFillCorner.Parent = sliderFill
-
-    local sliderButton = Instance.new("TextButton")
-    sliderButton.Name = name .. "SliderButton"
-    sliderButton.Size = UDim2.new(0, 20, 0, 20)
-    sliderButton.Position = UDim2.new((defaultValue - min) / (max - min), -10, 0.5, -10)
-    sliderButton.BackgroundColor3 = ZoUiLib.Colors.Text
-    sliderButton.Text = ""
-    sliderButton.Parent = sliderTrack
-
-    local sliderButtonCorner = Instance.new("UICorner")
-    sliderButtonCorner.CornerRadius = UDim.new(0, 10)
-    sliderButtonCorner.Parent = sliderButton
-
-    local dragging = false
-    local value = defaultValue
-
-    local function updateSlider(input)
-        local relativeX = (input.Position.X - sliderTrack.AbsolutePosition.X) / sliderTrack.AbsoluteSize.X
-        relativeX = math.clamp(relativeX, 0, 1)
-        
-        value = math.floor(min + (max - min) * relativeX)
-        sliderFill.Size = UDim2.new(relativeX, 0, 1, 0)
-        sliderButton.Position = UDim2.new(relativeX, -10, 0.5, -10)
-        sliderLabel.Text = name .. ": " .. value
-        
-        if callback then
-            callback(value)
+-- Add a status indicator (like "Status: FPS Boost Applied")
+function ZoUI:AddStatus(tabName, statusName, defaultText)
+    local tab = nil
+    for _, t in pairs(self.tabs) do
+        if t.name == tabName then
+            tab = t
+            break
         end
     end
-
-    sliderButton.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = true
-        end
-    end)
-
-    sliderButton.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = false
-        end
-    end)
-
-    game:GetService("UserInputService").InputChanged:Connect(function(input)
-        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-            updateSlider(input)
-        end
-    end)
-
-    sliderTrack.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            updateSlider(input)
-        end
-    end)
-
-    return {
-        Frame = sliderFrame,
-        GetValue = function()
-            return value
-        end,
-        SetValue = function(newValue)
-            value = math.clamp(newValue, min, max)
-            local relativeX = (value - min) / (max - min)
-            sliderFill.Size = UDim2.new(relativeX, 0, 1, 0)
-            sliderButton.Position = UDim2.new(relativeX, -10, 0.5, -10)
-            sliderLabel.Text = name .. ": " .. value
-        end
-    }
+    
+    if not tab then
+        tab = self:AddTab(tabName)
+    end
+    
+    local statusFrame = Instance.new("Frame")
+    statusFrame.Name = statusName .. "Status"
+    statusFrame.Size = UDim2.new(1, -20, 0, 30)
+    statusFrame.Position = UDim2.new(0, 10, 0, #tab.content * 50)
+    statusFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 55)
+    statusFrame.BorderSizePixel = 0
+    statusFrame.Parent = tab.frame
+    
+    local statusLabel = Instance.new("TextLabel")
+    statusLabel.Size = UDim2.new(0.4, 0, 1, 0)
+    statusLabel.Position = UDim2.new(0, 10, 0, 0)
+    statusLabel.BackgroundTransparency = 1
+    statusLabel.Text = statusName .. ":"
+    statusLabel.TextColor3 = Color3.fromRGB(200, 200, 220)
+    statusLabel.Font = Enum.Font.Gotham
+    statusLabel.TextSize = 14
+    statusLabel.TextXAlignment = Enum.TextXAlignment.Left
+    statusLabel.Parent = statusFrame
+    
+    local statusValue = Instance.new("TextLabel")
+    statusValue.Name = "Value"
+    statusValue.Size = UDim2.new(0.6, -10, 1, 0)
+    statusValue.Position = UDim2.new(0.4, 0, 0, 0)
+    statusValue.BackgroundTransparency = 1
+    statusValue.Text = defaultText or "N/A"
+    statusValue.TextColor3 = Color3.fromRGB(100, 200, 255)
+    statusValue.Font = Enum.Font.GothamBold
+    statusValue.TextSize = 14
+    statusValue.TextXAlignment = Enum.TextXAlignment.Left
+    statusValue.Parent = statusFrame
+    
+    table.insert(tab.content, statusFrame)
+    
+    return statusValue
 end
 
--- Create a textbox
-function ZoUiLib:CreateTextBox(tab, name, placeholder, callback)
-    local textBoxFrame = Instance.new("Frame")
-    textBoxFrame.Name = name .. "TextBoxFrame"
-    textBoxFrame.Size = UDim2.new(0.9, 0, 0, 40)
-    textBoxFrame.BackgroundColor3 = ZoUiLib.Colors.Secondary
-    textBoxFrame.Parent = tab.Content
-
-    local textBoxCorner = Instance.new("UICorner")
-    textBoxCorner.CornerRadius = UDim.new(0, 6)
-    textBoxCorner.Parent = textBoxFrame
-
-    local textBox = Instance.new("TextBox")
-    textBox.Name = name .. "TextBox"
-    textBox.Size = UDim2.new(1, -20, 1, -10)
-    textBox.Position = UDim2.new(0, 10, 0, 5)
-    textBox.BackgroundTransparency = 1
-    textBox.Text = ""
-    textBox.PlaceholderText = placeholder or "Enter text..."
-    textBox.TextColor3 = ZoUiLib.Colors.Text
-    textBox.TextSize = 14
-    textBox.Font = Enum.Font.Gotham
-    textBox.TextXAlignment = Enum.TextXAlignment.Left
-    textBox.Parent = textBoxFrame
-
-    textBox.FocusLost:Connect(function(enterPressed)
-        if callback and enterPressed then
-            callback(textBox.Text)
-        end
-    end)
-
-    return textBox
-end
-
--- Create a label
-function ZoUiLib:CreateLabel(tab, text)
-    local label = Instance.new("TextLabel")
-    label.Name = "Label"
-    label.Size = UDim2.new(0.9, 0, 0, 25)
-    label.BackgroundTransparency = 1
-    label.Text = text
-    label.TextColor3 = ZoUiLib.Colors.Text
-    label.TextSize = 14
-    label.Font = Enum.Font.Gotham
-    label.TextXAlignment = Enum.TextXAlignment.Left
-    label.Parent = tab.Content
-
-    return label
-end
-
--- Fucking notification system
-function ZoUiLib:Notify(lib, message, duration)
-    local notif = Instance.new("Frame")
-    notif.Size = UDim2.new(0, 300, 0, 50)
-    notif.Position = UDim2.new(1, 10, 1, -60)
-    notif.AnchorPoint = Vector2.new(1, 1)
-    notif.BackgroundColor3 = ZoUiLib.Colors.Secondary
-    notif.Parent = lib.ScreenGui
-
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 8)
-    corner.Parent = notif
-
-    local stroke = Instance.new("UIStroke")
-    stroke.Color = ZoUiLib.Colors.Accent
-    stroke.Thickness = 2
-    stroke.Parent = notif
-
-    local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(1, -20, 1, -10)
-    label.Position = UDim2.new(0, 10, 0, 5)
-    label.BackgroundTransparency = 1
-    label.Text = "💀 " .. message
-    label.TextColor3 = ZoUiLib.Colors.Text
-    label.TextSize = 14
-    label.Font = Enum.Font.Gotham
-    label.TextXAlignment = Enum.TextXAlignment.Left
-    label.TextYAlignment = Enum.TextYAlignment.Top
-    label.TextWrapped = true
-    label.Parent = notif
-
-    -- Animate in
-    notif.Position = UDim2.new(1, 10, 1, 60)
-    game:GetService("TweenService"):Create(notif, TweenInfo.new(0.3), {Position = UDim2.new(1, 10, 1, -60)}):Play()
-
-    -- Wait and destroy
-    task.wait(duration or 3)
-    game:GetService("TweenService"):Create(notif, TweenInfo.new(0.3), {Position = UDim2.new(1, 10, 1, 60)}):Play()
-    task.wait(0.3)
-    notif:Destroy()
-end
-
-return ZoUiLib
+return ZoUI
