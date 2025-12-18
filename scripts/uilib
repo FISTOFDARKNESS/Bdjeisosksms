@@ -144,19 +144,22 @@ function ZoUI:CreateWindow(options)
         })
         ZoUI:Create("UICorner", {CornerRadius = UDim.new(0, 4), Parent = tabButton})
         
-        local tabContent = ZoUI:Create("ScrollingFrame", {
+        local tabContent = ZoUI:Create("Frame", {
             Name = tabName .. "Content",
             Size = UDim2.new(1, 0, 1, 0),
             BackgroundTransparency = 1,
-            BorderSizePixel = 0,
-            ScrollBarThickness = 0,
-            AutomaticCanvasSize = Enum.AutomaticSize.Y,
-            CanvasSize = UDim2.new(0, 0, 0, 0),
             Visible = #window.Tabs == 0,
             Parent = contentFrame
         })
+        
         local listLayout = ZoUI:Create("UIListLayout", {
             Padding = UDim.new(0, 10),
+            Parent = tabContent
+        })
+        
+        local padding = ZoUI:Create("UIPadding", {
+            PaddingTop = UDim.new(0, 5),
+            PaddingBottom = UDim.new(0, 5),
             Parent = tabContent
         })
         
