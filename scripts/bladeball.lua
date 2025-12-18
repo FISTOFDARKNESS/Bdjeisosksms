@@ -666,12 +666,6 @@ walkToBallToggleButton.MouseButton1Click:Connect(function()
     end
 end)
 
-if Settings.WalkToBall then
-    updateToggle(walkToBallToggleInner, true)
-    WalkBall()
-end
-
-
 
 fpsBoostButton.MouseButton1Click:Connect(function()
     statusLabel.Text = "Status: Applying FPS Boost..."
