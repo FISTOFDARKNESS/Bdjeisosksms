@@ -151,6 +151,171 @@ function UI:CreateWindow(opt)
             UI:New("UICorner",{CornerRadius=UDim.new(0,4),Parent=b})
             if cb then b.MouseButton1Click:Connect(cb) end
         end
+       function tab:AddTextBox(text, default, callback)
+    local frame = UI:New("Frame", {
+        Size = UDim2.new(1, 0, 0, 30),
+        BackgroundTransparency = 1,
+        Parent = self.Content
+    })
+
+    UI:New("TextLabel", {
+        Size = UDim2.new(0.7, 0, 1, 0),
+        BackgroundTransparency = 1,
+        Text = text,
+        Font = UI.Font,
+        TextSize = 14,
+        TextColor3 = UI.Theme.Text,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        Parent = frame
+    })
+
+    local box = UI:New("TextBox", {
+        Size = UDim2.new(0.25, 0, 0.7, 0),
+        Position = UDim2.new(0.75, -5, 0.15, 0),
+        BackgroundColor3 = UI.Theme.Button,
+        Text = tostring(default or ""),
+        Font = UI.Font,
+        TextSize = 14,
+        TextColor3 = UI.Theme.Text,
+        ClearTextOnFocus = false,
+        Parent = frame
+    })
+    UI:New("UICorner", {CornerRadius = UDim.new(0, 4), Parent = box})
+
+    box.FocusLost:Connect(function()
+        if callback then
+            callback(box.Text)
+        end
+    end)
+
+    return box
+end
+function tab:AddSlider(text, min, max, default, callback)
+    local value = default or min
+
+    local frame = UI:New("Frame", {
+        Size = UDim2.new(1, 0, 0, 40),
+        BackgroundTransparency = 1,
+        Parent = self.Content
+    })
+
+    local label = UI:New("TextLabel", {
+        Size = UDim2.new(1, 0, 0, 18),
+        BackgroundTransparency = 1,
+        Text = text .. ": " .. value,
+        Font = UI.Font,
+        TextSize = 14,
+        TextColor3 = UI.Theme.Text,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        Parent = frame
+    })
+
+    local bar = UI:New("Frame", {
+        Size = UDim2.new(1, 0, 0, 10),
+        Position = UDim2.new(0, 0, 0, 25),
+        BackgroundColor3 = UI.Theme.Button,
+        Parent = frame
+    })
+    UI:New("UICorner", {CornerRadius = UDim.new(0, 6), Parent = bar})
+
+    local fill = UI:New("Frame", {
+        Size = UDim2.new((value - min) / (max - min), 0, 1, 0),
+        BackgroundColor3 = UI.Theme.Accent,
+        Parent = bar
+    })
+    UI:New("UICorner", {CornerRadius = UDim.new(0, 6), Parent = fill})
+
+    local dragging = false
+    bar.InputBegan:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+        end
+    end)
+
+    bar.InputEnded:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+        end
+    end)
+
+    game:GetService("UserInputService").InputChanged:Connect(function(i)
+        if dragging and i.UserInputType == Enum.UserInputType.MouseMovement then
+            local x = math.clamp((i.Position.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X, 0, 1)
+            value = math.floor(min + (max - min) * x)
+            fill.Size = UDim2.new(x, 0, 1, 0)
+            label.Text = text .. ": " .. value
+            if callback then callback(value) end
+        end
+    end)
+
+    return frame
+end
+function tab:AddDropdown(text, options, default, callback)
+    local selected = default or options[1]
+    local open = false
+
+    local frame = UI:New("Frame", {
+        Size = UDim2.new(1, 0, 0, 30),
+        BackgroundTransparency = 1,
+        Parent = self.Content
+    })
+
+    local button = UI:New("TextButton", {
+        Size = UDim2.new(1, 0, 1, 0),
+        BackgroundColor3 = UI.Theme.Button,
+        Text = text .. ": " .. selected,
+        Font = UI.Font,
+        TextSize = 14,
+        TextColor3 = UI.Theme.Text,
+        Parent = frame
+    })
+    UI:New("UICorner", {CornerRadius = UDim.new(0, 4), Parent = button})
+
+    local listFrame = UI:New("Frame", {
+        Size = UDim2.new(1, 0, 0, #options * 28),
+        Position = UDim2.new(0, 0, 1, 5),
+        BackgroundColor3 = UI.Theme.Primary,
+        Visible = false,
+        ZIndex = 10,
+        Parent = frame
+    })
+    UI:New("UICorner", {CornerRadius = UDim.new(0, 4), Parent = listFrame})
+
+    UI:New("UIListLayout", {
+        Padding = UDim.new(0, 4),
+        Parent = listFrame
+    })
+
+    for _, opt in ipairs(options) do
+        local optBtn = UI:New("TextButton", {
+            Size = UDim2.new(1, -8, 0, 24),
+            BackgroundColor3 = UI.Theme.Button,
+            Text = opt,
+            Font = UI.Font,
+            TextSize = 13,
+            TextColor3 = UI.Theme.Text,
+            Parent = listFrame
+        })
+        UI:New("UICorner", {CornerRadius = UDim.new(0, 4), Parent = optBtn})
+
+        optBtn.MouseButton1Click:Connect(function()
+            selected = opt
+            button.Text = text .. ": " .. selected
+            listFrame.Visible = false
+            open = false
+            if callback then callback(opt) end
+        end)
+    end
+
+    button.MouseButton1Click:Connect(function()
+        open = not open
+        listFrame.Visible = open
+    end)
+
+    return frame
+end
+
+        
 
         table.insert(self.Tabs,tab)
         return tab
