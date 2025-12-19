@@ -61,8 +61,8 @@ function UI:CreateWindow(opt)
         BorderSizePixel = 0,
         Parent = gui
     })
-    UI:New("UICorner",{CornerRadius=UDim.new(0,8),Parent=main})
-    UI:New("UIStroke",{Color=UI.Theme.Stroke,Thickness=2,Parent=main})
+    UI:New("UICorner",{CornerRadius=UDim.new(0,8),Parent=title})
+    UI:New("UIStroke",{Color=UI.Theme.Stroke,Thickness=2,Parent=title})
 
     -- DRAG
     local dragging, dragInput, dragStart, startPos = false, nil, nil, nil
@@ -70,7 +70,7 @@ function UI:CreateWindow(opt)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             dragging = true
             dragStart = input.Position
-            startPos = main.Position
+            startPos = title.Position
             input.Changed:Connect(function()
                 if input.UserInputState == Enum.UserInputState.End then dragging = false end
             end)
@@ -82,7 +82,7 @@ function UI:CreateWindow(opt)
     game:GetService("UserInputService").InputChanged:Connect(function(input)
         if dragging and input == dragInput then
             local delta = input.Position - dragStart
-            main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset+delta.X, startPos.Y.Scale, startPos.Y.Offset+delta.Y)
+            title.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset+delta.X, startPos.Y.Scale, startPos.Y.Offset+delta.Y)
         end
     end)
 
