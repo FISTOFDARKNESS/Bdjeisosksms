@@ -1,5 +1,5 @@
-local ZoUI = {}
-local UI = ZoUI
+local UiLib = {}
+local UI = UiLib
 local HttpService = game:GetService("HttpService")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -13,7 +13,7 @@ local mensagem = "Excalibur Hub | Loading: "
 
 for i = 0, 100, 1 do
     task.wait(0.001)
-    print(mensagem .. i .. "%")
+    warn(mensagem .. i .. "%")
 end
 print("Excalibur Hub | UI Library Loaded")
 
@@ -68,7 +68,7 @@ function UI:CreateWindow(opt)
 
     local title = UI:New("Frame",{Size=UDim2.new(1,0,0,40),BackgroundColor3=UI.Theme.Secondary,Parent=main})
     UI:New("UICorner",{CornerRadius=UDim.new(0,8),Parent=title})
-    local titleLabel = UI:New("TextLabel",{Size=UDim2.new(1,-40,1,0),BackgroundTransparency=1,Text=opt.Title or "ZoUI",Font=UI.FontBold,TextSize=18,TextColor3=UI.Theme.Text,Parent=title})
+    local titleLabel = UI:New("TextLabel",{Size=UDim2.new(1,-40,1,0),BackgroundTransparency=1,Text=opt.Title or "UiLib",Font=UI.FontBold,TextSize=18,TextColor3=UI.Theme.Text,Parent=title})
     local close = UI:New("TextButton",{Size=UDim2.new(0,40,1,0),Position=UDim2.new(1,-40,0,0),BackgroundTransparency=1,Text="X",Font=UI.FontBold,TextSize=18,TextColor3=UI.Theme.Text,Parent=title})
     close.MouseButton1Click:Connect(function() gui:Destroy() end)
 
@@ -96,7 +96,7 @@ function UI:CreateWindow(opt)
     local tabBar = UI:New("Frame",{Size=UDim2.new(1,-20,0,30),Position=UDim2.new(0,10,0,50),BackgroundTransparency=1,Parent=main})
     local content = UI:New("Frame",{Size=UDim2.new(1,-20,1,-100),Position=UDim2.new(0,10,0,90),BackgroundTransparency=1,Parent=main})
 
-    local window = {Tabs={}, Current=nil, Main=main, ConfigFile="ZoUI_Config.json"}
+    local window = {Tabs={}, Current=nil, Main=main, ConfigFile="UiLib_Config.json"}
 
     function window:SaveFile(name)
         self.ConfigFile = name
@@ -257,4 +257,4 @@ function UI:CreateWindow(opt)
     return window
 end
 
-return ZoUI
+return UiLib
