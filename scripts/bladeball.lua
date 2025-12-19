@@ -1,7 +1,7 @@
 repeat task.wait() until game:IsLoaded()
 
 local ZoUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/FISTOFDARKNESS/Bdjeisosksms/refs/heads/main/scripts/uilib"))()
-local window = ZoUI:CreateWindow({Title = "Test"})
+local window = ZoUI:CreateWindow({Title = "Blade Ball ᵇʸ ᵉˣᶜᵃˡⁱᵇᵘʳ ᵗᵉᵃᵐ"})
 
 local tab1 = window:CreateTab("Home")
 local autoParryToggle
@@ -206,7 +206,7 @@ local function startFpsMonitor()
         
         if fps < FPS_LIMITE then
             tempoFPSBaixo = tempoFPSBaixo + dt
-            print("⚠️ FPS baixo: " .. math.floor(fps) .. " | Tempo: " .. math.floor(tempoFPSBaixo) .. "s")
+       
         else
             tempoFPSBaixo = 0
         end
@@ -215,14 +215,13 @@ local function startFpsMonitor()
             rejoinado = true
             print("🚨 FPS abaixo de 15 por 5 segundos - Fazendo rejoin...")
             
-            -- Tenta teleport pra mesma instância
             local success, errorMsg = pcall(function()
                 TeleportService:TeleportToPlaceInstance(placeId, jobId, player)
             end)
             
             if not success then
-                print("⚠️ Erro no rejoin: " .. tostring(errorMsg))
-                -- Tenta teleport normal
+              
+                
                 pcall(function()
                     TeleportService:Teleport(placeId, player)
                 end)
