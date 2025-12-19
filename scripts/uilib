@@ -3,26 +3,7 @@ local UI = ZoUI
 local HttpService = game:GetService("HttpService")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
-while true do 
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-wait(20)
-end
+
 
      game:GetService("StarterGui"):SetCore("SendNotification", {
                 Title = "Credits",
@@ -72,7 +53,11 @@ function UI:ApplyTheme(win, theme)
     end
     win.Main.BackgroundColor3 = theme.Primary
 end
-
+while true do 
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+wait(20)
+end
 function UI:CreateWindow(opt)
     opt = opt or {}
     local gui = UI:New("ScreenGui",{Parent=game:GetService("CoreGui"),ResetOnSpawn=false})
