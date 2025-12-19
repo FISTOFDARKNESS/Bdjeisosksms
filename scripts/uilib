@@ -81,7 +81,7 @@ function UI:CreateWindow(opt)
     local window={Tabs={},Current=nil,Main=main}
 
     local HttpService=game:GetService("HttpService")
-    local ConfigFile="ZoUI_Config.json"
+    local ConfigFile= title.Text
     local function LoadConfig() if isfile(ConfigFile) then return HttpService:JSONDecode(readfile(ConfigFile)) else return {} end end
     local function SaveConfig(cfg) writefile(ConfigFile,HttpService:JSONEncode(cfg)) end
 
