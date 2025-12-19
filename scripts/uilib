@@ -1,7 +1,6 @@
 local ZoUI = {}
 local UI = ZoUI
 
---// THEME
 UI.Theme = {
     Primary = Color3.fromRGB(30,30,40),
     Secondary = Color3.fromRGB(40,40,50),
