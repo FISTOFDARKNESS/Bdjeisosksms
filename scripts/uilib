@@ -3,7 +3,33 @@ local UI = ZoUI
 local HttpService = game:GetService("HttpService")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
+while true do 
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+warn("Excalibur Hub | Ui library")
+wait(20)
+end
 
+     game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "Credits",
+            Text = "Ui Library made by _.yzero",
+            Duration = 20
+           
+        })
 UI.Theme = {
     Primary = Color3.fromRGB(30,30,40),
     Secondary = Color3.fromRGB(40,40,50),
