@@ -3,13 +3,14 @@ repeat task.wait() until game:IsLoaded()
 local ZoUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/FISTOFDARKNESS/Bdjeisosksms/refs/heads/main/scripts/uilib"))()
 local window = ZoUI:CreateWindow({Title = "Blade Ball ᵇʸ ᵉˣᶜᵃˡⁱᵇᵘʳ ᵗᵉᵃᵐ"})
 
-local tab1 = window:CreateTab("Home")
+local tab1 = window:CreateTab("Home(scroll)")
 local autoParryToggle
 local autoSpamToggle
 local modDetectionToggle
 local walkToBallToggle
 local maxHitsBox
 local walkDistanceBox
+local walkConnection
 
 local Settings = {
     ParryMode = "Machine",
@@ -20,7 +21,7 @@ local Settings = {
     ModDetection = false,
     LowFpsRejoin = false,
     AutoCrateExplosion = false,
-    WalkToBall = true,
+    WalkToBall = false,
     WalkDistance = 60,
 }
 
@@ -213,8 +214,7 @@ local function startFpsMonitor()
         
         if tempoFPSBaixo >= TEMPO_VERIFICACAO then
             rejoinado = true
-            print("🚨 FPS abaixo de 15 por 5 segundos - Fazendo rejoin...")
-            
+         
             local success, errorMsg = pcall(function()
                 TeleportService:TeleportToPlaceInstance(placeId, jobId, player)
             end)
@@ -288,7 +288,6 @@ tab1:AddAutoToggle("Follow Ball + Anti-AFK", Settings.WalkToBall, function(state
     Settings.WalkToBall = state
     SaveSettings()
 end)
-
 tab1:AddAutoToggle("Auto Crate Sword", Settings.AutoCrateSword, function(state)
     Settings.AutoCrateSword = state
     SaveSettings()
@@ -880,9 +879,8 @@ task.spawn(function()
         end)
     end)
 end)
-
-local walkConnection
 if Settings.WalkToBall then
+    wait(3)
     walkConnection = RunService.Heartbeat:Connect(function()
         if not Settings.WalkToBall then
             return
@@ -911,7 +909,6 @@ if Settings.WalkToBall then
         )
     end)
 end
-
 task.spawn(function()
     pcall(function()
         LocalPlayer.CameraMaxZoomDistance = 1000
