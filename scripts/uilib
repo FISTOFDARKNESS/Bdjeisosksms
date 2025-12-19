@@ -66,7 +66,7 @@ function UI:CreateWindow(opt)
 
     -- DRAG
     local dragging, dragInput, dragStart, startPos = false, nil, nil, nil
-    main.InputBegan:Connect(function(input)
+    title.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             dragging = true
             dragStart = input.Position
@@ -76,7 +76,7 @@ function UI:CreateWindow(opt)
             end)
         end
     end)
-    main.InputChanged:Connect(function(input)
+    title.InputChanged:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseMovement then dragInput = input end
     end)
     game:GetService("UserInputService").InputChanged:Connect(function(input)
