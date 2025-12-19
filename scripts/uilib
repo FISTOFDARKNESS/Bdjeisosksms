@@ -1,6 +1,7 @@
 local ZoUI = {}
 local UI = ZoUI
 
+--// Tema
 UI.Theme = {
     Primary = Color3.fromRGB(30,30,40),
     Secondary = Color3.fromRGB(40,40,50),
@@ -15,14 +16,14 @@ UI.Theme = {
 UI.Font = Enum.Font.Gotham
 UI.FontBold = Enum.Font.GothamBold
 
--- NEW INSTANCE
+--// Cria instância
 function UI:New(class, props)
     local obj = Instance.new(class)
     for k,v in pairs(props) do obj[k]=v end
     return obj
 end
 
--- APPLY THEME
+--// Aplica tema
 function UI:ApplyTheme(win, theme)
     theme = theme or UI.Theme
     for _, tab in pairs(win.Tabs) do
@@ -44,7 +45,7 @@ function UI:ApplyTheme(win, theme)
     win.Main.BackgroundColor3 = theme.Primary
 end
 
--- WINDOW
+--// Cria janela
 function UI:CreateWindow(opt)
     opt = opt or {}
 
@@ -53,79 +54,87 @@ function UI:CreateWindow(opt)
         ResetOnSpawn = false
     })
 
-local title = UI:New("Frame",{
-    Size = UDim2.new(1,0,0,40),
-    BackgroundColor3 = UI.Theme.Secondary,
-    Parent = main
-})
-UI:New("UICorner",{CornerRadius=UDim.new(0,8),Parent=title})
+    local main = UI:New("Frame",{
+        Size = UDim2.new(0,320,0,420),
+        Position = UDim2.fromScale(.5,.5),
+        AnchorPoint = Vector2.new(.5,.5),
+        BackgroundColor3 = UI.Theme.Primary,
+        BorderSizePixel = 0,
+        Parent = gui
+    })
+    UI:New("UICorner",{CornerRadius=UDim.new(0,8),Parent=main})
+    UI:New("UIStroke",{Color=UI.Theme.Stroke,Thickness=2,Parent=main})
 
-local titleLabel = UI:New("TextLabel",{
-    Size = UDim2.new(1,-40,1,0),
-    BackgroundTransparency = 1,
-    Text = opt.Title or "ZoUI",
-    Font = UI.FontBold,
-    TextSize = 18,
-    TextColor3 = UI.Theme.Text,
-    Parent = title
-})
-
-local close = UI:New("TextButton",{
-    Size = UDim2.new(0,40,1,0),
-    Position = UDim2.new(1,-40,0,0),
-    BackgroundTransparency = 1,
-    Text="X",
-    Font = UI.FontBold,
-    TextSize = 18,
-    TextColor3 = UI.Theme.Text,
-    Parent = title
-})
-close.MouseButton1Click:Connect(function() gui:Destroy() end)
-
--- DRAG APENAS PELO TITLE
-local dragging, dragInput, dragStart, startPos = false, nil, nil, nil
-title.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = true
-        dragStart = input.Position
-        startPos = main.Position
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-            end
-        end)
-    end
-end)
-
-title.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement then
-        dragInput = input
-    end
-end)
-
-game:GetService("UserInputService").InputChanged:Connect(function(input)
-    if dragging and input == dragInput then
-        local delta = input.Position - dragStart
-        main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    end
-end)
-
-    local title = UI:New("Frame",{Size=UDim2.new(1,0,0,40),BackgroundColor3=UI.Theme.Secondary,Parent=main})
+    --// TÍTULO
+    local title = UI:New("Frame",{
+        Size = UDim2.new(1,0,0,40),
+        BackgroundColor3 = UI.Theme.Secondary,
+        Parent = main
+    })
     UI:New("UICorner",{CornerRadius=UDim.new(0,8),Parent=title})
-    local titleLabel = UI:New("TextLabel",{Size=UDim2.new(1,-40,1,0),BackgroundTransparency=1,Text=opt.Title or "ZoUI",Font=UI.FontBold,TextSize=18,TextColor3=UI.Theme.Text,Parent=title})
-    local close = UI:New("TextButton",{Size=UDim2.new(0,40,1,0),Position=UDim2.new(1,-40,0,0),BackgroundTransparency=1,Text="X",Font=UI.FontBold,TextSize=18,TextColor3=UI.Theme.Text,Parent=title})
+
+    local titleLabel = UI:New("TextLabel",{
+        Size = UDim2.new(1,-40,1,0),
+        BackgroundTransparency = 1,
+        Text = opt.Title or "ZoUI",
+        Font = UI.FontBold,
+        TextSize = 18,
+        TextColor3 = UI.Theme.Text,
+        Parent = title
+    })
+
+    local close = UI:New("TextButton",{
+        Size = UDim2.new(0,40,1,0),
+        Position = UDim2.new(1,-40,0,0),
+        BackgroundTransparency = 1,
+        Text="X",
+        Font = UI.FontBold,
+        TextSize = 18,
+        TextColor3 = UI.Theme.Text,
+        Parent = title
+    })
     close.MouseButton1Click:Connect(function() gui:Destroy() end)
 
+    --// Drag APENAS PELO TÍTULO
+    local dragging, dragInput, dragStart, startPos = false, nil, nil, nil
+    title.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = main.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+
+    title.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement then
+            dragInput = input
+        end
+    end)
+
+    game:GetService("UserInputService").InputChanged:Connect(function(input)
+        if dragging and input == dragInput then
+            local delta = input.Position - dragStart
+            main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
+
+    --// TabBar e Content
     local tabBar = UI:New("Frame",{Size=UDim2.new(1,-20,0,30),Position=UDim2.new(0,10,0,50),BackgroundTransparency=1,Parent=main})
     local content = UI:New("Frame",{Size=UDim2.new(1,-20,1,-100),Position=UDim2.new(0,10,0,90),BackgroundTransparency=1,Parent=main})
 
     local window = {Tabs={}, Current=nil, Main=main}
 
-    -- TAB
+    --// Criar Tab
     function window:CreateTab(name)
         local index = #self.Tabs
         local button = UI:New("TextButton",{Size=UDim2.new(0,80,1,0),Position=UDim2.new(0,index*85,0,0),BackgroundColor3=index==0 and UI.Theme.Accent or UI.Theme.Button,Text=name,Font=index==0 and UI.FontBold or UI.Font,TextSize=14,TextColor3=UI.Theme.Text,Parent=tabBar})
         UI:New("UICorner",{CornerRadius=UDim.new(0,4),Parent=button})
+
         local scroll = UI:New("ScrollingFrame",{Size=UDim2.new(1,0,1,0),CanvasSize=UDim2.new(),AutomaticCanvasSize=Enum.AutomaticSize.Y,ScrollBarThickness=0,BackgroundTransparency=1,Visible=index==0,Parent=content})
         UI:New("UIListLayout",{Padding=UDim.new(0,10),Parent=scroll})
 
@@ -142,7 +151,7 @@ end)
 
         local tab = {Button=button, Content=scroll}
 
-        -- TOGGLE
+        --// TOGGLE
         function tab:AddToggle(text, default, callback)
             local frame = UI:New("Frame",{Size=UDim2.new(1,0,0,30),BackgroundTransparency=1,Parent=self.Content})
             UI:New("TextLabel",{Size=UDim2.new(.7,0,1,0),BackgroundTransparency=1,Text=text,Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,TextXAlignment=Enum.TextXAlignment.Left,Parent=frame})
@@ -158,14 +167,14 @@ end)
             end)
         end
 
-        -- BUTTON
+        --// BUTTON
         function tab:AddButton(text, callback)
             local btn = UI:New("TextButton",{Size=UDim2.new(1,0,0,34),BackgroundColor3=UI.Theme.Button,Text=text,Font=UI.FontBold,TextSize=14,TextColor3=UI.Theme.Text,Parent=self.Content})
             UI:New("UICorner",{CornerRadius=UDim.new(0,4),Parent=btn})
             if callback then btn.MouseButton1Click:Connect(callback) end
         end
 
-        -- TEXTBOX
+        --// TEXTBOX
         function tab:AddTextBox(text, default, callback)
             local frame = UI:New("Frame",{Size=UDim2.new(1,0,0,30),BackgroundTransparency=1,Parent=self.Content})
             UI:New("TextLabel",{Size=UDim2.new(.65,0,1,0),BackgroundTransparency=1,Text=text,Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,TextXAlignment=Enum.TextXAlignment.Left,Parent=frame})
@@ -174,7 +183,7 @@ end)
             box.FocusLost:Connect(function() if callback then callback(box.Text) end end)
         end
 
-        -- SLIDER
+        --// SLIDER
         function tab:AddSlider(text,min,max,default,callback)
             local value = default or min
             local frame = UI:New("Frame",{Size=UDim2.new(1,0,0,40),BackgroundTransparency=1,Parent=self.Content})
@@ -197,7 +206,7 @@ end)
             end)
         end
 
-        -- DROPDOWN
+        --// DROPDOWN
         function tab:AddDropdown(text,options,default,callback)
             local selected = default or options[1]
             local open=false
@@ -226,13 +235,13 @@ end)
             end
         end
 
-        -- KEYBIND
+        --// KEYBIND
         function tab:AddKeybind(text, default, callback)
             local frame = UI:New("Frame",{Size=UDim2.new(1,0,0,30),BackgroundTransparency=1,Parent=self.Content})
             UI:New("TextLabel",{Size=UDim2.new(.6,0,1,0),BackgroundTransparency=1,Text=text,Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,TextXAlignment=Enum.TextXAlignment.Left,Parent=frame})
             local btn = UI:New("TextButton",{Size=UDim2.new(.35,0,0.7,0),Position=UDim2.new(.6,0,.15,0),BackgroundColor3=UI.Theme.Button,Text=tostring(default or "None"),Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,Parent=frame})
             UI:New("UICorner",{CornerRadius=UDim.new(0,4),Parent=btn})
-            
+
             local function captureKey()
                 btn.Text = "..."
                 local conn
