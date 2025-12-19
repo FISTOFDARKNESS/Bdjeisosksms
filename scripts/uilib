@@ -233,28 +233,6 @@ function UI:CreateWindow(opt)
             end
         end
 
-  function tab:AddKeybind(text, default, callback)
-            local frame = UI:New("Frame",{Size=UDim2.new(1,0,0,30),BackgroundTransparency=1,Parent=self.Content})
-            UI:New("TextLabel",{Size=UDim2.new(.6,0,1,0),BackgroundTransparency=1,Text=text,Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,TextXAlignment=Enum.TextXAlignment.Left,Parent=frame})
-            local btn = UI:New("TextButton",{Size=UDim2.new(.35,0,0.7,0),Position=UDim2.new(.6,0,.15,0),BackgroundColor3=UI.Theme.Button,Text=tostring(default or "None"),Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,Parent=frame})
-            UI:New("UICorner",{CornerRadius=UDim.new(0,4),Parent=btn})
-            local function captureKey()
-        btn.Text = "..."
-        local conn
-        conn = game:GetService("UserInputService").InputBegan:Connect(function(input, gp)
-            if not gp and input.UserInputType == Enum.UserInputType.Keyboard then
-                btn.Text = input.KeyCode.Name
-                if callback then pcall(callback, input.KeyCode) end
-                conn:Disconnect()
-            end
-        end)
-    end
-
-    btn.MouseButton1Click:Connect(captureKey)
-    return btn
-end
-
-
     --// SAVE / LOAD CONFIG
     function window:SaveConfig(name)
         local cfg = {}
