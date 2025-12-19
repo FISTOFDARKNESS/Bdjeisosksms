@@ -1,72 +1,68 @@
 local ZoUI = {}
+local UI = ZoUI
 
-ZoUI.Theme = {
-    Primary = Color3.fromRGB(30, 30, 40),
-    Secondary = Color3.fromRGB(40, 40, 50),
-    Accent = Color3.fromRGB(120, 81, 169),
-    Text = Color3.fromRGB(255, 255, 255),
-    SubText = Color3.fromRGB(200, 200, 200),
-    ToggleOff = Color3.fromRGB(255, 100, 100),
-    ToggleOn = Color3.fromRGB(100, 255, 100),
-    Button = Color3.fromRGB(60, 60, 70),
-    Stroke = Color3.fromRGB(80, 80, 100)
+UI.Theme = {
+    Primary = Color3.fromRGB(30,30,40),
+    Secondary = Color3.fromRGB(40,40,50),
+    Accent = Color3.fromRGB(120,81,169),
+    Button = Color3.fromRGB(60,60,70),
+    ToggleOn = Color3.fromRGB(100,255,100),
+    ToggleOff = Color3.fromRGB(255,100,100),
+    Text = Color3.fromRGB(255,255,255),
+    SubText = Color3.fromRGB(200,200,200),
+    Stroke = Color3.fromRGB(80,80,100)
 }
 
-ZoUI.Font = Enum.Font.Gotham
-ZoUI.FontBold = Enum.Font.GothamBold
+UI.Font = Enum.Font.Gotham
+UI.FontBold = Enum.Font.GothamBold
 
-function ZoUI:Create(className, properties)
-    local obj = Instance.new(className)
-    for prop, value in pairs(properties) do
-        obj[prop] = value
-    end
-    return obj
+function UI:New(c,p)
+    local o = Instance.new(c)
+    for k,v in pairs(p) do o[k]=v end
+    return o
 end
 
-function ZoUI:CreateWindow(options)
-    local UI = ZoUI -- 🔒 fixa referência correta
+function UI:CreateWindow(opt)
+    opt = opt or {}
 
-    options = options or {}
-    local title = options.Title or "ZoUI Menu"
-    local size = options.Size or UDim2.new(0, 300, 0, 400)
-
-    local screenGui = UI:Create("ScreenGui", {
-        Name = "ZoUI_" .. title:gsub("%s+", ""),
+    local gui = UI:New("ScreenGui",{
         Parent = game:GetService("CoreGui"),
-        ResetOnSpawn = false
+        ResetOnSpawn = false,
+        DisplayOrder = 9999
     })
 
-    local mainFrame = UI:Create("Frame", {
-        Size = size,
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        Position = UDim2.fromScale(0.5, 0.5),
+    local main = UI:New("Frame",{
+        Size = UDim2.new(0,300,0,400),
+        Position = UDim2.fromScale(.5,.5),
+        AnchorPoint = Vector2.new(.5,.5),
         BackgroundColor3 = UI.Theme.Primary,
         BorderSizePixel = 0,
-        Parent = screenGui
+        Parent = gui
     })
-    UI:Create("UICorner", {CornerRadius = UDim.new(0, 8), Parent = mainFrame})
-    UI:Create("UIStroke", {Color = UI.Theme.Stroke, Thickness = 2, Parent = mainFrame})
+    UI:New("UICorner",{CornerRadius=UDim.new(0,8),Parent=main})
+    UI:New("UIStroke",{Color=UI.Theme.Stroke,Thickness=2,Parent=main})
 
-    local titleBar = UI:Create("Frame", {
-        Size = UDim2.new(1, 0, 0, 40),
+    local titleBar = UI:New("Frame",{
+        Size = UDim2.new(1,0,0,40),
         BackgroundColor3 = UI.Theme.Secondary,
         BorderSizePixel = 0,
-        Parent = mainFrame
+        Parent = main
     })
+    UI:New("UICorner",{CornerRadius=UDim.new(0,8),Parent=titleBar})
 
-    UI:Create("TextLabel", {
-        Size = UDim2.new(1, -40, 1, 0),
+    UI:New("TextLabel",{
+        Size = UDim2.new(1,-40,1,0),
         BackgroundTransparency = 1,
-        Text = title,
+        Text = opt.Title or "ZoUI",
         Font = UI.FontBold,
         TextSize = 18,
         TextColor3 = UI.Theme.Text,
         Parent = titleBar
     })
 
-    local close = UI:Create("TextButton", {
-        Size = UDim2.new(0, 40, 1, 0),
-        Position = UDim2.new(1, -40, 0, 0),
+    local close = UI:New("TextButton",{
+        Size = UDim2.new(0,40,1,0),
+        Position = UDim2.new(1,-40,0,0),
         BackgroundTransparency = 1,
         Text = "X",
         Font = UI.FontBold,
@@ -74,135 +70,89 @@ function ZoUI:CreateWindow(options)
         TextColor3 = UI.Theme.Text,
         Parent = titleBar
     })
-    close.MouseButton1Click:Connect(function()
-        screenGui:Destroy()
-    end)
+    close.MouseButton1Click:Connect(function() gui:Destroy() end)
 
-    local tabContainer = UI:Create("Frame", {
-        Size = UDim2.new(1, -20, 0, 30),
-        Position = UDim2.new(0, 10, 0, 50),
+    local tabBar = UI:New("Frame",{
+        Size = UDim2.new(1,-20,0,30),
+        Position = UDim2.new(0,10,0,50),
         BackgroundTransparency = 1,
-        Parent = mainFrame
+        Parent = main
     })
 
-    local contentFrame = UI:Create("Frame", {
-        Size = UDim2.new(1, -20, 1, -110),
-        Position = UDim2.new(0, 10, 0, 90),
+    local content = UI:New("Frame",{
+        Size = UDim2.new(1,-20,1,-110),
+        Position = UDim2.new(0,10,0,90),
         BackgroundTransparency = 1,
-        Parent = mainFrame
+        Parent = main
     })
 
-    local window = {
-        Tabs = {},
-        CurrentTab = nil
-    }
+    local window = {Tabs={},Current=nil}
 
     function window:CreateTab(name)
-        local tab = {}
+        local i = #self.Tabs
 
-        tab.Button = UI:Create("TextButton", {
-            Size = UDim2.new(0, 80, 1, 0),
-            Position = UDim2.new(0, (#self.Tabs * 85), 0, 0),
-            BackgroundColor3 = UI.Theme.Button,
+        local btn = UI:New("TextButton",{
+            Size = UDim2.new(0,80,1,0),
+            Position = UDim2.new(0,i*85,0,0),
+            BackgroundColor3 = i==0 and UI.Theme.Accent or UI.Theme.Button,
             Text = name,
-            Font = UI.Font,
+            Font = i==0 and UI.FontBold or UI.Font,
             TextSize = 14,
             TextColor3 = UI.Theme.Text,
-            Parent = tabContainer
+            Parent = tabBar
         })
-        UI:Create("UICorner", {CornerRadius = UDim.new(0, 4), Parent = tab.Button})
+        UI:New("UICorner",{CornerRadius=UDim.new(0,4),Parent=btn})
 
-        tab.Content = UI:Create("Frame", {
-            Size = UDim2.new(1, 0, 1, 0),
+        local scroll = UI:New("ScrollingFrame",{
+            Size = UDim2.new(1,0,1,0),
+            CanvasSize = UDim2.new(),
+            AutomaticCanvasSize = Enum.AutomaticSize.Y,
+            ScrollBarThickness = 0,
             BackgroundTransparency = 1,
-            Visible = false,
-            Parent = contentFrame
+            Visible = i==0,
+            Parent = content
         })
+        UI:New("UIListLayout",{Padding=UDim.new(0,10),Parent=scroll})
 
-        UI:Create("UIListLayout", {
-            Padding = UDim.new(0, 10),
-            Parent = tab.Content
-        })
-
-        tab.Button.MouseButton1Click:Connect(function()
-            for _, t in ipairs(self.Tabs) do
-                t.Content.Visible = false
-                t.Button.BackgroundColor3 = UI.Theme.Button
-                t.Button.Font = UI.Font
+        btn.MouseButton1Click:Connect(function()
+            for _,t in pairs(self.Tabs) do
+                t.Content.Visible=false
+                t.Button.BackgroundColor3=UI.Theme.Button
+                t.Button.Font=UI.Font
             end
-            tab.Content.Visible = true
-            tab.Button.BackgroundColor3 = UI.Theme.Accent
-            tab.Button.Font = UI.FontBold
-            self.CurrentTab = tab
+            scroll.Visible=true
+            btn.BackgroundColor3=UI.Theme.Accent
+            btn.Font=UI.FontBold
         end)
 
-        function tab:AddButton(text, callback)
-            local btn = UI:Create("TextButton", {
-                Size = UDim2.new(1, 0, 0, 35),
-                BackgroundColor3 = UI.Theme.Button,
-                Text = text,
-                Font = UI.FontBold,
-                TextSize = 14,
-                TextColor3 = UI.Theme.Text,
-                Parent = self.Content
-            })
-            UI:Create("UICorner", {CornerRadius = UDim.new(0, 4), Parent = btn})
-            btn.MouseButton1Click:Connect(callback)
-            return btn
-        end
+        local tab = {Button=btn,Content=scroll}
 
-        function tab:AddToggle(text, default, callback)
-            local frame = UI:Create("Frame", {
-                Size = UDim2.new(1, 0, 0, 30),
-                BackgroundTransparency = 1,
-                Parent = self.Content
-            })
+        function tab:AddToggle(text,def,cb)
+            local f = UI:New("Frame",{Size=UDim2.new(1,0,0,30),BackgroundTransparency=1,Parent=scroll})
+            UI:New("TextLabel",{Size=UDim2.new(.7,0,1,0),BackgroundTransparency=1,Text=text,Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,TextXAlignment=Left,Parent=f})
 
-            UI:Create("TextLabel", {
-                Size = UDim2.new(0.7, 0, 1, 0),
-                BackgroundTransparency = 1,
-                Text = text,
-                Font = UI.Font,
-                TextSize = 14,
-                TextColor3 = UI.Theme.Text,
-                TextXAlignment = Left,
-                Parent = frame
-            })
+            local b = UI:New("TextButton",{Size=UDim2.new(0,50,0,25),Position=UDim2.new(1,-50,.5,-12),BackgroundColor3=UI.Theme.Button,Text="",Parent=f})
+            UI:New("UICorner",{CornerRadius=UDim.new(0,12),Parent=b})
 
-            local toggle = UI:Create("TextButton", {
-                Size = UDim2.new(0, 50, 0, 24),
-                Position = UDim2.new(1, -50, 0.5, -12),
-                BackgroundColor3 = UI.Theme.Button,
-                Text = "",
-                Parent = frame
-            })
-            UI:Create("UICorner", {CornerRadius = UDim.new(1, 0), Parent = toggle})
+            local dot = UI:New("Frame",{Size=UDim2.new(0,21,0,21),Position=def and UDim2.new(1,-23,.5,-10) or UDim2.new(0,2,.5,-10),BackgroundColor3=def and UI.Theme.ToggleOn or UI.Theme.ToggleOff,Parent=b})
+            UI:New("UICorner",{CornerRadius=UDim.new(0,10),Parent=dot})
 
-            local dot = UI:Create("Frame", {
-                Size = UDim2.new(0, 20, 0, 20),
-                Position = default and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10),
-                BackgroundColor3 = default and UI.Theme.ToggleOn or UI.Theme.ToggleOff,
-                Parent = toggle
-            })
-            UI:Create("UICorner", {CornerRadius = UDim.new(1, 0), Parent = dot})
-
-            local state = default
-            toggle.MouseButton1Click:Connect(function()
-                state = not state
-                dot.Position = state and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10)
-                dot.BackgroundColor3 = state and UI.Theme.ToggleOn or UI.Theme.ToggleOff
-                if callback then callback(state) end
+            local s=def
+            b.MouseButton1Click:Connect(function()
+                s=not s
+                dot.Position=s and UDim2.new(1,-23,.5,-10) or UDim2.new(0,2,.5,-10)
+                dot.BackgroundColor3=s and UI.Theme.ToggleOn or UI.Theme.ToggleOff
+                if cb then cb(s) end
             end)
         end
 
-        table.insert(self.Tabs, tab)
-        if #self.Tabs == 1 then
-            tab.Content.Visible = true
-            tab.Button.BackgroundColor3 = UI.Theme.Accent
-            tab.Button.Font = UI.FontBold
-            self.CurrentTab = tab
+        function tab:AddButton(text,cb,color)
+            local b = UI:New("TextButton",{Size=UDim2.new(1,0,0,35),BackgroundColor3=color or UI.Theme.Button,Text=text,Font=UI.FontBold,TextSize=14,TextColor3=UI.Theme.Text,Parent=scroll})
+            UI:New("UICorner",{CornerRadius=UDim.new(0,4),Parent=b})
+            if cb then b.MouseButton1Click:Connect(cb) end
         end
 
+        table.insert(self.Tabs,tab)
         return tab
     end
 
