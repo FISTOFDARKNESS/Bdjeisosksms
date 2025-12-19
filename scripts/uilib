@@ -61,8 +61,8 @@ function UI:CreateWindow(opt)
         BorderSizePixel = 0,
         Parent = gui
     })
-    UI:New("UICorner",{CornerRadius=UDim.new(0,8),Parent=title})
-    UI:New("UIStroke",{Color=UI.Theme.Stroke,Thickness=2,Parent=title})
+    UI:New("UICorner",{CornerRadius=UDim.new(0,8),Parent=main})
+    UI:New("UIStroke",{Color=UI.Theme.Stroke,Thickness=2,Parent=main})
 
     -- DRAG
     local dragging, dragInput, dragStart, startPos = false, nil, nil, nil
