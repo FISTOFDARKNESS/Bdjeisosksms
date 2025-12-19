@@ -109,11 +109,13 @@ function UI:CreateWindow(opt)
             end)
         end
     end)
+
     title.InputChanged:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseMovement then
             dragInput = input
         end
     end)
+
     game:GetService("UserInputService").InputChanged:Connect(function(input)
         if dragging and input == dragInput then
             local delta = input.Position - dragStart
@@ -125,7 +127,7 @@ function UI:CreateWindow(opt)
     local tabBar = UI:New("Frame",{Size=UDim2.new(1,-20,0,30),Position=UDim2.new(0,10,0,50),BackgroundTransparency=1,Parent=main})
     local content = UI:New("Frame",{Size=UDim2.new(1,-20,1,-100),Position=UDim2.new(0,10,0,90),BackgroundTransparency=1,Parent=main})
 
-    local window = {Tabs={}, Current=nil, Main=main, Config={} }
+    local window = {Tabs={}, Current=nil, Main=main}
 
     --// Criar Tab
     function window:CreateTab(name)
@@ -147,7 +149,7 @@ function UI:CreateWindow(opt)
             button.Font=UI.FontBold
         end)
 
-        local tab = {Button=button, Content=scroll, Toggles={}}
+        local tab = {Button=button, Content=scroll}
 
         --// TOGGLE
         function tab:AddToggle(text, default, callback)
@@ -158,43 +160,21 @@ function UI:CreateWindow(opt)
             local dot = UI:New("Frame",{Size=UDim2.new(0,20,0,20),Position=default and UDim2.new(1,-22,.5,-10) or UDim2.new(0,2,.5,-10),BackgroundColor3=default and UI.Theme.ToggleOn or UI.Theme.ToggleOff,Parent=btn})
             UI:New("UICorner",{CornerRadius=UDim.new(0,10),Parent=dot})
             local state = default
-
-            local toggleData = {btn=btn, dot=dot, state=state, callback=callback, text=text}
-            table.insert(tab.Toggles, toggleData)
-
             btn.MouseButton1Click:Connect(function()
                 state = not state
-                toggleData.state = state
                 game:GetService("TweenService"):Create(dot,TweenInfo.new(0.15),{Position=state and UDim2.new(1,-22,.5,-10) or UDim2.new(0,2,.5,-10),BackgroundColor3=state and UI.Theme.ToggleOn or UI.Theme.ToggleOff}):Play()
                 if callback then callback(state) end
-                -- auto save
-                window.Config[text] = state
-                writefile("ZoUI_Config.json", game:GetService("HttpService"):JSONEncode(window.Config))
             end)
-
-            --// Auto-load toggle
-            if isfile("ZoUI_Config.json") then
-                local cfg = game:GetService("HttpService"):JSONDecode(readfile("ZoUI_Config.json"))
-                if cfg[text] ~= nil then
-                    state = cfg[text]
-                    toggleData.state = state
-                    dot.Position = state and UDim2.new(1,-22,.5,-10) or UDim2.new(0,2,.5,-10)
-                    dot.BackgroundColor3 = state and UI.Theme.ToggleOn or UI.Theme.ToggleOff
-                    window.Config[text] = state
-                else
-                    window.Config[text] = state
-                end
-            else
-                window.Config[text] = state
-            end
         end
 
+        --// BUTTON
         function tab:AddButton(text, callback)
             local btn = UI:New("TextButton",{Size=UDim2.new(1,0,0,34),BackgroundColor3=UI.Theme.Button,Text=text,Font=UI.FontBold,TextSize=14,TextColor3=UI.Theme.Text,Parent=self.Content})
             UI:New("UICorner",{CornerRadius=UDim.new(0,4),Parent=btn})
             if callback then btn.MouseButton1Click:Connect(callback) end
         end
 
+        --// TEXTBOX
         function tab:AddTextBox(text, default, callback)
             local frame = UI:New("Frame",{Size=UDim2.new(1,0,0,30),BackgroundTransparency=1,Parent=self.Content})
             UI:New("TextLabel",{Size=UDim2.new(.65,0,1,0),BackgroundTransparency=1,Text=text,Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,TextXAlignment=Enum.TextXAlignment.Left,Parent=frame})
@@ -203,6 +183,7 @@ function UI:CreateWindow(opt)
             box.FocusLost:Connect(function() if callback then callback(box.Text) end end)
         end
 
+        --// SLIDER
         function tab:AddSlider(text,min,max,default,callback)
             local value = default or min
             local frame = UI:New("Frame",{Size=UDim2.new(1,0,0,40),BackgroundTransparency=1,Parent=self.Content})
@@ -225,6 +206,7 @@ function UI:CreateWindow(opt)
             end)
         end
 
+        --// DROPDOWN
         function tab:AddDropdown(text,options,default,callback)
             local selected = default or options[1]
             local open=false
@@ -253,6 +235,7 @@ function UI:CreateWindow(opt)
             end
         end
 
+        --// KEYBIND
         function tab:AddKeybind(text, default, callback)
             local frame = UI:New("Frame",{Size=UDim2.new(1,0,0,30),BackgroundTransparency=1,Parent=self.Content})
             UI:New("TextLabel",{Size=UDim2.new(.6,0,1,0),BackgroundTransparency=1,Text=text,Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,TextXAlignment=Enum.TextXAlignment.Left,Parent=frame})
