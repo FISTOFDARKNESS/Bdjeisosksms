@@ -53,19 +53,37 @@ function UI:CreateWindow(opt)
         ResetOnSpawn = false
     })
 
-    local main = UI:New("Frame",{
-        Size = UDim2.new(0,320,0,420),
-        Position = UDim2.fromScale(.5,.5),
-        AnchorPoint = Vector2.new(.5,.5),
-        BackgroundColor3 = UI.Theme.Primary,
-        BorderSizePixel = 0,
-        Parent = gui
-    })
-    UI:New("UICorner",{CornerRadius=UDim.new(0,8),Parent=main})
-    UI:New("UIStroke",{Color=UI.Theme.Stroke,Thickness=2,Parent=main})
+local title = UI:New("Frame",{
+    Size = UDim2.new(1,0,0,40),
+    BackgroundColor3 = UI.Theme.Secondary,
+    Parent = main
+})
+UI:New("UICorner",{CornerRadius=UDim.new(0,8),Parent=title})
 
-    -- DRAG
-    local dragging, dragInput, dragStart, startPos = false, nil, nil, nil
+local titleLabel = UI:New("TextLabel",{
+    Size = UDim2.new(1,-40,1,0),
+    BackgroundTransparency = 1,
+    Text = opt.Title or "ZoUI",
+    Font = UI.FontBold,
+    TextSize = 18,
+    TextColor3 = UI.Theme.Text,
+    Parent = title
+})
+
+local close = UI:New("TextButton",{
+    Size = UDim2.new(0,40,1,0),
+    Position = UDim2.new(1,-40,0,0),
+    BackgroundTransparency = 1,
+    Text="X",
+    Font = UI.FontBold,
+    TextSize = 18,
+    TextColor3 = UI.Theme.Text,
+    Parent = title
+})
+close.MouseButton1Click:Connect(function() gui:Destroy() end)
+
+-- DRAG APENAS PELO TITLE
+local dragging, dragInput, dragStart, startPos = false, nil, nil, nil
 title.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         dragging = true
@@ -78,11 +96,13 @@ title.InputBegan:Connect(function(input)
         end)
     end
 end)
+
 title.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement then
         dragInput = input
     end
 end)
+
 game:GetService("UserInputService").InputChanged:Connect(function(input)
     if dragging and input == dragInput then
         local delta = input.Position - dragStart
