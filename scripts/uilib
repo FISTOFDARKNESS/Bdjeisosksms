@@ -1,5 +1,8 @@
 local ZoUI = {}
 local UI = ZoUI
+local HttpService = game:GetService("HttpService")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
 
 UI.Theme = {
     Primary = Color3.fromRGB(30,30,40),
@@ -8,6 +11,8 @@ UI.Theme = {
     Button = Color3.fromRGB(60,60,70),
     ToggleOn = Color3.fromRGB(120,255,120),
     ToggleOff = Color3.fromRGB(255,120,120),
+    AutoSaveOn = Color3.fromRGB(120,255,120),
+    AutoSaveOff = Color3.fromRGB(255,120,120),
     Text = Color3.fromRGB(255,255,255),
     Stroke = Color3.fromRGB(80,80,100)
 }
@@ -57,136 +62,175 @@ function UI:CreateWindow(opt)
 
     local dragging, dragInput, dragStart, startPos = false, nil, nil, nil
     title.InputBegan:Connect(function(input)
-        if input.UserInputType==Enum.UserInputType.MouseButton1 then
-            dragging=true
-            dragStart=input.Position
-            startPos=main.Position
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = main.Position
             input.Changed:Connect(function()
-                if input.UserInputState==Enum.UserInputState.End then dragging=false end
+                if input.UserInputState == Enum.UserInputState.End then dragging = false end
             end)
         end
     end)
     title.InputChanged:Connect(function(input)
-        if input.UserInputType==Enum.UserInputType.MouseMovement then dragInput=input end
+        if input.UserInputType == Enum.UserInputType.MouseMovement then dragInput = input end
     end)
-    game:GetService("UserInputService").InputChanged:Connect(function(input)
-        if dragging and input==dragInput then
-            local delta=input.Position-dragStart
-            main.Position=UDim2.new(startPos.X.Scale,startPos.X.Offset+delta.X,startPos.Y.Scale,startPos.Y.Offset+delta.Y)
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and input == dragInput then
+            local delta = input.Position - dragStart
+            main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
         end
     end)
 
     local tabBar = UI:New("Frame",{Size=UDim2.new(1,-20,0,30),Position=UDim2.new(0,10,0,50),BackgroundTransparency=1,Parent=main})
     local content = UI:New("Frame",{Size=UDim2.new(1,-20,1,-100),Position=UDim2.new(0,10,0,90),BackgroundTransparency=1,Parent=main})
-    local window={Tabs={},Current=nil,Main=main}
 
-    local HttpService=game:GetService("HttpService")
-    
+    local window = {Tabs={}, Current=nil, Main=main, ConfigFile="ZoUI_Config.json"}
+
     function window:SaveFile(name)
-    local ConfigFile= name
-    local function LoadConfig() if isfile(ConfigFile) then return HttpService:JSONDecode(readfile(ConfigFile)) else return {} end end
-    local function SaveConfig(cfg) writefile(ConfigFile,HttpService:JSONEncode(cfg)) end
+        self.ConfigFile = name
+        if not isfile(name) then writefile(name,HttpService:JSONEncode({})) end
     end
 
     function window:CreateTab(name)
-        local index=#self.Tabs
-        local button=UI:New("TextButton",{Size=UDim2.new(0,80,1,0),Position=UDim2.new(0,index*85,0,0),BackgroundColor3=index==0 and UI.Theme.Accent or UI.Theme.Button,Text=name,Font=index==0 and UI.FontBold or UI.Font,TextSize=14,TextColor3=UI.Theme.Text,Parent=tabBar})
+        local index = #self.Tabs
+        local button = UI:New("TextButton",{Size=UDim2.new(0,80,1,0),Position=UDim2.new(0,index*85,0,0),BackgroundColor3=index==0 and UI.Theme.Accent or UI.Theme.Button,Text=name,Font=index==0 and UI.FontBold or UI.Font,TextSize=14,TextColor3=UI.Theme.Text,Parent=tabBar})
         UI:New("UICorner",{CornerRadius=UDim.new(0,4),Parent=button})
-        local scroll=UI:New("ScrollingFrame",{Size=UDim2.new(1,0,1,0),CanvasSize=UDim2.new(),AutomaticCanvasSize=Enum.AutomaticSize.Y,ScrollBarThickness=0,BackgroundTransparency=1,Visible=index==0,Parent=content})
+        local scroll = UI:New("ScrollingFrame",{Size=UDim2.new(1,0,1,0),CanvasSize=UDim2.new(),AutomaticCanvasSize=Enum.AutomaticSize.Y,ScrollBarThickness=0,BackgroundTransparency=1,Visible=index==0,Parent=content})
         UI:New("UIListLayout",{Padding=UDim.new(0,10),Parent=scroll})
         button.MouseButton1Click:Connect(function()
-            for _,t in pairs(self.Tabs) do t.Content.Visible=false;t.Button.BackgroundColor3=UI.Theme.Button;t.Button.Font=UI.Font end
-            scroll.Visible=true;button.BackgroundColor3=UI.Theme.Accent;button.Font=UI.FontBold
+            for _,t in pairs(self.Tabs) do t.Content.Visible=false t.Button.BackgroundColor3=UI.Theme.Button t.Button.Font=UI.Font end
+            scroll.Visible=true button.BackgroundColor3=UI.Theme.Accent button.Font=UI.FontBold
         end)
-        local tab={Button=button,Content=scroll}
-       
+        local tab = {Button=button, Content=scroll}
+
+        function tab:AddButton(text, callback)
+            local btn = UI:New("TextButton",{Size=UDim2.new(1,0,0,34),BackgroundColor3=UI.Theme.Button,Text=text,Font=UI.FontBold,TextSize=14,TextColor3=UI.Theme.Text,Parent=self.Content})
+            UI:New("UICorner",{CornerRadius=UDim.new(0,4),Parent=btn})
+            if callback then btn.MouseButton1Click:Connect(callback) end
+        end
+
         function tab:AddAutoToggle(text, default, callback)
-            local frame=UI:New("Frame",{Size=UDim2.new(1,0,0,30),BackgroundTransparency=1,Parent=self.Content})
+            local frame = UI:New("Frame",{Size=UDim2.new(1,0,0,30),BackgroundTransparency=1,Parent=self.Content})
             UI:New("TextLabel",{Size=UDim2.new(.7,0,1,0),BackgroundTransparency=1,Text=text,Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,TextXAlignment=Enum.TextXAlignment.Left,Parent=frame})
-            local btn=UI:New("TextButton",{Size=UDim2.new(0,50,0,24),Position=UDim2.new(1,-50,.5,-12),BackgroundColor3=UI.Theme.Button,Text="",Parent=frame})
+            local btn = UI:New("TextButton",{Size=UDim2.new(0,50,0,24),Position=UDim2.new(1,-50,.5,-12),BackgroundColor3=UI.Theme.Button,Text="",Parent=frame})
             UI:New("UICorner",{CornerRadius=UDim.new(0,12),Parent=btn})
-            local dot=UI:New("Frame",{Size=UDim2.new(0,20,0,20),Position=default and UDim2.new(1,-22,.5,-10) or UDim2.new(0,2,.5,-10),BackgroundColor3=default and UI.Theme.ToggleOn or UI.Theme.ToggleOff,Parent=btn})
+            local dot = UI:New("Frame",{Size=UDim2.new(0,20,0,20),Position=default and UDim2.new(1,-22,.5,-10) or UDim2.new(0,2,.5,-10),BackgroundColor3=default and UI.Theme.AutoSaveOn or UI.Theme.AutoSaveOff,Parent=btn})
             UI:New("UICorner",{CornerRadius=UDim.new(0,10),Parent=dot})
-            local state=default
-            local cfg=LoadConfig()
-            if cfg[text]~=nil then
-                state=cfg[text]
-                dot.Position=state and UDim2.new(1,-22,.5,-10) or UDim2.new(0,2,.5,-10)
-                dot.BackgroundColor3=state and UI.Theme.ToggleOn or UI.Theme.ToggleOff
-            end
+            local state = default
+            local cfg = {}
+            if isfile(window.ConfigFile) then cfg = HttpService:JSONDecode(readfile(window.ConfigFile)) end
+            if cfg[text] ~= nil then state = cfg[text] dot.Position = state and UDim2.new(1,-22,.5,-10) or UDim2.new(0,2,.5,-10) dot.BackgroundColor3 = state and UI.Theme.AutoSaveOn or UI.Theme.AutoSaveOff end
             btn.MouseButton1Click:Connect(function()
-                state=not state
-                game:GetService("TweenService"):Create(dot,TweenInfo.new(0.15),{Position=state and UDim2.new(1,-22,.5,-10) or UDim2.new(0,2,.5,-10),BackgroundColor3=state and UI.Theme.ToggleOn or UI.Theme.ToggleOff}):Play()
-                cfg[text]=state
-                SaveConfig(cfg)
+                state = not state
+                TweenService:Create(dot,TweenInfo.new(0.15),{Position=state and UDim2.new(1,-22,.5,-10) or UDim2.new(0,2,.5,-10),BackgroundColor3=state and UI.Theme.AutoSaveOn or UI.Theme.AutoSaveOff}):Play()
                 if callback then callback(state) end
+                local cfg = {}
+                if isfile(window.ConfigFile) then cfg = HttpService:JSONDecode(readfile(window.ConfigFile)) end
+                cfg[text] = state
+                writefile(window.ConfigFile,HttpService:JSONEncode(cfg))
             end)
         end
 
-
         function tab:AddAutoTextBox(text, default, callback)
-            local frame=UI:New("Frame",{Size=UDim2.new(1,0,0,30),BackgroundTransparency=1,Parent=self.Content})
+            local frame = UI:New("Frame",{Size=UDim2.new(1,0,0,30),BackgroundTransparency=1,Parent=self.Content})
             UI:New("TextLabel",{Size=UDim2.new(.65,0,1,0),BackgroundTransparency=1,Text=text,Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,TextXAlignment=Enum.TextXAlignment.Left,Parent=frame})
-            local box=UI:New("TextBox",{Size=UDim2.new(.3,0,.7,0),Position=UDim2.new(.7,0,.15,0),BackgroundColor3=UI.Theme.Button,Text=tostring(default or ""),Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,ClearTextOnFocus=false,Parent=frame})
+            local box = UI:New("TextBox",{Size=UDim2.new(.3,0,.7,0),Position=UDim2.new(.7,0,.15,0),BackgroundColor3=UI.Theme.Button,Text=tostring(default or ""),Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,ClearTextOnFocus=false,Parent=frame})
             UI:New("UICorner",{CornerRadius=UDim.new(0,4),Parent=box})
-            local cfg=LoadConfig()
-            if cfg[text]~=nil then box.Text=cfg[text] end
+            local cfg = {}
+            if isfile(window.ConfigFile) then cfg = HttpService:JSONDecode(readfile(window.ConfigFile)) end
+            if cfg[text] then box.Text = cfg[text] end
             box.FocusLost:Connect(function()
-                cfg[text]=box.Text
-                SaveConfig(cfg)
                 if callback then callback(box.Text) end
+                local cfg = {}
+                if isfile(window.ConfigFile) then cfg = HttpService:JSONDecode(readfile(window.ConfigFile)) end
+                cfg[text] = box.Text
+                writefile(window.ConfigFile,HttpService:JSONEncode(cfg))
+            end)
+        end
+
+        function tab:AddAutoSlider(text, min, max, default, callback)
+            local value = default or min
+            local frame = UI:New("Frame",{Size=UDim2.new(1,0,0,40),BackgroundTransparency=1,Parent=self.Content})
+            local label = UI:New("TextLabel",{Size=UDim2.new(1,0,0,18),BackgroundTransparency=1,Text=text..": "..value,Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,TextXAlignment=Enum.TextXAlignment.Left,Parent=frame})
+            local bar = UI:New("Frame",{Size=UDim2.new(1,0,0,10),Position=UDim2.new(0,0,0,26),BackgroundColor3=UI.Theme.Button,Parent=frame})
+            UI:New("UICorner",{CornerRadius=UDim.new(0,6),Parent=bar})
+            local fill = UI:New("Frame",{Size=UDim2.new((value-min)/(max-min),0,1,0),BackgroundColor3=UI.Theme.Accent,Parent=bar})
+            UI:New("UICorner",{CornerRadius=UDim.new(0,6),Parent=fill})
+            local dragging=false
+            local cfg = {}
+            if isfile(window.ConfigFile) then cfg = HttpService:JSONDecode(readfile(window.ConfigFile)) end
+            if cfg[text] then value = cfg[text] fill.Size = UDim2.new((value-min)/(max-min),0,1,0) label.Text = text..": "..value end
+            bar.InputBegan:Connect(function(i) if i.UserInputType==Enum.UserInputType.MouseButton1 then dragging=true end end)
+            bar.InputEnded:Connect(function(i) if i.UserInputType==Enum.UserInputType.MouseButton1 then dragging=false end end)
+            UserInputService.InputChanged:Connect(function(i)
+                if dragging and i.UserInputType==Enum.UserInputType.MouseMovement then
+                    local x=math.clamp((i.Position.X-bar.AbsolutePosition.X)/bar.AbsoluteSize.X,0,1)
+                    value=math.floor(min+(max-min)*x)
+                    TweenService:Create(fill,TweenInfo.new(0.05),{Size=UDim2.new(x,0,1,0)}):Play()
+                    label.Text=text..": "..value
+                    if callback then callback(value) end
+                    local cfg = {}
+                    if isfile(window.ConfigFile) then cfg = HttpService:JSONDecode(readfile(window.ConfigFile)) end
+                    cfg[text] = value
+                    writefile(window.ConfigFile,HttpService:JSONEncode(cfg))
+                end
             end)
         end
 
         function tab:AddAutoDropdown(text, options, default, callback)
-            local selected=default or options[1]
+            local selected = default or options[1]
             local open=false
-            local btn=UI:New("TextButton",{Size=UDim2.new(1,0,0,30),BackgroundColor3=UI.Theme.Button,Text=text..": "..selected,Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,Parent=self.Content})
+            local btn = UI:New("TextButton",{Size=UDim2.new(1,0,0,30),BackgroundColor3=UI.Theme.Button,Text=text..": "..selected,Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,Parent=self.Content})
             UI:New("UICorner",{CornerRadius=UDim.new(0,4),Parent=btn})
-            local list=UI:New("Frame",{Size=UDim2.new(1,0,0,#options*26),BackgroundColor3=UI.Theme.Primary,Visible=false,Parent=self.Content})
+            local list = UI:New("Frame",{Size=UDim2.new(1,0,0,#options*26),BackgroundColor3=UI.Theme.Primary,Visible=false,Parent=self.Content})
             UI:New("UICorner",{CornerRadius=UDim.new(0,4),Parent=list})
             UI:New("UIListLayout",{Padding=UDim.new(0,4),Parent=list})
-            local cfg=LoadConfig()
-            if cfg[text]~=nil then
-                selected=cfg[text]
-                btn.Text=text..": "..selected
-            end
+            local cfg = {}
+            if isfile(window.ConfigFile) then cfg = HttpService:JSONDecode(readfile(window.ConfigFile)) end
+            if cfg[text] then selected = cfg[text] btn.Text = text..": "..selected end
             btn.MouseButton1Click:Connect(function()
-                open=not open
-                list.Position=UDim2.new(0,0,0,btn.AbsolutePosition.Y-self.Content.AbsolutePosition.Y+35)
-                list.Visible=open
+                open = not open
+                list.Position = UDim2.new(0,0,0,btn.AbsolutePosition.Y-self.Content.AbsolutePosition.Y+35)
+                list.Visible = open
             end)
             for _,opt in ipairs(options) do
-                local o=UI:New("TextButton",{Size=UDim2.new(1,-8,0,24),BackgroundColor3=UI.Theme.Button,Text=opt,Font=UI.Font,TextSize=13,TextColor3=UI.Theme.Text,Parent=list})
+                local o = UI:New("TextButton",{Size=UDim2.new(1,-8,0,24),BackgroundColor3=UI.Theme.Button,Text=opt,Font=UI.Font,TextSize=13,TextColor3=UI.Theme.Text,Parent=list})
                 UI:New("UICorner",{CornerRadius=UDim.new(0,4),Parent=o})
                 o.MouseButton1Click:Connect(function()
-                    selected=opt
-                    btn.Text=text..": "..opt
-                    list.Visible=false
-                    open=false
-                    cfg[text]=opt
-                    SaveConfig(cfg)
+                    selected = opt
+                    btn.Text = text..": "..opt
+                    list.Visible = false
+                    open = false
                     if callback then callback(opt) end
+                    local cfg = {}
+                    if isfile(window.ConfigFile) then cfg = HttpService:JSONDecode(readfile(window.ConfigFile)) end
+                    cfg[text] = selected
+                    writefile(window.ConfigFile,HttpService:JSONEncode(cfg))
                 end)
             end
         end
 
         function tab:AddAutoKeybind(text, default, callback)
-            local frame=UI:New("Frame",{Size=UDim2.new(1,0,0,30),BackgroundTransparency=1,Parent=self.Content})
+            local frame = UI:New("Frame",{Size=UDim2.new(1,0,0,30),BackgroundTransparency=1,Parent=self.Content})
             UI:New("TextLabel",{Size=UDim2.new(.6,0,1,0),BackgroundTransparency=1,Text=text,Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,TextXAlignment=Enum.TextXAlignment.Left,Parent=frame})
-            local btn=UI:New("TextButton",{Size=UDim2.new(.35,0,0.7,0),Position=UDim2.new(.6,0,.15,0),BackgroundColor3=UI.Theme.Button,Text=tostring(default or "None"),Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,Parent=frame})
+            local btn = UI:New("TextButton",{Size=UDim2.new(.35,0,0.7,0),Position=UDim2.new(.6,0,.15,0),BackgroundColor3=UI.Theme.Button,Text=tostring(default or "None"),Font=UI.Font,TextSize=14,TextColor3=UI.Theme.Text,Parent=frame})
             UI:New("UICorner",{CornerRadius=UDim.new(0,4),Parent=btn})
-            local cfg=LoadConfig()
-            if cfg[text]~=nil then btn.Text=cfg[text] end
+            local key = default
+            local cfg = {}
+            if isfile(window.ConfigFile) then cfg = HttpService:JSONDecode(readfile(window.ConfigFile)) end
+            if cfg[text] then key = cfg[text] btn.Text = key.Name end
             local function captureKey()
-                btn.Text="..."
+                btn.Text = "..."
                 local conn
-                conn=game:GetService("UserInputService").InputBegan:Connect(function(input,gp)
-                    if not gp and input.UserInputType==Enum.UserInputType.Keyboard then
-                        btn.Text=input.KeyCode.Name
-                        cfg[text]=input.KeyCode.Name
-                        SaveConfig(cfg)
-                        if callback then pcall(callback,input.KeyCode) end
+                conn = UserInputService.InputBegan:Connect(function(input, gp)
+                    if not gp and input.UserInputType == Enum.UserInputType.Keyboard then
+                        key = input.KeyCode
+                        btn.Text = key.Name
+                        if callback then pcall(callback,key) end
+                        local cfg = {}
+                        if isfile(window.ConfigFile) then cfg = HttpService:JSONDecode(readfile(window.ConfigFile)) end
+                        cfg[text] = key
+                        writefile(window.ConfigFile,HttpService:JSONEncode(cfg))
                         conn:Disconnect()
                     end
                 end)
