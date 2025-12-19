@@ -3,14 +3,20 @@ local UI = ZoUI
 local HttpService = game:GetService("HttpService")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
-
-
-     game:GetService("StarterGui"):SetCore("SendNotification", {
+game:GetService("StarterGui"):SetCore("SendNotification", {
                 Title = "Credits",
             Text = "Ui Library made by _.yzero",
             Duration = 20
            
         })
+local mensagem = "Excalibur Hub | Loading: "
+
+for i = 0, 100, 1 do
+    wait(0.05)
+    print(mensagem .. i .. "%")
+end
+print("Excalibur Hub | UI Library Loaded")
+
 UI.Theme = {
     Primary = Color3.fromRGB(30,30,40),
     Secondary = Color3.fromRGB(40,40,50),
@@ -52,11 +58,6 @@ function UI:ApplyTheme(win, theme)
         end
     end
     win.Main.BackgroundColor3 = theme.Primary
-end
-while true do 
-warn("Excalibur Hub | Ui library")
-warn("Excalibur Hub | Ui library")
-wait(20)
 end
 function UI:CreateWindow(opt)
     opt = opt or {}
