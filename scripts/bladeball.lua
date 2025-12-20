@@ -82,9 +82,9 @@ end
 
 LoadSettings()
 
-local ParryDuration = 0.548
-local HitDelayCheck = 0.8
-local MinRange = 2.583
+local ParryDuration = 0.3
+local HitDelayCheck = 0.2
+local MinRange = 2
 
 local Match = {
     ball = {
@@ -480,7 +480,7 @@ function Match.perform_parry()
         Match.perform_grab_animation()
         props.cooldown = true
     end
-    VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0.0001)
+    VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0.001)
     task.delay(HitDelayCheck, function()
         if props.parries > 0 then
             props.parries = props.parries - 1
@@ -644,7 +644,7 @@ RunService.PreSimulation:Connect(function()
     props.ping = GameStats.Network.ServerStatsItem["Data Ping"]:GetValue()
     props.velocity = char.PrimaryPart.AssemblyLinearVelocity
     props.speed = props.velocity.Magnitude
-    props.is_moving = props.speed > 30
+    props.is_moving = props.speed > 25
 end)
 
 Match.ball.ball_itself = Match.get_ball()
