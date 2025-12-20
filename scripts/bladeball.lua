@@ -82,9 +82,9 @@ end
 
 LoadSettings()
 
-local ParryDuration = 0.3
-local HitDelayCheck = 0.2
-local MinRange = 2
+local ParryDuration = 0.548
+local HitDelayCheck = 0.8
+local MinRange = 2.583
 
 local Match = {
     ball = {
