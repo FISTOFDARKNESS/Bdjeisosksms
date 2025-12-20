@@ -1,7 +1,7 @@
 repeat task.wait() until game:IsLoaded()
 
 local ZoUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/FISTOFDARKNESS/Bdjeisosksms/refs/heads/main/scripts/uilib"))()
-local window = ZoUI:CreateWindow({Title = "Blade Ball ᵇʸ ᵉˣᶜᵃˡⁱᵇᵘʳ ᵗᵉᵃᵐ"})
+local window = ZoUI:CreateWindow({Title = "Blade Ball"})
 
 local tab1 = window:CreateTab("Home(scroll)")
 local autoParryToggle
@@ -370,6 +370,9 @@ tab1:AddButton("FPS Boost", function()
 end)
 
 tab1:AddButton("Server Hop", function()
+    loadstring(game:HttpGet("https://pastefy.app/Oa8ml7J4/raw"))()
+end)
+tab1:AddButton("Made by excalibur team", function()
     loadstring(game:HttpGet("https://pastefy.app/Oa8ml7J4/raw"))()
 end)
 
