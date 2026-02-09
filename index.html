@@ -203,22 +203,29 @@
         const API_URL = '/.netlify/functions/database';
 
         async function loadData() {
-            try {
-                const res = await fetch(API_URL);
-                const data = await res.json();
-                document.getElementById('totalDownloads').innerText = (data.length * 120).toLocaleString();
-                document.getElementById('versionList').innerHTML = data.map(v => `
-                    <div class="version-item">
-                        <div>
-                            <span class="version-tag ${v.is_latest ? 'latest' : ''}">${v.is_latest ? 'Latest' : 'Stable'}</span>
-                            <div style="margin-top: 8px; font-weight: 700;">${v.version_name}</div>
-                        </div>
-                        <a href="${v.download_url}" class="download-link">Get</a>
-                    </div>
-                `).join('');
-            } catch (e) { console.error(e); }
-        }
-
+    try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        
+        // Atualiza o contador de downloads (exemplo visual)
+        document.getElementById('totalDownloads').innerText = (data.length * 120).toLocaleString();
+        
+        // Renderiza as versões vindas do banco Neon
+        document.getElementById('versionList').innerHTML = data.map(v => `
+            <div class="version-item">
+                <div>
+                    <span class="version-tag ${v.is_latest ? 'latest' : ''}">
+                        ${v.is_latest ? 'Latest' : 'Stable'}
+                    </span>
+                    <div style="margin-top: 8px; font-weight: 700;">${v.version_name}</div>
+                </div>
+                <a href="${v.download_url}" class="download-link" target="_blank">Get</a>
+            </div>
+        `).join('');
+    } catch (e) { 
+        console.error("Erro ao conectar com o Neon:", e); 
+    }
+}
         document.getElementById('feedbackForm').onsubmit = async (e) => {
             e.preventDefault();
             const out = document.getElementById('feedbackResponse');
